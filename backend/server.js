@@ -10,7 +10,8 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/api',(req, res) => {
+//login path
+app.get('/login',(req, res) => {
     res.json({"users": ["userOne","userTwo","userThree"]});
 })
 
