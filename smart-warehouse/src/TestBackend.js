@@ -7,7 +7,11 @@ function TestBackend() {
 
     useEffect(() => {
 
-        fetch('/api').then(
+        /* fetch http://localhost:5000/login
+            then receive data from server
+        */
+
+        fetch('/login').then(
             response => response.json()
             ).then(
                 data => { setBackendData(data) }
@@ -18,13 +22,13 @@ function TestBackend() {
     return (
         <div>
             {backendData.users}
-            {/* {(typeof backendData.users === 'undefined') ? (
+            {(typeof backendData.users === 'undefined') ? (
                 <p> Loading... </p>
             ):(
                 backendData.users.map((user,i) =>{
                     return <p key={i}>{user}</p>
                 })
-            )} */}
+            )}
         </div>
     )
 }
