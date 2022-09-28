@@ -1,11 +1,11 @@
 import './App.css';
-import TestBackend from './TestBackend';
+import Navbar from './components/Navbar';
+
 
 function App() {
   return (
     <div className="App">
-    <TestBackend />
-    <h1>Hey, my name is Pathomporn.♥</h1>
+    <Navbar />
     </div>
   );
 }
