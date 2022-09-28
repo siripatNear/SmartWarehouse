@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import logo from './logo-kmutt.png';
+// import PopUp from './Components/PopUp';
 
 const theme = createTheme();
 
@@ -72,9 +73,19 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+            // onClick={() => {setOpenPopup(true);}}
             >
               Sign In
             </Button>
+            {/* {openPopup && <PopUp closePopUp={setOpenPopup} />} */}
+
+            {/* <button className='stupidbtn' onClick={() => {setOpenPopup(true);}}>
+              stupid button
+            </button>
+            {openPopup && <PopUp closePopUp={setOpenPopup} />} */}
+
+
+
           </Box>
         </Box>
       </Container>
