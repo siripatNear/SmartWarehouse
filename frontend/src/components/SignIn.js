@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import logo from './logo-kmutt.png';
+import logo from '../assets/logo-kmutt.png';
 
 const theme = createTheme();
 
