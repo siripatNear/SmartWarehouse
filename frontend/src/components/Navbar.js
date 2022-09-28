@@ -16,11 +16,13 @@ import {
   Stack,
   Text,
   VStack,
+  requiredChakraThemeKeys,
 } from '@chakra-ui/react';
 import { FiChevronDown,FiBell } from 'react-icons/fi';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import logo from './logo-kmutt.png';
-import { IoNotifications } from "react-icons/io5";
+import logo from '../assets/logo-kmutt.png';
+// import { BellIcon } from '@chakra-ui/icons'
+// import { IoNotifications } from "react-icons/io5";
 
 
 const Links = ['Home', 'Order list', 'Report'];
@@ -32,7 +34,7 @@ const NavLink = ({ children }) => (
     rounded={'md'}
     _hover={{
       textDecoration: 'none',
-      bg: useColorModeValue('gray.200', 'gray.700'),
+      bg: useColorModeValue('#DAEFFD', 'white'),
     }}
     href={'#'}>
     {children}
@@ -44,7 +46,7 @@ export default function Simple() {
 
   return (
     <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+      <Box bg={useColorModeValue('#A3D9FB', '#A3D9FB')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton
             size={'md'}
@@ -63,20 +65,24 @@ export default function Simple() {
             <HStack
               as={'nav'}
               spacing={4}
-              display={{ base: 'none', md: 'flex' }}>
+              display={{ base: 'none', md: 'flex' }}
+              fontSize="xl">
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
               ))}
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
-          <HStack spacing={{ base: '0', md: '6' }}>
+          <HStack spacing={{ base: '0', md: '2' }}>
             <IconButton
-              size="xl"
+              size="lg"
               variant="ghost"
+              fontWeight={600}
+              // variant={'link'}
               aria-label="open menu"
               icon={<FiBell />}
             />
+          
           <Flex alignItems={'center'}>
             <Menu>
               <MenuButton
@@ -84,14 +90,14 @@ export default function Simple() {
                 transition="all 0.3s"
                 _focus={{ boxShadow: 'none' }}>
                 <HStack>
-                  <Avatar size='md' 
-                    bg='teal.500' />
+                  <Avatar size='sm' 
+                    bg='#618296' />
                   <VStack
                     display={{ base: 'none', md: 'flex' }}
                     alignItems="flex-start"
                     spacing="1px"
                     ml="2">
-                    <Text fontSize="sm">u071819</Text>
+                    <Text fontSize="xl">u071819</Text>
                   </VStack>
                   <Box display={{ base: 'none', md: 'flex' }}>
                     <FiChevronDown />
