@@ -5,8 +5,13 @@ import {createBrowserRouter} from "react-router-dom";
 import './App.css';
 import { useState } from "react";
 // import TestBackend from './TestBackend';
-// import SignIn from './Components/SignIn';
-import PopUp from './Components/PopUp';
+// import SignIn from './components/SignIn';
+import PopUp from './components/PopUp';
+
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import OrderList from './components/OrderList';
+import SignIn from './components/SignIn';
 
 function App() {
   const [openPopup, setOpenPopup] = useState(false);
@@ -28,17 +33,15 @@ function App() {
     </div>
   );
 }
-import Navbar from './components/Navbar';
-import Home from './components/Home';
-import OrderList from './components/OrderList';
-import SignIn from './components/SignIn';
-
-
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "app",
+    element: <App />,
   },
   {
     path: "orderlist",
