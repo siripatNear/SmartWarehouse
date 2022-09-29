@@ -1,6 +1,5 @@
 import React from 'react';
 import "./PopUp.css";
-// import Button from '@mui/material/Button';
 
 function PopUp({ closePopUp }) {
   return (
