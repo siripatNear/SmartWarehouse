@@ -1,8 +1,13 @@
 import React from 'react'
+import BoxDashboard from '../components/BoxDashboard';
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <div>
+      search Box
+      date
+      <BoxDashboard />
+    </div>
   )
 }
 
