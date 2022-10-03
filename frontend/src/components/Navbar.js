@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React } from "react";
 import {
   Box,
   Flex,
@@ -15,25 +15,43 @@ import {
   Stack,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import { FiChevronDown,FiBell } from 'react-icons/fi';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import logo from '../assets/logo-kmutt.png';
+} from "@chakra-ui/react";
+import { FiChevronDown } from "react-icons/fi";
+import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import LogoutIcon from "@mui/icons-material/Logout";
+import logo from "../assets/logo-kmutt.png";
+// import { Link as RouterLink } from "react-router-dom";
 
-
-const Links = ['Home', 'Order list', 'Report'];
+// const Links = ["Dashboard", "Orderlist", "Report"];
+const Links = [
+  {
+    name: "Dashboard",
+    link: "/",
+  },
+  {
+    name: "Order list",
+    link: "orderlist",
+  },
+  {
+    name: "Report",
+    link: "report",
+  },
+];
 
 const NavLink = ({ children }) => (
   <Link
     px={2}
     py={1}
-    rounded={'md'}
+    rounded={"md"}
     _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('#DAEFFD', 'white'),
+      textDecoration: "none",
+      bg: useColorModeValue("#DAEFFD", "white"),
     }}
-    href={'#'}>
-    {children}
+    href={children.link}
+    // as={RouterLink}
+    // to="search"
+  >
+    {children.name}
   </Link>
 );
 
@@ -42,78 +60,82 @@ export default function Simple() {
 
   return (
     <>
-      <Box bg={useColorModeValue('#A3D9FB', '#A3D9FB')} px={4}>
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+      <Box bg={useColorModeValue("#A3D9FB", "#A3D9FB")} px={4}>
+        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
-            size={'md'}
+            size={"md"}
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={'Open Menu'}
-            display={{ md: 'none' }}
-            onClick={isOpen ? onClose : onOpen}/>
-          <HStack spacing={8} alignItems={'center'}>
-          <img
-              src={logo}
-              width="200"
-              height="auto"
-              className="d-inline-block align-top"
-              alt="Smart Warehouse"
-            />
+            aria-label={"Open Menu"}
+            display={{ md: "none" }}
+            onClick={isOpen ? onClose : onOpen}
+          />
+          <HStack spacing={8} alignItems={"center"}>
+            <Link href="/">
+              <div>
+                <img
+                  src={logo}
+                  width="200"
+                  height="auto"
+                  alt="Smart Warehouse"
+                  className="Logo"
+                />
+              </div>
+            </Link>
+
             <HStack
-              as={'nav'}
-              spacing={4}
-              display={{ base: 'none', md: 'flex' }}
-              fontSize="xl">
+              as={"nav"}
+              spacing={6}
+              display={{ base: "none", md: "flex" }}
+              fontSize="xl"
+            >
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <NavLink key={link.name}>{link}</NavLink>
               ))}
             </HStack>
           </HStack>
-          <Flex alignItems={'center'}>
-          <HStack spacing={{ base: '0', md: '2' }}>
-            <IconButton
-              size="lg"
-              variant="ghost"
-              fontWeight={600}
-              // variant={'link'}
-              aria-label="open menu"
-              icon={<FiBell />}
-            />
-          
-          <Flex alignItems={'center'}>
+          <Flex alignItems={"center"}>
             <Menu>
               <MenuButton
                 py={2}
                 transition="all 0.3s"
-                _focus={{ boxShadow: 'none' }}>
+                _focus={{ boxShadow: "none" }}
+              >
                 <HStack>
-                  <Avatar size='sm' 
-                    bg='#618296' />
+                  <Avatar size="sm" bg="#618296" />
                   <VStack
-                    display={{ base: 'none', md: 'flex' }}
+                    display={{ base: "none", md: "flex" }}
                     alignItems="flex-start"
                     spacing="1px"
-                    ml="2">
-                    <Text fontSize="xl">u071819</Text>
+                    ml="2"
+                  >
+                    <Text marginLeft={4} fontSize="xl">
+                      u071819
+                    </Text>
                   </VStack>
-                  <Box display={{ base: 'none', md: 'flex' }}>
+                  <Box display={{ base: "none", md: "flex" }}>
                     <FiChevronDown />
                   </Box>
                 </HStack>
               </MenuButton>
               <MenuList
-                bg={useColorModeValue('white', 'gray.900')}
-                borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                <MenuItem>Sign out</MenuItem>
+                bg={useColorModeValue("white", "gray.900")}
+                borderColor={useColorModeValue("gray.200", "gray.700")}
+              >
+                <MenuItem>
+                  <LogoutIcon />
+                  <Text marginLeft={4} fontSize="xl">
+                    {" "}
+                    Sign out{" "}
+                  </Text>
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>
-        </HStack>
-        </Flex>
         </Flex>
 
         {isOpen ? (
-          <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
+          <Box pb={4} display={{ md: "none" }}>
+            <Stack as={"nav"} spacing={4}>
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
               ))}
