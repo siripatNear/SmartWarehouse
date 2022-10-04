@@ -1,0 +1,51 @@
+.SectionBox {
+  width: 20%;
+  /* background-color: paleturquoise; */
+  padding: 0px;
+  float: left;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.CateBox {
+  width: 50%;
+  /* background-color: palegreen; */
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  float: left;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.LengthBox {
+  width: 25%;
+  /* background-color: palevioletred; */
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  float: left;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.ButtonBox {
+  width: 1%;
+  /* background-color: palevioletred; */
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  float: left;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.Container {
+    width: 70%;
+    /* background-color: palevioletred; */
+  }
+
+
+/* body {
+    font-family: 'Prompt';font-size: 22px;
+} */
