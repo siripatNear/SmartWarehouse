@@ -11,6 +11,7 @@ import SignIn from './pages/SignIn';
 import PickingList from './pages/PickingList';
 
 import Search from './components/Search';
+import TablePickingList from './components/TablePickingList';
 
 
 function App() {
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
   {
     path: "popup",
     element: <PopUp />,
+  },
+  {
+    path: "TablePickingList",
+    element: <TablePickingList/>,
   },
 
 ]);

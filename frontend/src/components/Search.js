@@ -6,12 +6,22 @@ import { Input } from "@chakra-ui/react";
 import { IconButton } from '@chakra-ui/react'
 import { SearchIcon } from "@chakra-ui/icons";
 
-export const section = [
-  { value: "Section 1", label: "Section 1" },
-  { value: "Section 2", label: "Section 2" },
-  { value: "Section 3", label: "Section 3" },
-  { value: "Section 4", label: "Section 4" },
+export const warehouse = [
+  { value: "Warehouse 1", label: "Warehouse 1" },
+  { value: "Warehouse 2", label: "Warehouse 2" },
+  { value: "Warehouse 3", label: "Warehouse 3" },
+  { value: "Warehouse 4", label: "Warehouse 4" },
 ];
+
+export const zone = [
+  { value: "Zone 1", label: "Zone 1" },
+  { value: "Zone 2", label: "Zone 2" },
+  { value: "Zone 3", label: "Zone 3" },
+  { value: "Zone 4", label: "Zone 4" },
+  { value: "Zone 5", label: "Zone 5" },
+  { value: "Zone 6", label: "Zone 6" },
+];
+
 export const cate = [
   { value: "kraft", label: "Kraft" },
   { value: "bleached", label: "Bleached" },
@@ -22,17 +32,28 @@ export const cate = [
   { value: "corrugated", label: "Corrugated" },
 ];
 
+
 const Search = () => {
   return (
     <div className="Container">
       <FormControl p={4} id="search" >
-        <div className="SectionBox">
-          <FormLabel>Section</FormLabel>
+
+        <div className="WarehouseBox">
+          <FormLabel>Warehouse</FormLabel>
           <Select
-            selectedOptionColor="purple"
-            name="Section"
-            options={section}
-            placeholder="Section"
+            name="Warehouse"
+            options={warehouse}
+            placeholder="Warehouse"
+            closeMenuOnSelect={true}
+          />
+        </div>
+
+        <div className="ZoneBox">
+          <FormLabel>Zone</FormLabel>
+          <Select
+            name="Zone"
+            options={zone}
+            placeholder="Zone"
             closeMenuOnSelect={true}
           />
         </div>
