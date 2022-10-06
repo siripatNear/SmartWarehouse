@@ -10,10 +10,11 @@ import {
   TableContainer,
   Badge,
 } from "@chakra-ui/react";
-// import "./TablePickingList.css";
+
+
 import { data } from "../assets/dataRawMat";
 import * as dayjs from 'dayjs'
-// import { WHTrans } from "../assets/dataWarehouse";
+
 
 
 export const header = [
@@ -88,11 +89,10 @@ const mapStatus = (status) => {
 
 
 
-
 const TablePickingList = () => {
   return (
-    <TableContainer width="70%">
-      <Table size="md">
+    <TableContainer width='100%'>
+      <Table size="md" >
         <Thead>
           <Tr>
             {header.map((head) => (
@@ -104,7 +104,6 @@ const TablePickingList = () => {
         </Thead>
         
         <Tbody>
-        {/* {WHTrans.map((wh) => (<div key={wh.value}></div>))} */}
           {data.map((d) => (
             <Tr
               _hover={{
@@ -124,7 +123,7 @@ const TablePickingList = () => {
               <Td>{d.length}</Td>
               <Td>{d.internal_id}</Td>
 
-              <Td>{dayjs(d.create_dt).format('DD-MM-YYYY')}</Td>
+              <Td>{dayjs(d.create_dt).format('DD / MM / YYYY')}</Td>
               <Td>{mapStatus(d.item_status)}</Td>
             </Tr>
           ))}
@@ -136,3 +135,8 @@ const TablePickingList = () => {
 };
 
 export default TablePickingList;
+
+
+
+
+
