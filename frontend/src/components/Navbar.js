@@ -69,7 +69,7 @@ export default function Simple() {
             display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
           />
-          <HStack spacing={8} alignItems={"center"}>
+          <HStack spacing={9} alignItems={"center"}>
             <Link href="/">
               <div>
                 <img
@@ -84,7 +84,7 @@ export default function Simple() {
 
             <HStack
               as={"nav"}
-              spacing={6}
+              spacing={15}
               display={{ base: "none", md: "flex" }}
               fontSize="xl"
             >
