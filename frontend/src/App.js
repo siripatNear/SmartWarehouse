@@ -12,6 +12,7 @@ import PickingList from './pages/PickingList';
 import OrderDetail from './pages/OrderDetail';
 
 import Search from './components/Search';
+import TablePickingList from './components/TablePickingList';
 
 
 function App() {
@@ -68,6 +69,8 @@ export const router = createBrowserRouter([
   {
     path: "orderdetail",
     element: <OrderDetail />,
+    path: "TablePickingList",
+    element: <TablePickingList/>,
   },
 
 ]);

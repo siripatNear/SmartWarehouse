@@ -1,6 +1,14 @@
-.SectionBox {
+.WarehouseBox {
   width: 20%;
-  /* background-color: paleturquoise; */
+  padding: 0px;
+  float: left;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+
+.ZoneBox {
+  width: 15%;
   padding: 0px;
   float: left;
   margin-top: 5px;
@@ -8,8 +16,7 @@
 }
 
 .CateBox {
-  width: 50%;
-  /* background-color: palegreen; */
+  width: 33%;
   display: flex;
   flex-direction: column;
   padding: 0px;
@@ -20,7 +27,6 @@
 
 .LengthBox {
   width: 25%;
-  /* background-color: palevioletred; */
   display: flex;
   flex-direction: column;
   padding: 0px;
@@ -31,7 +37,6 @@
 
 .ButtonBox {
   width: 1%;
-  /* background-color: palevioletred; */
   display: flex;
   flex-direction: column;
   padding: 0px;
@@ -41,11 +46,6 @@
 }
 
 .Container {
-    width: 70%;
+    width: 100%;
     /* background-color: palevioletred; */
   }
-
-
-/* body {
-    font-family: 'Prompt';font-size: 22px;
-} */
