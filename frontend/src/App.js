@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import OrderList from './pages/OrderList';
 import SignIn from './pages/SignIn';
 import PickingList from './pages/PickingList';
+import OrderDetail from './pages/OrderDetail';
 
 import Search from './components/Search';
 
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
   {
     path: "popup",
     element: <PopUp />,
+  },
+  {
+    path: "orderdetail",
+    element: <OrderDetail />,
   },
 
 ]);
