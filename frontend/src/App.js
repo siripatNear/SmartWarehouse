@@ -69,6 +69,8 @@ export const router = createBrowserRouter([
   {
     path: "orderdetail",
     element: <OrderDetail />,
+  },
+  {
     path: "TablePickingList",
     element: <TablePickingList/>,
   },
