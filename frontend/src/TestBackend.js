@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 function TestBackend() {
 
-    const [backendData, setBackendData] = useState([{}]);
+    const [backendData, setBackendData] = useState();
 
     useEffect(() => {
 
@@ -21,14 +21,8 @@ function TestBackend() {
 
     return (
         <div>
-            {backendData.users}
-            {(typeof backendData.users === 'undefined') ? (
-                <p> Loading... </p>
-            ):(
-                backendData.users.map((user,i) =>{
-                    return <p key={i}>{user}</p>
-                })
-            )}
+            {backendData}
+
         </div>
     )
 }
