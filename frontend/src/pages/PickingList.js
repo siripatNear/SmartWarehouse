@@ -1,12 +1,17 @@
 import React from 'react'
+import { Button, HStack, Link, VStack,Heading, Box, } from '@chakra-ui/react'
+
+import BoxOverallDashboard from '../components/BoxOverallDashboard';
 import TablePickingList from '../components/TablePickingList';
 import Search from '../components/Search';
-import { Button, HStack, Link, VStack,Heading, Box} from '@chakra-ui/react'
-import BoxOverallDashboard from '../components/BoxOverallDashboard';
+import AddAlert from '../components/Addbutton';
+
 
 
 
 const PickingList = () => {
+
+
   return (
     <HStack align='flex-start' >
       <VStack width='70%' >
@@ -18,12 +23,12 @@ const PickingList = () => {
        </Link>
       </HStack>
         <TablePickingList />
-        <Box alignSelf='flex-end' paddingRight='16px'>
-          <Link href="/">
-           <Button colorScheme='twitter' variant='solid' >Add</Button>
-        </Link>
+        <Box alignSelf='flex-end' paddingRight='16px' paddingTop='20px' paddingBottom='20px'>
+        <AddAlert/>
+        {/* <Link href="/">
+          <Button colorScheme='twitter' variant='solid' >Add</Button>
+        </Link> */}
         </Box>
-        
       </VStack>
         <Box width='30%' paddingTop='160px'>
           <BoxOverallDashboard />

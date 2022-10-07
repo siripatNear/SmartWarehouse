@@ -52,7 +52,7 @@ const mapStatus = (status) => {
   switch (status) {
     case "stock in":
       return (<Badge variant='subtle' 
-              width="70%" 
+              // width="70%" 
               textAlign={"center"} 
               borderRadius='5px' 
               colorScheme='green'>
@@ -60,7 +60,7 @@ const mapStatus = (status) => {
               </Badge>);
     case "used":
       return (<Badge variant='subtle' 
-              width="70%" 
+              // width="70%" 
               textAlign={"center"} 
               borderRadius='5px' 
               colorScheme='yellow'>
@@ -68,7 +68,7 @@ const mapStatus = (status) => {
               </Badge>);
     case "new coming":
       return (<Badge variant='subtle' 
-              width="70%" 
+              // width="70%" 
               textAlign={"center"} 
               borderRadius='5px' 
               colorScheme='red'>
@@ -76,7 +76,7 @@ const mapStatus = (status) => {
               </Badge>);
     case "in progress":
       return (<Badge variant='subtle' 
-              width="70%" 
+              // width="70%" 
               textAlign={"center"} 
               borderRadius='5px' 
               colorScheme='gray'>

@@ -3,7 +3,7 @@ import React from 'react'
 import BoxSectionDashboard from '../components/BoxSectionDashboard';
 import BoxOverallDashboard from '../components/BoxOverallDashboard';
 import Search from '../components/Search';
-import { HStack,VStack } from '@chakra-ui/react'
+import { HStack,LinkBox,LinkOverlay,VStack } from '@chakra-ui/react'
 
 const Dashboard = () => {
   return (
@@ -12,7 +12,13 @@ const Dashboard = () => {
         <Search />
         <BoxSectionDashboard />
       </VStack>
-      <BoxOverallDashboard />
+
+      <LinkBox as='Overall'>
+        <LinkOverlay href='/PickingList'>
+          <BoxOverallDashboard />
+        </LinkOverlay>
+      </LinkBox>
+      
     </HStack>
   )
 }
