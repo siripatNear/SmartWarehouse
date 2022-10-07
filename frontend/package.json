@@ -4,16 +4,30 @@
   "private": true,
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.10",
+    "@chakra-ui/react": "^2.3.4",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@mui/material": "^5.10.6",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/joy": "^5.0.0-alpha.47",
+    "@mui/material": "^5.10.7",
+    "@mui/styled-engine-sc": "^5.10.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "antd": "^4.23.4",
     "axios": "^0.27.2",
+    "chakra-react-select": "^4.2.4",
+    "chakra-ui-autocomplete": "^1.4.5",
+    "framer-motion": "^7.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-font-size-changer": "^0.2.0",
+    "react-icons": "^4.4.0",
+    "react-router-dom": "^6.4.1",
     "react-scripts": "^5.0.1",
+    "react-select": "^5.4.0",
+    "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -39,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }
