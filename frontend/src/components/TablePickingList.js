@@ -11,7 +11,6 @@ import {
   Badge,
 } from "@chakra-ui/react";
 
-
 import { data } from "../assets/dataRawMat";
 import * as dayjs from 'dayjs'
 
