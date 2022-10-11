@@ -22,26 +22,19 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import logo from "../assets/logo-kmutt.png";
 
 
-
 const AdminLinks = [
-  {
-    name: "Dashboard",
-    link: "/",
-  },
+
   {
     name: "Order list",
     link: "orderlist",
-  },
-  {
-    name: "Report",
-    link: "report",
   },
 ];
 
 const OpLinks = [
+  
   {
     name: "Dashboard",
-    link: "/",
+    link: "dashboard",
   },
   {
     name: "Order list",
@@ -52,6 +45,8 @@ const OpLinks = [
     link: "report",
   },
 ];
+
+const GuestLink = [{}];
 
 const NavLink = ({ children }) => (
   <Link
@@ -63,8 +58,8 @@ const NavLink = ({ children }) => (
       bg: useColorModeValue("#DAEFFD", "white"),
     }}
     href={children.link}
-    // as={RouterLink}
-    // to="search"
+  // as={RouterLink}
+  // to="search"
   >
     {children.name}
   </Link>
@@ -72,6 +67,7 @@ const NavLink = ({ children }) => (
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const isAuth = false;
 
   return (
     <>
@@ -103,9 +99,22 @@ export default function Navbar() {
               display={{ base: "none", md: "flex" }}
               fontSize="xl"
             >
-              {Links.map((link) => (
+
+              {/* //? edit */}
+              
+              { isAuth ? 
+                OpLinks.map((link) => (
                 <NavLink key={link.name}>{link}</NavLink>
-              ))}
+                
+
+              )) : 
+                  
+                GuestLink.map((link) => (
+                <NavLink key={link.name}>{link}</NavLink>
+              ))
+
+              }
+
             </HStack>
           </HStack>
           <Flex alignItems={"center"}>
@@ -148,10 +157,10 @@ export default function Navbar() {
           </Flex>
         </Flex>
 
-        {isOpen ? (
+        {isAuth ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              {Links.map((link) => (
+              {OpLinks.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
               ))}
             </Stack>

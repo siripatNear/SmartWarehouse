@@ -11,7 +11,7 @@ import logo from '../assets/logo-kmutt.png';
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -47,7 +47,7 @@ export default function SignIn() {
               name="username"
               autoComplete="username"
               autoFocus
-            />
+              />
             <TextField
               margin="normal"
               required
@@ -57,18 +57,19 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
+              />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-            >
+              >
               Sign In
             </Button>
           </Box>
         </Box>
       </Container>
     </ThemeProvider>
+
   );
 }

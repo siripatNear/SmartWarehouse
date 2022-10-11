@@ -1,73 +1,93 @@
 import React from "react";
-import {createBrowserRouter} from "react-router-dom";
-import './App.css';
-import { useState } from "react";
+import {
+  createBrowserRouter,
+  BrowserRouter,
+  Navigate,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 
-import PopUp from './components/PopUp';
-import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import OrderList from './pages/OrderList';
-import SignIn from './pages/SignIn';
+import Login from './pages/Login';
 import PickingList from './pages/PickingList';
 
-import Search from './components/Search';
-import TablePickingList from './components/TablePickingList';
+import './App.css';
 
+import { useSelector } from 'react-redux'
+import Navbar from "./components/Navbar";
 
-function App() {
-  const [openPopup, setOpenPopup] = useState(false);
+const PrivateRoutes = () => {
+  // const { isAuth } = useSelector((state) => state.auth)
+  const isAuth = false;
 
-  return (
-    <div className="App">
-      <button
-        className='stupidbtn'
-        onClick={() => {
-          setOpenPopup(true);
-        }}
-      >
-        button
-      </button>
-      {openPopup && <PopUp closePopUp={setOpenPopup} />}
-    </div>
-  );
+  return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
 }
 
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Dashboard />,
-  },
-  {
-    path: "app",
-    element: <App />,
-  },
-  {
-    path: "orderlist",
-    element: <OrderList />,
-  },
-  {
-    path: "signin",
-    element: <SignIn />,
-  },
-  {
-    path: "navbar",
-    element: <Navbar />,
-  },
-  {
-    path: "pickinglist",
-    element: <PickingList />,
-  },
-  {
-    path: "search",
-    element: <Search />,
-  },
-  {
-    path: "popup",
-    element: <PopUp />,
-  },
-  {
-    path: "TablePickingList",
-    element: <TablePickingList/>,
-  },
+const RestrictedRoutes = () => {
+  // const { isAuth } = useSelector((state) => state.auth)
+  const isAuth = false;
 
-]);
+  return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
+}
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Login />} />
+          <Route element={<PrivateRoutes />}>
+          <Route path='/dashboard' element={<Dashboard />} />
+        </Route>
+
+        <Route element={<RestrictedRoutes />}>
+          <Route path='/login' element={<Login />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App;
+
+
+// export const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <Dashboard />,
+//   },
+//   {
+//     path: "app",
+//     element: <App />,
+//   },
+//   {
+//     path: "orderlist",
+//     element: <OrderList />,
+//   },
+//   {
+//     path: "login",
+//     element: <LogIn />,
+//   },
+//   {
+//     path: "navbar",
+//     element: <Navbar />,
+//   },
+//   {
+//     path: "pickinglist",
+//     element: <PickingList />,
+//   },
+//   {
+//     path: "search",
+//     element: <Search />,
+//   },
+//   {
+//     path: "popup",
+//     element: <PopUp />,
+//   },
+//   {
+//     path: "TablePickingList",
+//     element: <TablePickingList />,
+//   },
+
+// ]);

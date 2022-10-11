@@ -14,6 +14,7 @@ const Dashboard = () => {
       </VStack>
       <BoxOverallDashboard />
     </HStack>
+
   )
 }
 
