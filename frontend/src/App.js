@@ -15,7 +15,12 @@ import Login from './pages/Login';
 
 import './App.css';
 
-// import { useSelector } from 'react-redux'
+
+import Search from './components/Search';
+import TablePickingList from './components/TablePickingList';
+import AddUser from "./components/AddUser";
+import { useSelector } from 'react-redux'
+import Navbar from "./components/Navbar";
 
 
 const PrivateRoutes = () => {
