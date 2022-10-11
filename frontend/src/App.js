@@ -14,6 +14,10 @@ import SignIn from './pages/SignIn';
 import PickingList from './pages/PickingList';
 import OrderDetail from './pages/OrderDetail';
 
+import Search from './components/Search';
+import TablePickingList from './components/TablePickingList';
+import AddUser from "./components/AddUser";
+
 // Forklift_PutAway_Page
 import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
@@ -80,6 +84,8 @@ export const router = createBrowserRouter([
     element: <TablePickingList/>,
   },
   {
+    path: "AddUser",
+    element: <AddUser/>,
     path: "scantag",
     element: <ScanTag/>,
   },

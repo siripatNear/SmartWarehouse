@@ -1,21 +1,28 @@
-import React from 'react'
+import React from "react";
 // import "./Dashboard.css";
-import BoxSectionDashboard from '../components/BoxSectionDashboard';
-import BoxOverallDashboard from '../components/BoxOverallDashboard';
-import Search from '../components/Search';
-import { HStack,VStack } from '@chakra-ui/react'
+import BoxSectionDashboard from "../components/BoxSectionDashboard";
+import BoxOverallDashboard from "../components/BoxOverallDashboard";
+import Search from "../components/Search";
+import { HStack, LinkBox, LinkOverlay, VStack } from "@chakra-ui/react";
 
 const Dashboard = () => {
   return (
-    <HStack>
-      <VStack width='70%'>
+    <HStack paddingBottom={"64px"}>
+      <VStack width="70%">
         <Search />
+        {/* <VStack > */}
         <BoxSectionDashboard />
+        {/* </VStack> */}
       </VStack>
-      <BoxOverallDashboard />
+
+      <LinkBox as="Overall">
+        <LinkOverlay href="/PickingList">
+          <BoxOverallDashboard />
+        </LinkOverlay>
+      </LinkBox>
     </HStack>
-  )
-}
+  );
+};
 
 // const Dashboard = () => {
 //   return (
@@ -31,4 +38,4 @@ const Dashboard = () => {
 //   )
 // }
 
-export default Dashboard
+export default Dashboard;
