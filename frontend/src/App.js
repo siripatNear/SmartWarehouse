@@ -15,6 +15,9 @@ import PickingList from './pages/PickingList';
 
 import './App.css';
 
+import Search from './components/Search';
+import TablePickingList from './components/TablePickingList';
+import AddUser from "./components/AddUser";
 import { useSelector } from 'react-redux'
 import Navbar from "./components/Navbar";
 

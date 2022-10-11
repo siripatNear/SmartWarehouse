@@ -58,8 +58,6 @@ const NavLink = ({ children }) => (
       bg: useColorModeValue("#DAEFFD", "white"),
     }}
     href={children.link}
-  // as={RouterLink}
-  // to="search"
   >
     {children.name}
   </Link>
@@ -170,3 +168,6 @@ export default function Navbar() {
     </>
   );
 }
+
+
+
