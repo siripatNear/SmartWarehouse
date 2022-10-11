@@ -6,7 +6,6 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 
 import Dataorder from "../assets/orderdetailmock.json";
 
-
 function OrderDetail() {
     return (
         <div>
