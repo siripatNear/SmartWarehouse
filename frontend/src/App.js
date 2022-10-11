@@ -11,6 +11,8 @@ import SignIn from './pages/SignIn';
 import PickingList from './pages/PickingList';
 
 import Search from './components/Search';
+import TablePickingList from './components/TablePickingList';
+import AddUser from "./components/AddUser";
 
 
 function App() {
@@ -63,6 +65,14 @@ export const router = createBrowserRouter([
   {
     path: "popup",
     element: <PopUp />,
+  },
+  {
+    path: "TablePickingList",
+    element: <TablePickingList/>,
+  },
+  {
+    path: "AddUser",
+    element: <AddUser/>,
   },
 
 ]);
