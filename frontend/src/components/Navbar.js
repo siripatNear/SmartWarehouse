@@ -20,10 +20,25 @@ import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import LogoutIcon from "@mui/icons-material/Logout";
 import logo from "../assets/logo-kmutt.png";
-// import { Link as RouterLink } from "react-router-dom";
 
-// const Links = ["Dashboard", "Orderlist", "Report"];
-const Links = [
+
+
+const AdminLinks = [
+  {
+    name: "Dashboard",
+    link: "/",
+  },
+  {
+    name: "Order list",
+    link: "orderlist",
+  },
+  {
+    name: "Report",
+    link: "report",
+  },
+];
+
+const OpLinks = [
   {
     name: "Dashboard",
     link: "/",
@@ -55,7 +70,7 @@ const NavLink = ({ children }) => (
   </Link>
 );
 
-export default function Simple() {
+export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
