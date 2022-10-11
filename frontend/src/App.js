@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  createBrowserRouter,
+  // createBrowserRouter,
   BrowserRouter,
   Navigate,
   Routes,
@@ -9,14 +9,14 @@ import {
 } from "react-router-dom";
 
 import Dashboard from './pages/Dashboard';
-import OrderList from './pages/OrderList';
+// import OrderList from './pages/OrderList';
 import Login from './pages/Login';
-import PickingList from './pages/PickingList';
+// import PickingList from './pages/PickingList';
 
 import './App.css';
 
-import { useSelector } from 'react-redux'
-import Navbar from "./components/Navbar";
+// import { useSelector } from 'react-redux'
+
 
 const PrivateRoutes = () => {
   // const { isAuth } = useSelector((state) => state.auth)

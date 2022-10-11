@@ -11,11 +11,8 @@ import {
   Badge,
 } from "@chakra-ui/react";
 
-
 import { data } from "../assets/dataRawMat";
-import * as dayjs from 'dayjs'
-
-
+import * as dayjs from "dayjs";
 
 export const header = [
   { value: "checkbox", label: " " },
@@ -51,48 +48,58 @@ const mapCateName = (category) => {
 const mapStatus = (status) => {
   switch (status) {
     case "stock in":
-      return (<Badge variant='subtle' 
-              width="70%" 
-              textAlign={"center"} 
-              borderRadius='5px' 
-              colorScheme='green'>
-              stock in
-              </Badge>);
+      return (
+        <Badge
+          variant="subtle"
+          textAlign={"center"}
+          borderRadius="5px"
+          colorScheme="green"
+        >
+          stock in
+        </Badge>
+      );
     case "used":
-      return (<Badge variant='subtle' 
-              width="70%" 
-              textAlign={"center"} 
-              borderRadius='5px' 
-              colorScheme='yellow'>
-              used
-              </Badge>);
+      return (
+        <Badge
+          variant="subtle"
+          textAlign={"center"}
+          borderRadius="5px"
+          colorScheme="yellow"
+        >
+          used
+        </Badge>
+      );
     case "new coming":
-      return (<Badge variant='subtle' 
-              width="70%" 
-              textAlign={"center"} 
-              borderRadius='5px' 
-              colorScheme='red'>
-              new coming
-              </Badge>);
+      return (
+        <Badge
+          variant="subtle"
+          textAlign={"center"}
+          borderRadius="5px"
+          colorScheme="red"
+        >
+          new coming
+        </Badge>
+      );
     case "in progress":
-      return (<Badge variant='subtle' 
-              width="70%" 
-              textAlign={"center"} 
-              borderRadius='5px' 
-              colorScheme='gray'>
-              in progress
-              </Badge>);
+      return (
+        <Badge
+          variant="subtle"
+          textAlign={"center"}
+          borderRadius="5px"
+          colorScheme="gray"
+        >
+          in progress
+        </Badge>
+      );
     default:
       return "";
   }
 };
 
-
-
 const TablePickingList = () => {
   return (
-    <TableContainer width='100%'>
-      <Table size="md" >
+    <TableContainer width="100%">
+      <Table size="md">
         <Thead>
           <Tr>
             {header.map((head) => (
@@ -102,7 +109,7 @@ const TablePickingList = () => {
             ))}
           </Tr>
         </Thead>
-        
+
         <Tbody>
           {data.map((d) => (
             <Tr
@@ -123,11 +130,10 @@ const TablePickingList = () => {
               <Td>{d.length}</Td>
               <Td>{d.internal_id}</Td>
 
-              <Td>{dayjs(d.create_dt).format('DD / MM / YYYY')}</Td>
+              <Td>{dayjs(d.create_dt).format("DD / MM / YYYY")}</Td>
               <Td>{mapStatus(d.item_status)}</Td>
             </Tr>
           ))}
-
         </Tbody>
       </Table>
     </TableContainer>
@@ -135,8 +141,3 @@ const TablePickingList = () => {
 };
 
 export default TablePickingList;
-
-
-
-
-
