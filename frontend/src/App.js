@@ -14,8 +14,6 @@ import SignIn from './pages/SignIn';
 import PickingList from './pages/PickingList';
 import OrderDetail from './pages/OrderDetail';
 
-import Search from './components/Search';
-import TablePickingList from './components/TablePickingList';
 import AddUser from "./components/AddUser";
 
 // Forklift_PutAway_Page
@@ -86,6 +84,8 @@ export const router = createBrowserRouter([
   {
     path: "AddUser",
     element: <AddUser/>,
+  },
+  {
     path: "scantag",
     element: <ScanTag/>,
   },
