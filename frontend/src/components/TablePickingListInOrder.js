@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import * as dayjs from 'dayjs'
 
-import { data } from "../assets/dataRawMat";
+import Dataorder from "../assets/orderdetailmock.json";
 
 export const header = [
   { value: "item_code", label: "Item Code" },
@@ -56,17 +56,17 @@ const TablePickingList = () => {
         </Thead>
         
         <Tbody >
-          {data.map((d) => (
+          {Dataorder.map((data) => (
             <Tr
               _hover={{
                 backgroundColor: "#ECF7FE",
               }}
-              key={d.value}
+              key={data.value}
             >
-              <Td>{d.item_code}</Td>
-              <Td>{mapCateName(d.item_cate_code)}</Td>
-              <Td>{d.length}</Td>
-              <Td>{dayjs(d.create_dt).format('DD / MM / YYYY')}</Td>
+              <Td>{data.item_code}</Td>
+              <Td>{mapCateName(data.item_cate_code)}</Td>
+              <Td>{data.length}</Td>
+              <Td>{dayjs(data.create_dt).format('DD / MM / YYYY')}</Td>
             </Tr>
           ))}
 
