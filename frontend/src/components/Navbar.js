@@ -20,9 +20,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import LogoutIcon from "@mui/icons-material/Logout";
 import logo from "../assets/logo-kmutt.png";
-// import { Link as RouterLink } from "react-router-dom";
 
-// const Links = ["Dashboard", "Orderlist", "Report"];
 const Links = [
   {
     name: "Dashboard",
@@ -48,14 +46,12 @@ const NavLink = ({ children }) => (
       bg: useColorModeValue("#DAEFFD", "white"),
     }}
     href={children.link}
-    // as={RouterLink}
-    // to="search"
   >
     {children.name}
   </Link>
 );
 
-export default function Simple() {
+export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -146,3 +142,6 @@ export default function Simple() {
     </>
   );
 }
+
+
+

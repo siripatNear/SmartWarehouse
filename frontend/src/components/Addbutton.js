@@ -1,5 +1,12 @@
-
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure } from '@chakra-ui/react'
+import { AlertDialog, 
+  AlertDialogBody, 
+  AlertDialogContent, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogOverlay, 
+  Button, 
+  useDisclosure, 
+ } from '@chakra-ui/react'
 import React from 'react'
 
 
@@ -9,7 +16,13 @@ function AddAlert() {
 
   return (
     <>
-      <Button colorScheme='green' onClick={onOpen}>
+      <Button 
+      colorScheme='green' 
+      onClick={onOpen}
+      _hover={{
+        bg: "green.500",
+      }}
+      >
         Add
       </Button>
 
@@ -17,6 +30,7 @@ function AddAlert() {
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
         onClose={onClose}
+        isCentered
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
