@@ -7,12 +7,13 @@ import PopUp from './components/PopUp';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import OrderList from './pages/OrderList';
-import SignIn from './pages/SignIn';
+import LogIn from './pages/LogIn';
 import PickingList from './pages/PickingList';
 
 import Search from './components/Search';
 import TablePickingList from './components/TablePickingList';
 import AddUser from "./components/AddUser";
+import UserManage from "./pages/UserManage";
 
 
 function App() {
@@ -47,8 +48,8 @@ export const router = createBrowserRouter([
     element: <OrderList />,
   },
   {
-    path: "signin",
-    element: <SignIn />,
+    path: "login",
+    element: <LogIn />,
   },
   {
     path: "navbar",
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
   {
     path: "AddUser",
     element: <AddUser/>,
+  },
+  {
+    path: "UserManage",
+    element: <UserManage/>,
   },
 
 ]);
