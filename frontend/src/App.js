@@ -53,43 +53,45 @@ const App = () => {
 
 export default App;
 
+/*
 
-// export const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <Dashboard />,
-//   },
-//   {
-//     path: "app",
-//     element: <App />,
-//   },
-//   {
-//     path: "orderlist",
-//     element: <OrderList />,
-//   },
-//   {
-//     path: "login",
-//     element: <LogIn />,
-//   },
-//   {
-//     path: "navbar",
-//     element: <Navbar />,
-//   },
-//   {
-//     path: "pickinglist",
-//     element: <PickingList />,
-//   },
-//   {
-//     path: "search",
-//     element: <Search />,
-//   },
-//   {
-//     path: "popup",
-//     element: <PopUp />,
-//   },
-//   {
-//     path: "TablePickingList",
-//     element: <TablePickingList />,
-//   },
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Dashboard />,
+  },
+  {
+    path: "app",
+    element: <App />,
+  },
+  {
+    path: "orderlist",
+    element: <OrderList />,
+  },
+  {
+    path: "login",
+    element: <LogIn />,
+  },
+  {
+    path: "navbar",
+    element: <Navbar />,
+  },
+  {
+    path: "pickinglist",
+    element: <PickingList />,
+  },
+  {
+    path: "search",
+    element: <Search />,
+  },
+  {
+    path: "popup",
+    element: <PopUp />,
+  },
+  {
+    path: "TablePickingList",
+    element: <TablePickingList />,
+  },
 
-// ]);
+]);
+*/
