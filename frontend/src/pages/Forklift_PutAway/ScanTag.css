@@ -1,6 +1,8 @@
 .Content {
-    display: grid;
-    justify-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .UserContainer {
@@ -18,8 +20,9 @@
 
 .ScanTagContainer {
     width: 40%;
-    height: 450px;
+    height: 400px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-weight: 500;
