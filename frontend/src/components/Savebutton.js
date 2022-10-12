@@ -17,6 +17,7 @@ function SaveButton({
   isOpen,
   onOpen,
   onClose,
+  onConfirm,
 }) {
   const cancelRef = React.useRef();
 
@@ -52,9 +53,9 @@ function SaveButton({
           <AlertDialogBody>{textBody}</AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
-              Cancle
+              Cancel
             </Button>
-            <Button colorScheme="green" ml={3}>
+            <Button colorScheme="green" onClick={onConfirm} ml={3}>
               Confirm
             </Button>
           </AlertDialogFooter>

@@ -20,6 +20,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import LogoutIcon from "@mui/icons-material/Logout";
 import logo from "../assets/logo-kmutt.png";
+import { useSelector } from "react-redux";
 
 
 const AdminLinks = [
@@ -65,7 +66,7 @@ const NavLink = ({ children }) => (
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isAuth = false;
+  const { isAuth } = useSelector((state) => state.auth);
 
   return (
     <>

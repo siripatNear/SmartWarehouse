@@ -14,20 +14,19 @@ import Login from './pages/Login';
 // import PickingList from './pages/PickingList';
 
 import './App.css';
+import AddUser from "./pages/AddUser";
 
-// import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 
 const PrivateRoutes = () => {
-  // const { isAuth } = useSelector((state) => state.auth)
-  const isAuth = false;
+  const { isAuth } = useSelector((state) => state.auth)
 
   return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
 }
 
 const RestrictedRoutes = () => {
-  // const { isAuth } = useSelector((state) => state.auth)
-  const isAuth = false;
+  const { isAuth } = useSelector((state) => state.auth)
 
   return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
 }
@@ -40,6 +39,9 @@ const App = () => {
           <Route element={<PrivateRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
+
+        {/* //?test routes */}
+        <Route path='/add-user' element={<AddUser />} />
 
         <Route element={<RestrictedRoutes />}>
           <Route path='/login' element={<Login />} />

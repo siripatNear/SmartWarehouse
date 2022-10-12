@@ -25,18 +25,4 @@ const Dashboard = () => {
   )
 }
 
-// const Dashboard = () => {
-//   return (
-//     <div>
-//       <div className='Search'>
-//         <Search />
-//       </div>
-//       <div className='Dashboard'>
-//         <BoxSectionDashboard />
-//         <BoxOverallDashboard />
-//       </div>
-//     </div>
-//   )
-// }
-
 export default Dashboard;
