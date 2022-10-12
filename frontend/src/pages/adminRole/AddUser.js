@@ -17,7 +17,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
-import SaveButton from "./Savebutton";
+import SaveButton from "../../components/TwoButton";
 
 export const roleData = [
   { value: "Operator", label: "Operator" },
@@ -168,14 +168,27 @@ export default function AddUser() {
                   onOpen={onOpen}
                   onClose={onClose}
                   buttonName="Save"
-                  textHeader="Add"
-                  textBody=<VStack alignItems="left">
+                  buttonColor="whatsapp"
+                  HearderFsize="2xl"
+                  LbuttonPopup="Cancle"
+                  RbuttonPopup="Confirm"
+                  ColorRbuttonPopup='whatsapp'
+
+                  textHeader= 
+                  <HStack>
+                    <font color="green"> Confirm </font> 
+                    <font > to add this user </font>  
+                  </HStack>
+
+                  textBody=
+                  <VStack alignItems="left">
                     <Text fontSize="xl">
                       Name : {firstname} {lasttname}
                     </Text>
                     <Text fontSize="xl">User ID : {userid} </Text>
                     <Text fontSize="xl">Role : {role} </Text>
                   </VStack>
+
                 />
               </Stack>
             </Stack>

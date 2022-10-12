@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, HStack, Link, VStack, Heading, Box } from "@chakra-ui/react";
 
-import BoxOverallDashboard from "../components/BoxOverallDashboard";
-import TablePickingList from "../components/TablePickingList";
-import Search from "../components/Search";
-import AddAlert from "../components/Addbutton";
+import BoxOverallDashboard from "../../components/BoxOverallDashboard";
+import TablePickingList from "../../components/TablePickingList";
+import Search from "../../components/Search";
+import AddAlert from "../../components/Addbutton";
 
 const PickingList = () => {
   return (
