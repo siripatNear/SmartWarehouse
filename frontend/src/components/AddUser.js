@@ -26,6 +26,8 @@ export const roleData = [
 ];
 
 export default function AddUser() {
+
+  /*
   const [firstname, setFirstName] = useState("");
   const [lasttname, setLastName] = useState("");
   const [userid, setUserID] = useState("");
