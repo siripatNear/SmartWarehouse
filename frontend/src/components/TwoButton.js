@@ -12,8 +12,13 @@ import React from "react";
 
 function SaveButton({
   buttonName = "",
+  buttonColor = "",
   textHeader = "",
   textBody = "",
+  LbuttonPopup = "",
+  RbuttonPopup = "",
+  ColorRbuttonPopup = "",
+  HearderFsize = "",
   isOpen,
   onOpen,
   onClose,
@@ -24,10 +29,9 @@ function SaveButton({
     <>
       <Button
         type="submit"
-        colorScheme="green"
+        colorScheme={buttonColor}
         loadingText="Submitting"
         size="lg"
-        bg={"green"}
         color={"white"}
         _hover={{
           bg: "green.500",
@@ -45,17 +49,17 @@ function SaveButton({
         <AlertDialogOverlay />
 
         <AlertDialogContent borderRadius="15px">
-          <AlertDialogHeader fontSize={"2xl"}>
-            <font color="green">Confirm</font> to {textHeader} this user
+          <AlertDialogHeader fontSize={HearderFsize}>
+            {textHeader}
           </AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>{textBody}</AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
-              Cancle
+              {LbuttonPopup}
             </Button>
-            <Button colorScheme="green" ml={3}>
-              Confirm
+            <Button colorScheme={ColorRbuttonPopup} ml={3}>
+              {RbuttonPopup}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
