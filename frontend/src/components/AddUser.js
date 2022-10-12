@@ -32,7 +32,6 @@ export default function AddUser() {
   const [role, setRole] = useState("");
   // const [password, setPassword] = useState("");
   // const [confirmpassword, setConfirmPassword] = useState("");
-
   const [setPassword] = useState("");
   const [setConfirmPassword] = useState("");
 
@@ -169,7 +168,7 @@ export default function AddUser() {
                   onOpen={onOpen}
                   onClose={onClose}
                   buttonName="Save"
-                  textHeader="add"
+                  textHeader="Add"
                   textBody=<VStack alignItems="left">
                     <Text fontSize="xl">
                       Name : {firstname} {lasttname}

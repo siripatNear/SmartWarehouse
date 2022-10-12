@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import logo from "../assets/logo-kmutt.png";
 
-export default function SimpleCard() {
+export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
 
@@ -34,14 +34,14 @@ export default function SimpleCard() {
       >
         <Stack align={"center"}>
           <img src={logo} alt="logo" height="auto" width="350px" />
-          <Heading fontSize={"2xl"}>Sign in to your account</Heading>
+          <Heading fontSize={"2xl"}>Log in to your account</Heading>
         </Stack>
 
         <Box borderRadius="15px" boxShadow={"lg"} p={10} bgColor="white">
           <Stack spacing={4}>
             <FormControl id="username">
               <FormLabel>User ID</FormLabel>
-              <Input type="text" placeholder="Username" />
+              <Input type="text" placeholder="User ID" />
             </FormControl>
 
             <FormControl>

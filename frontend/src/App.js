@@ -10,11 +10,12 @@ import TablePickingList from './components/TablePickingList';
 
 import Dashboard from './pages/Dashboard';
 import OrderList from './pages/OrderList';
-import SignIn from './pages/SignIn';
+import LogIn from './pages/LogIn';
 import PickingList from './pages/PickingList';
 import OrderDetail from './pages/OrderDetail';
 
 import AddUser from "./components/AddUser";
+import UserManage from "./pages/UserManage";
 
 // Forklift_PutAway_Page
 import ScanTag from "./pages/Forklift_PutAway/ScanTag";
@@ -54,8 +55,8 @@ export const router = createBrowserRouter([
     element: <OrderList />,
   },
   {
-    path: "signin",
-    element: <SignIn />,
+    path: "login",
+    element: <LogIn />,
   },
   {
     path: "navbar",
@@ -84,6 +85,10 @@ export const router = createBrowserRouter([
   {
     path: "AddUser",
     element: <AddUser/>,
+  },
+  {
+    path: "UserManage",
+    element: <UserManage/>,
   },
   {
     path: "scantag",
