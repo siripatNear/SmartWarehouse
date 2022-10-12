@@ -30,8 +30,11 @@ export default function AddUser() {
   const [lasttname, setLastName] = useState("");
   const [userid, setUserID] = useState("");
   const [role, setRole] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [confirmpassword, setConfirmPassword] = useState("");
+
+  const [setPassword] = useState("");
+  const [setConfirmPassword] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const handleSubmit = (event) => {
