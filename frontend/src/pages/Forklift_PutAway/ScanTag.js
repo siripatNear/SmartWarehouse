@@ -2,9 +2,9 @@ import React from 'react'
 import "./ScanTag.css";
 import scanlogo from "../../assets/scanlogo.png";
 
-const users = [
+const user = [
     {
-        "user": "Mr.Petch",
+        "name": "Mr.Petch",
         "id": "0123456789",
     },
 ]
@@ -12,9 +12,9 @@ const users = [
 function ScanTag() {
   return (
     <div>
-      <div className='Content'>
+      <div className='ContentScanTagPage'>
         <div className='UserContainer'>
-          Name : {users[0].user} ID : {users[0].id} 
+          Name : {user[0].name} ID : {user[0].id} 
         </div>
         <div className='ScanTagContainer'>
           Please! Scan Tag
