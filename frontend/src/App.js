@@ -5,15 +5,22 @@ import { useState } from "react";
 
 import PopUp from './components/PopUp';
 import Navbar from './components/Navbar';
+import Search from './components/Search';
+import TablePickingList from './components/TablePickingList';
+
 import Dashboard from './pages/Dashboard';
 import OrderList from './pages/OrderList';
 import LogIn from './pages/LogIn';
 import PickingList from './pages/PickingList';
+import OrderDetail from './pages/OrderDetail';
 
-import Search from './components/Search';
-import TablePickingList from './components/TablePickingList';
 import AddUser from "./components/AddUser";
 import UserManage from "./pages/UserManage";
+
+// Forklift_PutAway_Page
+import ScanTag from "./pages/Forklift_PutAway/ScanTag";
+import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
+import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 
 
 function App() {
@@ -68,6 +75,10 @@ export const router = createBrowserRouter([
     element: <PopUp />,
   },
   {
+    path: "orderdetail",
+    element: <OrderDetail />,
+  },
+  {
     path: "TablePickingList",
     element: <TablePickingList/>,
   },
@@ -78,6 +89,18 @@ export const router = createBrowserRouter([
   {
     path: "UserManage",
     element: <UserManage/>,
+  },
+  {
+    path: "scantag",
+    element: <ScanTag/>,
+  },
+  {
+    path: "updatemat",
+    element: <UpdateMat/>,
+  },
+  {
+    path: "putawayitem",
+    element: <PutAwayItem/>,
   },
 
 ]);
