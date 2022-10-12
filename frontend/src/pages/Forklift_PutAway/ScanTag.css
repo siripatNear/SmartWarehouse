@@ -1,0 +1,33 @@
+.Content {
+    display: grid;
+    justify-items: center;
+}
+
+.UserContainer {
+    width: 40%;
+    height: 53px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: 25px;
+    border-radius: 15px;
+    margin-top: 20px;
+    background-color: rgb(235, 235, 235);
+}
+
+.ScanTagContainer {
+    width: 40%;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: 25px;
+    border-radius: 15px;
+    margin-top: 20px;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    box-shadow: 0 4px 8px 0 rgba(124, 124, 124, 0.2), 0 6px 20px 0 rgba(124, 124, 124, 0.19);
+}
