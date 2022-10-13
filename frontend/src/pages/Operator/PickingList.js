@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, HStack, Link, VStack, Heading, Box } from "@chakra-ui/react";
+import { Button, HStack, VStack, Heading, Box } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 import BoxOverallDashboard from "../../components/BoxOverallDashboard";
 import TablePickingList from "../../components/TablePickingList";
@@ -19,11 +20,9 @@ const PickingList = () => {
           width="100%"
         >
           <Heading as="h1">Zone 4</Heading>
-          <Link href="/">
-            <Button colorScheme="twitter" variant="outline">
-              Show All
-            </Button>
-          </Link>
+          <Button colorScheme="twitter" variant="outline" as={Link} to="/">
+            Show All
+          </Button>
         </HStack>
         <TablePickingList />
         <Box

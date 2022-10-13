@@ -34,9 +34,9 @@ export const cate = [
 const Search = () => {
   return (
     <form style={{ width: "100%" }}>
-      <HStack width={"100%"} paddingRight={8}>
+      <HStack width={"100%"} paddingRight={8} paddingTop={4}>
         <FormControl p={4} id="warehouse">
-          <FormLabel>Warehouse</FormLabel>
+          {/* <FormLabel>Warehouse</FormLabel> */}
           <Select
             name="Warehouse"
             options={warehouse}
@@ -46,7 +46,7 @@ const Search = () => {
         </FormControl>
 
         <FormControl>
-          <FormLabel>Zone</FormLabel>
+          {/* <FormLabel>Zone</FormLabel> */}
           <Select
             name="Zone"
             options={zone}
@@ -56,7 +56,7 @@ const Search = () => {
         </FormControl>
 
         <FormControl>
-          <FormLabel>Category</FormLabel>
+          {/* <FormLabel>Category</FormLabel> */}
           <Select
             name="Category"
             options={cate}
@@ -66,7 +66,7 @@ const Search = () => {
         </FormControl>
 
         <FormControl p={4} id="length">
-          <FormLabel>Length</FormLabel>
+          {/* <FormLabel>Length</FormLabel> */}
           <Input type="text" placeholder="Search Length" />
         </FormControl>
         <IconButton

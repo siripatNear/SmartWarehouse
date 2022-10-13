@@ -11,7 +11,6 @@ import {
   Stack,
   Button,
   Heading,
-  useColorModeValue,
   Text,
   VStack,
   useDisclosure,
@@ -71,22 +70,12 @@ export default function AddUser() {
         </VStack>
       />
 
-      <Flex
-        minH={"93.2vh"}
-        align={"center"}
-        justify={"center"}
-        bg={useColorModeValue("white.200", "gray.800")}
-      >
+      <Flex minH={"93vh"} align={"center"} justify={"center"} bgColor={"white"}>
         <Stack spacing={5} py={30} px={15}>
           <Stack>
             <Heading fontSize={"4xl"}>Add User</Heading>
           </Stack>
-          <Box
-            borderRadius="15px"
-            bg={useColorModeValue("white", "gray.700")}
-            boxShadow={"lg"}
-            p={8}
-          >
+          <Box borderRadius="15px" bgColor={"white"} boxShadow={"lg"} p={8}>
             <form onSubmit={handleSubmit}>
               <Stack spacing={4}>
                 <HStack>
