@@ -70,7 +70,7 @@ const UserManage = () => {
           <TableContainer width="70%">
             <Table size="md">
               <Thead>
-                <Tr backgroundColor="#A3D9FB">
+                <Tr backgroundColor="#C7E8FC">
                   {header.map((head) => (
                     <Th fontSize={16} key={head.value}>
                       {head.label}

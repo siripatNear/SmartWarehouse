@@ -21,6 +21,7 @@ import UserManage from "./pages/adminRole/UserManage";
 import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
+import NavbarAdmin from "./components/NavbarAdmin";
 
 function App() {
   const [openPopup, setOpenPopup] = useState(false);
@@ -100,5 +101,9 @@ export const router = createBrowserRouter([
   {
     path: "putawayitem",
     element: <PutAwayItem />,
+  },
+  {
+    path: "navbaradmin",
+    element: <NavbarAdmin />,
   },
 ]);

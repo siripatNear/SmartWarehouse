@@ -1,14 +1,10 @@
 import React from "react";
-import {
-  FormControl,
-  HStack,
-  Button,
-  Link,
-} from "@chakra-ui/react";
+import { FormControl, HStack, Button } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { Input } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 
 export const roleData = [
   { value: "Operator", label: "Operator" },
@@ -42,11 +38,15 @@ const SearchUser = () => {
           />
         </HStack>
       </form>
-      <Link href="/adduser">
-        <Button marginRight={4} colorScheme="whatsapp">
-          ADD USER
-        </Button>
-      </Link>
+      <Button
+        marginRight={4}
+        marginLeft={3}
+        colorScheme="whatsapp"
+        as={Link}
+        to="/adduser"
+      >
+        ADD USER
+      </Button>
     </>
   );
 };
