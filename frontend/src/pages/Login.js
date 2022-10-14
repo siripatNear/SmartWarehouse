@@ -108,7 +108,8 @@ export default function Login() {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
-              {/* //TODO: manage error and success style */}
+
+              {/* //TODO: manage error style */}
 
               <div style={{color:'red', margin: '5px 0'}}>{error}</div>
 
