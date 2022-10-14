@@ -18,6 +18,7 @@ export const CustomAlertDialog = ({
   HearderFsize = "",
   isOpen,
   onClose,
+  onConfirm
 }) => {
 
   return (
@@ -38,7 +39,7 @@ export const CustomAlertDialog = ({
           <AlertDialogBody>{textBody}</AlertDialogBody>
           <AlertDialogFooter>
             <Button onClick={onClose}>{LbuttonPopup}</Button>
-            <Button colorScheme={ColorRbuttonPopup} ml={3}>
+            <Button colorScheme={ColorRbuttonPopup} ml={3} onClick={onConfirm}>
               {RbuttonPopup}
             </Button>
           </AlertDialogFooter>
