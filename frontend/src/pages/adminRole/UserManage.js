@@ -37,12 +37,12 @@ const UserManage = () => {
         isOpen={isOpen}
         onClose={onClose}
         LbuttonPopup="Cancle"
-        RbuttonPopup="Confirm"
+        RbuttonPopup="Delete"
         ColorRbuttonPopup="red"
         HearderFsize="2xl"
         textHeader=<HStack>
-          <font color="red"> Confirm </font>
-          <font> to delete this user </font>
+          <font color="red"> Delete </font>
+          <font> this user ? </font>
         </HStack>
         textBody=<VStack alignItems="left">
           <Text fontSize="xl">

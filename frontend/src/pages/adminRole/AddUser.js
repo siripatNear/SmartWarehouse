@@ -58,8 +58,9 @@ export default function AddUser() {
         RbuttonPopup="Confirm"
         ColorRbuttonPopup="whatsapp"
         textHeader=<HStack>
-          <font color="green"> Confirm </font>
-          <font> to add this user </font>
+          <font> Confirm to </font>
+          <font color="green"> add </font>
+          <font> this user </font>
         </HStack>
         textBody=<VStack alignItems="left">
           <Text fontSize="xl">
