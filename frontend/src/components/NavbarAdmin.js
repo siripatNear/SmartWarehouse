@@ -13,6 +13,7 @@ import {
   useColorModeValue,
   Stack,
   Text,
+  Link as L,
   VStack,
   MenuDivider,
 } from "@chakra-ui/react";
@@ -39,7 +40,7 @@ const Links = [
 ];
 
 const NavLink = ({ children }) => (
-  <Link
+  <L
     px={2}
     py={1}
     rounded={"md"}
@@ -50,7 +51,7 @@ const NavLink = ({ children }) => (
     href={children.link}
   >
     {children.name}
-  </Link>
+  </L>
 );
 
 export default function NavbarAdmin() {
