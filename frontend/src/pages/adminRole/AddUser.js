@@ -18,29 +18,75 @@ import {
 import { Select } from "chakra-react-select";
 import CustomButton from "../../components/CustomButton";
 import { CustomAlertDialog } from "../../components/AlertDialog";
+//api
+import { onAddUser } from "../../api/auth";
 
-export const roleData = [
+
+export const roles = [
   { value: "Operator", label: "Operator" },
   { value: "Forklift", label: "Forklift" },
   { value: "Admin", label: "Admin" },
 ];
 
 export default function AddUser() {
-  const [firstname, setFirstName] = useState("");
-  const [lasttname, setLastName] = useState("");
-  const [userid, setUserID] = useState("");
-  const [role, setRole] = useState("");
+  const [values, setValues] = useState({
+    first_name: '',
+    last_name: '',
+    user_id: '',
+    role: '',
+    password: '',
+    confirmPassword: '',
+
+  });
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  }
+
+  const onConfirm = async (e) => {
+    console.log(values);
+    try {
+
+      const { data } = await onAddUser(values);
+      setError('');
+      setSuccess(data.message)
+      setValues({
+        first_name: '',
+        last_name: '',
+        user_id: '',
+        role: '',
+        password: '',
+        confirmPassword: '',
+
+      })
+      onClose(); // close popup window
+
+    } catch (error) {
+      setError(error.response.data.errors[0].msg);
+      setSuccess('');
+      onClose(); // close popup window
+
+    }
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    onOpen(); //call popup
+  };
+
+  // *Password-----------------------------------------
   // const [password, setPassword] = useState("");
   // const [confirmpassword, setConfirmPassword] = useState("");
   const [setPassword] = useState("");
   const [setConfirmPassword] = useState("");
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onOpen();
-  };
+  //-----------------------------------------------
+  //* popup
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  //--------------------------------------------------
+  // show password
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
@@ -48,11 +94,14 @@ export default function AddUser() {
   const handleShowConfirmClick = () =>
     setShowConfirmPassword(!showConfirmPassword);
 
+  //----------------------------------------------------
+
   return (
     <>
       <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
+        onConfirm={onConfirm}
         HearderFsize="2xl"
         LbuttonPopup="Cancle"
         RbuttonPopup="Confirm"
@@ -64,10 +113,10 @@ export default function AddUser() {
         </HStack>
         textBody=<VStack alignItems="left">
           <Text fontSize="xl">
-            Name : {firstname} {lasttname}
+            Name : {values.first_name} {values.last_name}
           </Text>
-          <Text fontSize="xl">User ID : {userid} </Text>
-          <Text fontSize="xl">Role : {role} </Text>
+          <Text fontSize="xl">User ID : {values.user_id} </Text>
+          <Text fontSize="xl">Role : {values.role} </Text>
         </VStack>
       />
 
@@ -77,7 +126,7 @@ export default function AddUser() {
             <Heading fontSize={"4xl"}>Add User</Heading>
           </Stack>
           <Box borderRadius="15px" bgColor={"white"} boxShadow={"lg"} p={8}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => onSubmit(e)}>
               <Stack spacing={4}>
                 <HStack>
                   <Box width="100%">
@@ -86,8 +135,9 @@ export default function AddUser() {
                       <Input
                         type="text"
                         placeholder="First Name"
-                        onChange={(event) =>
-                          setFirstName(event.currentTarget.value)
+                        name='first_name'
+                        value={values.first_name}
+                        onChange={(e) => onChange(e)
                         }
                       />
                     </FormControl>
@@ -95,12 +145,11 @@ export default function AddUser() {
                   <Box width="100%">
                     <FormControl id="lastName" isRequired>
                       <FormLabel>Last Name</FormLabel>
-                      <Input
-                        type="text"
-                        placeholder="Last Name"
-                        onChange={(event) =>
-                          setLastName(event.currentTarget.value)
-                        }
+                      <Input onChange={(e) => onChange(e)}
+                        type='text'
+                        name='last_name'
+                        value={values.last_name}
+                        placeholder='Last Name'
                       />
                     </FormControl>
                   </Box>
@@ -109,12 +158,11 @@ export default function AddUser() {
                   <Box width="100%">
                     <FormControl id="userid" isRequired>
                       <FormLabel>User ID</FormLabel>
-                      <Input
-                        type="text"
-                        placeholder="User ID"
-                        onChange={(event) =>
-                          setUserID(event.currentTarget.value)
-                        }
+                      <Input onChange={(e) => onChange(e)}
+                        type='text'
+                        name='user_id'
+                        value={values.user_id}
+                        placeholder='User ID'
                       />
                     </FormControl>
                   </Box>
@@ -122,10 +170,12 @@ export default function AddUser() {
                     <FormControl id="role" isRequired>
                       <FormLabel>Role</FormLabel>
                       <Select
-                        options={roleData}
+                        options={roles}
                         placeholder="Role"
                         closeMenuOnSelect={true}
-                        onChange={(v) => setRole(v.value)}
+                        onChange={(e) => {
+                          setValues({ ...values, role: e.value })
+                        }}
                       />
                     </FormControl>
                   </Box>
@@ -138,9 +188,9 @@ export default function AddUser() {
                         <Input
                           type={showPassword ? "text" : "password"}
                           placeholder="Password"
-                          onChange={(event) =>
-                            setPassword(event.currentTarget.value)
-                          }
+                          name="password"
+                          value={values.password}
+                          onChange={(e) => onChange(e)}
                         />
                         <InputRightElement width="4.5rem">
                           <Button
@@ -162,9 +212,9 @@ export default function AddUser() {
                         <Input
                           type={showConfirmPassword ? "text" : "password"}
                           placeholder="Confirm Password"
-                          onChange={(event) =>
-                            setConfirmPassword(event.currentTarget.value)
-                          }
+                          name="confirmPassword"
+                          value={values.confirmPassword}
+                          onChange={(e) => onChange(e)}
                         />
                         <InputRightElement zIndex={1} width="4.5rem">
                           <Button
@@ -179,6 +229,13 @@ export default function AddUser() {
                     </FormControl>
                   </Box>
                 </HStack>
+
+                {/* //TODO: manage error and success style */}
+
+                <div style={{ color: 'red', margin: '10px 0' }}>{error}</div>
+                <div style={{ color: 'green', margin: '10px 0' }}>{success}</div>
+
+                { /* ------------------------------------ */}
 
                 <Stack spacing={10} pt={2}>
                   <CustomButton

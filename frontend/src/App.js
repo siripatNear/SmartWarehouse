@@ -1,12 +1,18 @@
 import React from "react";
-import { createBrowserRouter } from "react-router-dom";
+import {
+  // createBrowserRouter,
+  BrowserRouter,
+  Navigate,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
+
+import './App.css';
+
+import { useSelector } from 'react-redux'
 import "./App.css";
 import { useState } from "react";
-
-import PopUp from "./components/PopUp";
-import Navbar from "./components/Navbar";
-import Search from "./components/Search";
-import TablePickingList from "./components/TablePickingList";
 
 import Dashboard from "./pages/Dashboard";
 import OrderList from "./pages/OrderList";
@@ -23,23 +29,42 @@ import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 import NavbarAdmin from "./components/NavbarAdmin";
 
-function App() {
-  const [openPopup, setOpenPopup] = useState(false);
 
-  return (
-    <div className="App">
-      <button
-        className="stupidbtn"
-        onClick={() => {
-          setOpenPopup(true);
-        }}
-      >
-        button
-      </button>
-      {openPopup && <PopUp closePopUp={setOpenPopup} />}
-    </div>
-  );
+const PrivateRoutes = () => {
+  const { isAuth } = useSelector((state) => state.auth)
+
+  return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
 }
+
+const RestrictedRoutes = () => {
+  const { isAuth } = useSelector((state) => state.auth)
+
+  return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
+}
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<LogIn />} />
+          <Route element={<PrivateRoutes />}>
+          <Route path='/dashboard' element={<Dashboard />} />
+        </Route>
+
+        {/* //?test routes */}
+        <Route path='/add-user' element={<AddUser />} />
+
+        <Route element={<RestrictedRoutes />}>
+          <Route path='/login' element={<LogIn />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App;
+
+/*
 
 export const router = createBrowserRouter([
   {
@@ -81,6 +106,8 @@ export const router = createBrowserRouter([
   {
     path: "TablePickingList",
     element: <TablePickingList />,
+<<<<<<< HEAD
+=======
   },
   {
     path: "AddUser",
@@ -105,5 +132,7 @@ export const router = createBrowserRouter([
   {
     path: "navbaradmin",
     element: <NavbarAdmin />,
+>>>>>>> 9b8d87b608e266af3cde6ab4d5d84dc0a2969c98
   },
 ]);
+*/

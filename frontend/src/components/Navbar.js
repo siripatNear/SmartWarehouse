@@ -20,11 +20,22 @@ import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { MdOutlineLogout } from "react-icons/md";
 import logo from "../assets/logo-kmutt.png";
+import { useSelector } from "react-redux";
 
-const Links = [
+
+const AdminLinks = [
+
+  {
+    name: "Order list",
+    link: "orderlist",
+  },
+];
+
+const OpLinks = [
+  
   {
     name: "Dashboard",
-    link: "/",
+    link: "dashboard",
   },
   {
     name: "Order list",
@@ -35,6 +46,8 @@ const Links = [
   //   link: "report",
   // },
 ];
+
+const GuestLink = [{}];
 
 const NavLink = ({ children }) => (
   <Link
@@ -53,6 +66,7 @@ const NavLink = ({ children }) => (
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isAuth } = useSelector((state) => state.auth);
 
   return (
     <>
@@ -84,9 +98,22 @@ export default function Navbar() {
               display={{ base: "none", md: "flex" }}
               fontSize="xl"
             >
-              {Links.map((link) => (
+
+              {/* //? edit */}
+              
+              { isAuth ? 
+                OpLinks.map((link) => (
                 <NavLink key={link.name}>{link}</NavLink>
-              ))}
+                
+
+              )) : 
+                  
+                GuestLink.map((link) => (
+                <NavLink key={link.name}>{link}</NavLink>
+              ))
+
+              }
+
             </HStack>
           </HStack>
           <Flex alignItems={"center"}>
@@ -127,10 +154,10 @@ export default function Navbar() {
           </Flex>
         </Flex>
 
-        {isOpen ? (
+        {isAuth ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              {Links.map((link) => (
+              {OpLinks.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
               ))}
             </Stack>
