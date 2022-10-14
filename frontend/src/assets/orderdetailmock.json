@@ -1,0 +1,22 @@
+[
+    {
+      "order_id": "0000001",
+      "create_by": "Slth",
+      "create_dt": "2022-10-11 11:36:00.407316",
+      "item_code": "BLBL21084M00492",
+      "category": 4,
+      "length": 100,
+      "create_dt-2": "2022-09-20 08:25:00",
+      "zone": 1
+    },
+    {
+      "order_id": "0000001",
+      "create_by": "Slth",
+      "create_dt": "2022-10-11 11:36:00.407316",
+      "item_code": "BLBL21084M00488",
+      "category": 6,
+      "length": 130,
+      "create_dt-2": "2022-09-20 06:00:00",
+      "zone": 4
+    }
+  ]

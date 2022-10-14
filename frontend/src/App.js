@@ -8,15 +8,26 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import Dashboard from './pages/Dashboard';
-// import OrderList from './pages/OrderList';
-import Login from './pages/Login';
-// import PickingList from './pages/PickingList';
-
 import './App.css';
-import AddUser from "./pages/AddUser";
 
 import { useSelector } from 'react-redux'
+import "./App.css";
+import { useState } from "react";
+
+import Dashboard from "./pages/Dashboard";
+import OrderList from "./pages/OrderList";
+import LogIn from "./pages/LogIn";
+import PickingList from "./pages/Operator/PickingList";
+import OrderDetail from "./pages/OrderDetail";
+
+import AddUser from "./pages/adminRole/AddUser";
+import UserManage from "./pages/adminRole/UserManage";
+
+// Forklift_PutAway_Page
+import ScanTag from "./pages/Forklift_PutAway/ScanTag";
+import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
+import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
+import NavbarAdmin from "./components/NavbarAdmin";
 
 
 const PrivateRoutes = () => {
@@ -35,7 +46,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login />} />
+        <Route path='/' element={<LogIn />} />
           <Route element={<PrivateRoutes />}>
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
@@ -44,7 +55,7 @@ const App = () => {
         <Route path='/add-user' element={<AddUser />} />
 
         <Route element={<RestrictedRoutes />}>
-          <Route path='/login' element={<Login />} />
+          <Route path='/login' element={<LogIn />} />
         </Route>
       </Routes>
     </BrowserRouter>
@@ -89,9 +100,39 @@ export const router = createBrowserRouter([
     element: <PopUp />,
   },
   {
+    path: "orderdetail",
+    element: <OrderDetail />,
+  },
+  {
     path: "TablePickingList",
     element: <TablePickingList />,
+<<<<<<< HEAD
+=======
   },
-
+  {
+    path: "AddUser",
+    element: <AddUser />,
+  },
+  {
+    path: "UserManage",
+    element: <UserManage />,
+  },
+  {
+    path: "scantag",
+    element: <ScanTag />,
+  },
+  {
+    path: "updatemat",
+    element: <UpdateMat />,
+  },
+  {
+    path: "putawayitem",
+    element: <PutAwayItem />,
+  },
+  {
+    path: "navbaradmin",
+    element: <NavbarAdmin />,
+>>>>>>> 9b8d87b608e266af3cde6ab4d5d84dc0a2969c98
+  },
 ]);
 */

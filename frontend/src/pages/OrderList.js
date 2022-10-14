@@ -1,9 +1,16 @@
 import React from 'react'
+import "./OrderList.css";
+import TableOrderlist from '../components/TableOrderlist';
 
 const OrderList = () => {
   return (
     <div>
-      OrderList
+      <div className='TitleOrderListPage'>
+        Order List
+      </div>
+      <div className='TableOrderlist'>
+        <TableOrderlist />
+      </div>
     </div>
   )
 }
