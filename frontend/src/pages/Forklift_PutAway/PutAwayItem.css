@@ -52,8 +52,21 @@
     font-weight: 400;
 }
 
+.ContainerContent{
+    display: flex;
+}
+
+.ContainerBtnFinish{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+
 .ContainerNoteBox {
     display: flex;
+    width: 80%;
     /* justify-content: center; */
     align-items: center;
     column-gap: 20px;

@@ -53,6 +53,9 @@ const App = () => {
 
         {/* //?test routes */}
         <Route path='/add-user' element={<AddUser />} />
+        <Route path='/usermanage' element={<UserManage />} />
+        <Route path='/putaway' element={<PutAwayItem />} />
+        <Route path='/updatemat' element={<UpdateMat />} />
 
         <Route element={<RestrictedRoutes />}>
           <Route path='/login' element={<LogIn />} />
