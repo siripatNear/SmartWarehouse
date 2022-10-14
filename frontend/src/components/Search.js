@@ -1,9 +1,8 @@
 import React from "react";
-import { FormControl, FormLabel } from "@chakra-ui/react";
+import { FormControl, FormLabel, HStack } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
-import "./Search.css";
 import { Input } from "@chakra-ui/react";
-import { IconButton } from '@chakra-ui/react'
+import { IconButton } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
 export const warehouse = [
@@ -32,57 +31,53 @@ export const cate = [
   { value: "corrugated", label: "Corrugated" },
 ];
 
-
 const Search = () => {
   return (
-    <div className="Container">
-      <FormControl p={4} id="search" >
-
-        <div className="WarehouseBox">
-          <FormLabel>Warehouse</FormLabel>
+    <form style={{ width: "100%" }}>
+      <HStack width={"100%"} paddingRight={8} paddingTop={4}>
+        <FormControl p={4} id="warehouse">
+          {/* <FormLabel>Warehouse</FormLabel> */}
           <Select
             name="Warehouse"
             options={warehouse}
             placeholder="Warehouse"
             closeMenuOnSelect={true}
           />
-        </div>
+        </FormControl>
 
-        <div className="ZoneBox">
-          <FormLabel>Zone</FormLabel>
+        <FormControl>
+          {/* <FormLabel>Zone</FormLabel> */}
           <Select
             name="Zone"
             options={zone}
             placeholder="Zone"
             closeMenuOnSelect={true}
           />
-        </div>
-        <div className="CateBox">
-          <FormLabel>Category</FormLabel>
+        </FormControl>
+
+        <FormControl>
+          {/* <FormLabel>Category</FormLabel> */}
           <Select
             name="Category"
             options={cate}
             placeholder="Category"
             closeMenuOnSelect={true}
           />
-        </div>
-        <div className="LengthBox">
-          <FormLabel>Length</FormLabel>
-          <Input type="number" placeholder="Length" />
-        </div>
-      </FormControl>
-      <div className="ButtonBox">
-      <IconButton
-      colorScheme='blue'
-      aria-label='Search database'
-      icon={<SearchIcon />}
-      type="submit" 
-      form="search" 
-      value="Submit"
-      />
-      </div>
-    </div>
-    
+        </FormControl>
+
+        <FormControl p={4} id="length">
+          {/* <FormLabel>Length</FormLabel> */}
+          <Input type="text" placeholder="Search Length" />
+        </FormControl>
+        <IconButton
+          colorScheme="blue"
+          aria-label="Search database"
+          icon={<SearchIcon />}
+          type="submit"
+          form="search"
+        />
+      </HStack>
+    </form>
   );
 };
 export default Search;
