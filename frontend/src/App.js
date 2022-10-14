@@ -8,9 +8,9 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import './App.css';
+import "./App.css";
 
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import "./App.css";
 import { useState } from "react";
 
@@ -29,38 +29,37 @@ import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 import NavbarAdmin from "./components/NavbarAdmin";
 
-
 const PrivateRoutes = () => {
-  const { isAuth } = useSelector((state) => state.auth)
+  const { isAuth } = useSelector((state) => state.auth);
 
-  return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
-}
+  return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
+};
 
 const RestrictedRoutes = () => {
-  const { isAuth } = useSelector((state) => state.auth)
+  const { isAuth } = useSelector((state) => state.auth);
 
-  return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
-}
+  return <>{!isAuth ? <Outlet /> : <Navigate to="/dashboard" />}</>;
+};
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<LogIn />} />
-          <Route element={<PrivateRoutes />}>
-          <Route path='/dashboard' element={<Dashboard />} />
+        <Route path="/" element={<LogIn />} />
+        <Route element={<PrivateRoutes />}>
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
 
         {/* //?test routes */}
-        <Route path='/add-user' element={<AddUser />} />
+        <Route path="/add-user" element={<AddUser />} />
 
         <Route element={<RestrictedRoutes />}>
-          <Route path='/login' element={<LogIn />} />
+          <Route path="/login" element={<LogIn />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
 export default App;
 
