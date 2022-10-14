@@ -20,6 +20,7 @@ import { Select } from "chakra-react-select";
 import SaveButton from "../components/Savebutton";
 
 import { onAddUser } from '../api/auth';
+import CustomButton from "../components/CustomButton";
 
 
 const roles = [
@@ -27,7 +28,6 @@ const roles = [
   { value: "Forklift", label: "Forklift" },
   { value: "Admin", label: "Admin" },
 ];
-
 
 
 export default function AddUser() {
@@ -105,7 +105,7 @@ export default function AddUser() {
           boxShadow={"lg"}
           p={8}
         >
-          <form onSubmit={(e)=>onSubmit(e)}>
+          <form onSubmit={(e) => onSubmit(e)}>
             <Stack spacing={4}>
               <HStack>
                 <Box width="100%">
@@ -219,7 +219,7 @@ export default function AddUser() {
               { /* ------------------------------------ */}
 
               <Stack spacing={10} pt={2}>
-                <SaveButton
+                <CustomButton
                   isOpen={isOpen}
                   onOpen={onOpen}
                   onClose={onClose}
