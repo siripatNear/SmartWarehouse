@@ -52,6 +52,7 @@ const App = () => {
 
         {/* //?test routes */}
         <Route path="/add-user" element={<AddUser />} />
+        <Route path="/UserManage" element={<UserManage />} />
 
         <Route element={<RestrictedRoutes />}>
           <Route path="/login" element={<LogIn />} />
@@ -105,8 +106,6 @@ export const router = createBrowserRouter([
   {
     path: "TablePickingList",
     element: <TablePickingList />,
-<<<<<<< HEAD
-=======
   },
   {
     path: "AddUser",
@@ -131,7 +130,6 @@ export const router = createBrowserRouter([
   {
     path: "navbaradmin",
     element: <NavbarAdmin />,
->>>>>>> 9b8d87b608e266af3cde6ab4d5d84dc0a2969c98
   },
 ]);
 */
