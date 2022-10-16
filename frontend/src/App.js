@@ -8,9 +8,9 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import './App.css';
+import "./App.css";
 
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import "./App.css";
 import { useState } from "react";
 
@@ -30,15 +30,14 @@ import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 import NavbarAdmin from "./components/NavbarAdmin";
 import RunPage from "./components/Logout";
 
-
 const PrivateRoutes = () => {
-  const { isAuth } = useSelector((state) => state.auth)
+  const { isAuth } = useSelector((state) => state.auth);
 
-  return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
-}
+  return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
+};
 
 const RestrictedRoutes = () => {
-  const { isAuth } = useSelector((state) => state.auth)
+  const { isAuth } = useSelector((state) => state.auth);
 
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
@@ -57,15 +56,17 @@ const App = () => {
         </Route>
 
         {/* //?test routes */}
-        <Route path='/add-user' element={<AddUser />} />
+        <Route path="/add-user" element={<AddUser />} />
+        <Route path="/UserManage" element={<UserManage />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
           <Route path='/login' element={<LogIn />} />
+
         </Route>
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
 export default App;
