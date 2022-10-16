@@ -78,8 +78,6 @@ export default function AddUser() {
   // *Password-----------------------------------------
   // const [password, setPassword] = useState("");
   // const [confirmpassword, setConfirmPassword] = useState("");
-  const [setPassword] = useState("");
-  const [setConfirmPassword] = useState("");
 
   //-----------------------------------------------
   //* popup

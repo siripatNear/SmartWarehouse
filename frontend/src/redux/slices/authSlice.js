@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 //this function wil make isAuth is true until we sign out
 const userAuthFromLocalStorage = () => {
-    const isAuth = localStorage.getItem('isAuth')
+    const isAuth = localStorage.getItem('isAuth');
 
     if (isAuth && JSON.parse(isAuth) === true) {
         return true;
