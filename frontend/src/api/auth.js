@@ -12,6 +12,11 @@ export async function onLogin(loginData){
 }
 
 export async function fetchProtectedInfo(){
-    return await axios.post(
+    return await axios.get(
         'http://localhost:5000/api/protected')
+}
+
+export async function onLogout(){
+    return await axios.get(
+        'http://localhost:5000/api/logout')
 }

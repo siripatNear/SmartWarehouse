@@ -56,7 +56,7 @@ const loginFieldCheck = check('user_id').custom(async (value, { req }) => {
     }
 
     req.user = user.rows[0] //get user login
-    // console.log(req.user)
+
 })
 
 

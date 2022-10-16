@@ -18,7 +18,7 @@ passport.use(
     new Strategy(opts, async ({ user_id }, done)=>{
         try {
             const { rows } = await db.query(`
-                SELECT user_id, first_name, last_name 
+                SELECT user_id, first_name, last_name, role
                 FROM users WHERE user_id = $1`,
                 [user_id]
             )
@@ -29,7 +29,9 @@ passport.use(
 
             let user = { user_id: rows[0].user_id, 
                         first_name: rows[0].first_name, 
-                        last_name: rows[0].last_name }
+                        last_name: rows[0].last_name,
+                        role: rows[0].role 
+                        }
 
             return await done(null, user)
         } catch (error){
