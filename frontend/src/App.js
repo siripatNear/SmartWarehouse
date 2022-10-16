@@ -31,13 +31,13 @@ import NavbarAdmin from "./components/NavbarAdmin";
 import RunPage from "./components/Logout";
 
 
-const AllRoutes = () => {
+const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth)
 
   return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
 }
 
-const AdminRoutes = () => {
+const RestrictedRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth)
 
   // if not logged in -> go to outlet routes (login).
@@ -46,23 +46,12 @@ const AdminRoutes = () => {
   return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
 }
 
-// const OperatorRoutes = () => {
-//   const { isAuth } = useSelector((state) => state.auth)
-
-//   return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
-// }
-
-// const ForkliftRoutes = () => {
-//   const { isAuth } = useSelector((state) => state.auth)
-
-//   return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
-// }
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<AllRoutes />}>
+        <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
           <Route path='/dashboard' element={<RunPage />} />
         </Route>
@@ -70,7 +59,7 @@ const App = () => {
         {/* //?test routes */}
         <Route path='/add-user' element={<AddUser />} />
 
-        <Route element={<AdminRoutes />}>
+        <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
           <Route path='/login' element={<LogIn />} />
         </Route>
