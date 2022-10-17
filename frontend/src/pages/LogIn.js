@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Flex,
     Box,
@@ -23,8 +23,10 @@ export default function Login() {
         password: ''
 
     });
+
     const [error, setError] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [user, setUser] = useState("");
+    const [role, setRole] = useState("")
 
     const onChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -33,23 +35,32 @@ export default function Login() {
     const dispatch = useDispatch();
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log(values);
 
         try {
 
+            await onLogin(values)
+                    .then((res) => {
+                        setUser(res.data.user.first_name);
+                        setRole(res.data.user.role);
+                    })
             const { data } = await onLogin(values);
             dispatch(authenticateUser())
             localStorage.setItem('isAuth', 'true')
+            
+            console.log(data)
 
-            setSuccess(data.message)
-            console.log(success);
 
         } catch (error) {
+            
             console.log(error.response.data.errors[0].msg);
             setError(error.response.data.errors[0].msg);
         }
 
     }
+
+    // useEffect(()=>{
+    //     console.log(user);
+    //     },[user]);
 
     //-------------------------------------------------------------
 
@@ -108,6 +119,7 @@ export default function Login() {
                                     </InputRightElement>
                                 </InputGroup>
                             </FormControl>
+
                             {/* //TODO: manage error and success style */}
 
                             <div style={{ color: 'red', margin: '5px 0' }}>{error}</div>

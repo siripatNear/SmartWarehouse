@@ -6,7 +6,7 @@ const { SECRET } = require('../constants')
 //* get users
 exports.getUsers = async (req,res) => {
     try {
-        const { rows } = await db.query("SELECT first_name, last_name FROM users");
+        const { rows } = await db.query("SELECT first_name, last_name, role FROM users");
         
         return res.status(200).json({
             success: true,
@@ -48,13 +48,15 @@ exports.login = async (req,res)=>{
     let payload = {
         user_id : user.user_id,
         first_name : user.first_name,
-        last_name : user.last_name
+        last_name : user.last_name,
+        role: user.role
     }
     try{
         const token = await sign(payload, SECRET)
         return res.status(200).cookie('token',token,{httpOnly:true}).json({
             success: true,
-            message: 'Logged in successfully'
+            message: 'Logged in successfully',
+            user: payload
         })
 
     }catch(error){
@@ -65,6 +67,7 @@ exports.login = async (req,res)=>{
     }
 
 }
+
 
 //* Authentication
 exports.protected = async (req,res) => {

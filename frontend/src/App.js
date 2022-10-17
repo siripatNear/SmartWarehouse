@@ -8,9 +8,9 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import './App.css';
+import "./App.css";
 
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import "./App.css";
 import { useState } from "react";
 
@@ -28,27 +28,31 @@ import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 import NavbarAdmin from "./components/NavbarAdmin";
-
+import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
+import RunPage from "./components/Logout";
 
 const PrivateRoutes = () => {
-  const { isAuth } = useSelector((state) => state.auth)
+  const { isAuth } = useSelector((state) => state.auth);
 
-  return <>{isAuth ? <Outlet /> : <Navigate to='/login' />}</>
-}
+  return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
+};
 
 const RestrictedRoutes = () => {
-  const { isAuth } = useSelector((state) => state.auth)
+  const { isAuth } = useSelector((state) => state.auth);
 
-  return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
-}
+  // if not logged in -> go to outlet routes (login).
+  // if logged in -> go to home page.
+
+  return <>{!isAuth ? <Outlet /> : <Navigate to="/dashboard" />}</>;
+};
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<LogIn />} />
-          <Route element={<PrivateRoutes />}>
-          <Route path='/dashboard' element={<Dashboard />} />
+        <Route element={<PrivateRoutes />}>
+          {/* //*Outlet [Need to login before access these routes] */}
+          <Route path="/dashboard" element={<RunPage />} />
         </Route>
 
         {/* //?test routes */}
@@ -56,86 +60,17 @@ const App = () => {
         <Route path='/usermanage' element={<UserManage />} />
         <Route path='/putaway' element={<PutAwayItem />} />
         <Route path='/updatemat' element={<UpdateMat />} />
+        <Route path="/add-user" element={<AddUser />} />
+        <Route path="/UserManage" element={<UserManage />} />
+        <Route path="/PickingOrderList" element={<PickingOrderList />} />
 
         <Route element={<RestrictedRoutes />}>
-          <Route path='/login' element={<LogIn />} />
+          {/* //*Outlet  */}
+          <Route path="/login" element={<LogIn />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
 
 export default App;
-
-/*
-
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Dashboard />,
-  },
-  {
-    path: "app",
-    element: <App />,
-  },
-  {
-    path: "orderlist",
-    element: <OrderList />,
-  },
-  {
-    path: "login",
-    element: <LogIn />,
-  },
-  {
-    path: "navbar",
-    element: <Navbar />,
-  },
-  {
-    path: "pickinglist",
-    element: <PickingList />,
-  },
-  {
-    path: "search",
-    element: <Search />,
-  },
-  {
-    path: "popup",
-    element: <PopUp />,
-  },
-  {
-    path: "orderdetail",
-    element: <OrderDetail />,
-  },
-  {
-    path: "TablePickingList",
-    element: <TablePickingList />,
-<<<<<<< HEAD
-=======
-  },
-  {
-    path: "AddUser",
-    element: <AddUser />,
-  },
-  {
-    path: "UserManage",
-    element: <UserManage />,
-  },
-  {
-    path: "scantag",
-    element: <ScanTag />,
-  },
-  {
-    path: "updatemat",
-    element: <UpdateMat />,
-  },
-  {
-    path: "putawayitem",
-    element: <PutAwayItem />,
-  },
-  {
-    path: "navbaradmin",
-    element: <NavbarAdmin />,
->>>>>>> 9b8d87b608e266af3cde6ab4d5d84dc0a2969c98
-  },
-]);
-*/

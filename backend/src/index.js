@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const cors = require('cors');
 
+
 //import passport middleware
 require('./middlewares/passport-middleware')
 
@@ -14,11 +15,12 @@ app.use(cookieParser());
 app.use(cors({ origin: CLIENT_URL, credentials: true }));
 app.use(passport.initialize());
 
-//import routes from
-const authRoutes = require('./routes/auth');
+//import auth routes from
+const auth = require('./routes/auth');
 
-//initialize routes
-app.use('/api', authRoutes)
+
+//initialize for auth routes
+app.use('/api', auth)
 
 //app start
 const appStart = () => {

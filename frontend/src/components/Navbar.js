@@ -47,7 +47,6 @@ const OpLinks = [
   // },
 ];
 
-const GuestLink = [{}];
 
 const NavLink = ({ children }) => (
   <Link
@@ -104,19 +103,56 @@ export default function Navbar() {
               { isAuth ? 
                 OpLinks.map((link) => (
                 <NavLink key={link.name}>{link}</NavLink>
-                
-
               )) : 
-                  
-                GuestLink.map((link) => (
-                <NavLink key={link.name}>{link}</NavLink>
-              ))
-
+                  null
               }
 
             </HStack>
           </HStack>
+
+          { isAuth ? 
+          (
           <Flex alignItems={"center"}>
+            <Menu>
+              <MenuButton
+                py={2}
+                transition="all 0.3s"
+                _focus={{ boxShadow: "none" }}
+              >
+                <HStack>
+                  <Avatar size="sm" bg="#618296" />
+                  <VStack
+                    display={{ base: "none", md: "flex" }}
+                    alignItems="flex-start"
+                    spacing="1px"
+                    ml="2"
+                  >
+                    <Text marginLeft={4} fontSize="xl">
+                      u071819
+                    </Text>
+                  </VStack>
+                  <Box display={{ base: "none", md: "flex" }}>
+                    <FiChevronDown />
+                  </Box>
+                </HStack>
+              </MenuButton>
+              <MenuList
+                // bg={useColorModeValue("white", "gray.900")}
+                // borderColor={useColorModeValue("gray.200", "gray.700")}
+              >
+                <MenuItem icon={<MdOutlineLogout size={"30px"} />}>
+                  <Text marginLeft={4} fontSize="xl">
+                    Sign out
+                  </Text>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Flex>
+
+          ):null
+          }
+
+        {/* <Flex alignItems={"center"}>
             <Menu>
               <MenuButton
                 py={2}
@@ -151,10 +187,13 @@ export default function Navbar() {
                 </MenuItem>
               </MenuList>
             </Menu>
-          </Flex>
+          </Flex> */}
+
+
+
         </Flex>
 
-        {isAuth ? (
+        {/* {isAuth ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
               {OpLinks.map((link) => (
@@ -162,7 +201,9 @@ export default function Navbar() {
               ))}
             </Stack>
           </Box>
-        ) : null}
+        ) : null} */}
+
+
       </Box>
     </>
   );

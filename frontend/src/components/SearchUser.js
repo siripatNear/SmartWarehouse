@@ -43,7 +43,7 @@ const SearchUser = () => {
         marginLeft={3}
         colorScheme="whatsapp"
         as={Link}
-        to="/adduser"
+        to="/add-user"
       >
         ADD USER
       </Button>

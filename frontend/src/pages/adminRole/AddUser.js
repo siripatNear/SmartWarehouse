@@ -21,6 +21,9 @@ import { CustomAlertDialog } from "../../components/AlertDialog";
 //api
 import { onAddUser } from "../../api/auth";
 
+import { useForm, Controller } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export const roles = [
   { value: "Operator", label: "Operator" },
@@ -28,58 +31,65 @@ export const roles = [
   { value: "Admin", label: "Admin" },
 ];
 
+const schema = yup
+  .object({
+    first_name: yup.string().required(),
+    last_name: yup.string().required(),
+    user_id: yup.string().required(),
+    role: yup.string().required(),
+    password: yup.string().required(),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password")], "Passwords must match")
+      .required(),
+  })
+  .required();
+
 export default function AddUser() {
   const [values, setValues] = useState({
-    first_name: '',
-    last_name: '',
-    user_id: '',
-    role: '',
-    password: '',
-    confirmPassword: '',
-
+    first_name: "",
+    last_name: "",
+    user_id: "",
+    role: "",
+    password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  }
 
   const onConfirm = async (e) => {
     console.log(values);
     try {
-
       const { data } = await onAddUser(values);
-      setError('');
-      setSuccess(data.message)
+      setError("");
+      setSuccess(data.message);
       setValues({
-        first_name: '',
-        last_name: '',
-        user_id: '',
-        role: '',
-        password: '',
-        confirmPassword: '',
-
-      })
+        first_name: "",
+        last_name: "",
+        user_id: "",
+        role: "",
+        password: "",
+        confirmPassword: "",
+      });
       onClose(); // close popup window
-
     } catch (error) {
       setError(error.response.data.errors[0].msg);
-      setSuccess('');
+      setSuccess("");
       onClose(); // close popup window
-
     }
-  }
+  };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (x) => {
+    setValues(x);
     onOpen(); //call popup
   };
 
   // *Password-----------------------------------------
   // const [password, setPassword] = useState("");
   // const [confirmpassword, setConfirmPassword] = useState("");
-  const [setPassword] = useState("");
-  const [setConfirmPassword] = useState("");
+  // const [setPassword] = useState("");
+  // const [setConfirmPassword] = useState("");
+
 
   //-----------------------------------------------
   //* popup
@@ -95,6 +105,15 @@ export default function AddUser() {
     setShowConfirmPassword(!showConfirmPassword);
 
   //----------------------------------------------------
+
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   return (
     <>
@@ -126,71 +145,68 @@ export default function AddUser() {
             <Heading fontSize={"4xl"}>Add User</Heading>
           </Stack>
           <Box borderRadius="15px" bgColor={"white"} boxShadow={"lg"} p={8}>
-            <form onSubmit={(e) => onSubmit(e)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing={4}>
                 <HStack>
                   <Box width="100%">
-                    <FormControl id="firstName" isRequired>
+                    <FormControl id="firstName" isInvalid={errors.first_name}>
                       <FormLabel>First Name</FormLabel>
                       <Input
                         type="text"
                         placeholder="First Name"
-                        name='first_name'
-                        value={values.first_name}
-                        onChange={(e) => onChange(e)
-                        }
+                        {...register("first_name")}
                       />
                     </FormControl>
                   </Box>
                   <Box width="100%">
-                    <FormControl id="lastName" isRequired>
+                    <FormControl id="lastName" isInvalid={errors.last_name}>
                       <FormLabel>Last Name</FormLabel>
-                      <Input onChange={(e) => onChange(e)}
-                        type='text'
-                        name='last_name'
-                        value={values.last_name}
-                        placeholder='Last Name'
+                      <Input
+                        type="text"
+                        placeholder="Last Name"
+                        {...register("last_name")}
                       />
                     </FormControl>
                   </Box>
                 </HStack>
                 <HStack>
                   <Box width="100%">
-                    <FormControl id="userid" isRequired>
+                    <FormControl id="userid" isInvalid={errors.user_id}>
                       <FormLabel>User ID</FormLabel>
-                      <Input onChange={(e) => onChange(e)}
-                        type='text'
-                        name='user_id'
-                        value={values.user_id}
-                        placeholder='User ID'
+                      <Input
+                        type="text"
+                        placeholder="User ID"
+                        {...register("user_id")}
                       />
                     </FormControl>
                   </Box>
                   <Box width="100%" zIndex={2}>
-                    <FormControl id="role" isRequired>
+                    <FormControl isInvalid={errors.role}>
                       <FormLabel>Role</FormLabel>
-                      <Select
-                        options={roles}
-                        placeholder="Role"
-                        closeMenuOnSelect={true}
-                        onChange={(e) => {
-                          setValues({ ...values, role: e.value })
-                        }}
+                      <Controller
+                        name="role"
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            onChange={(v) => field.onChange(v.value)}
+                            placeholder="Role"
+                            closeMenuOnSelect={true}
+                            options={roles}
+                          />
+                        )}
                       />
                     </FormControl>
                   </Box>
                 </HStack>
                 <HStack>
                   <Box>
-                    <FormControl isRequired>
+                    <FormControl isInvalid={errors.password}>
                       <FormLabel>Password</FormLabel>
                       <InputGroup>
                         <Input
                           type={showPassword ? "text" : "password"}
                           placeholder="Password"
-                          name="password"
-                          value={values.password}
-                          onChange={(e) => onChange(e)}
+                          {...register("password")}
                         />
                         <InputRightElement width="4.5rem">
                           <Button
@@ -206,15 +222,13 @@ export default function AddUser() {
                   </Box>
 
                   <Box>
-                    <FormControl isRequired>
+                    <FormControl isInvalid={errors.confirmPassword}>
                       <FormLabel>Confirm Password</FormLabel>
                       <InputGroup>
                         <Input
                           type={showConfirmPassword ? "text" : "password"}
                           placeholder="Confirm Password"
-                          name="confirmPassword"
-                          value={values.confirmPassword}
-                          onChange={(e) => onChange(e)}
+                          {...register("confirmPassword")}
                         />
                         <InputRightElement zIndex={1} width="4.5rem">
                           <Button
@@ -232,14 +246,15 @@ export default function AddUser() {
 
                 {/* //TODO: manage error and success style */}
 
-                <div style={{ color: 'red', margin: '10px 0' }}>{error}</div>
-                <div style={{ color: 'green', margin: '10px 0' }}>{success}</div>
+                <div style={{ color: "red", margin: "10px 0" }}>{error}</div>
+                <div style={{ color: "green", margin: "10px 0" }}>
+                  {success}
+                </div>
 
-                { /* ------------------------------------ */}
+                {/* ------------------------------------ */}
 
                 <Stack spacing={10} pt={2}>
                   <CustomButton
-                    onClose={onClose}
                     buttonName="Save"
                     buttonColor="whatsapp"
                     buttonSize="lg"
