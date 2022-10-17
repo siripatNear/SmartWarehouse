@@ -28,6 +28,7 @@ import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 import NavbarAdmin from "./components/NavbarAdmin";
+import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
 import RunPage from "./components/Logout";
 
 const PrivateRoutes = () => {
@@ -42,9 +43,8 @@ const RestrictedRoutes = () => {
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
 
-  return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
-}
-
+  return <>{!isAuth ? <Outlet /> : <Navigate to="/dashboard" />}</>;
+};
 
 const App = () => {
   return (
@@ -52,17 +52,17 @@ const App = () => {
       <Routes>
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
-          <Route path='/dashboard' element={<RunPage />} />
+          <Route path="/dashboard" element={<RunPage />} />
         </Route>
 
         {/* //?test routes */}
         <Route path="/add-user" element={<AddUser />} />
         <Route path="/UserManage" element={<UserManage />} />
+        <Route path="/PickingOrderList" element={<PickingOrderList />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
-          <Route path='/login' element={<LogIn />} />
-
+          <Route path="/login" element={<LogIn />} />
         </Route>
       </Routes>
     </BrowserRouter>

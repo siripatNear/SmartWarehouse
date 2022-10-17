@@ -14,8 +14,6 @@ import {
   Text,
   VStack,
   useDisclosure,
-  FormErrorMessage,
-  FormHelperText,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import CustomButton from "../../components/CustomButton";
