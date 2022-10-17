@@ -37,7 +37,7 @@
 }
 
 .GridContainer {
-    max-width: 50%;
+    width: 900px;
     margin: auto;
     margin-bottom: 20px;
     display: grid;

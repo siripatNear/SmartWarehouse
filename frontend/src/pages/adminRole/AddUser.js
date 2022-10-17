@@ -258,6 +258,9 @@ export default function AddUser() {
                     buttonName="Save"
                     buttonColor="whatsapp"
                     buttonSize="lg"
+                    borderRadius="10px"
+                    fontSize="22px"
+                    fontWeight="medium"
                   />
                 </Stack>
               </Stack>
