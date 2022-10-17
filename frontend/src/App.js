@@ -28,6 +28,7 @@ import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 import NavbarAdmin from "./components/NavbarAdmin";
+import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -53,6 +54,7 @@ const App = () => {
         {/* //?test routes */}
         <Route path="/add-user" element={<AddUser />} />
         <Route path="/UserManage" element={<UserManage />} />
+        <Route path="/PickingOrderList" element={<PickingOrderList />} />
 
         <Route element={<RestrictedRoutes />}>
           <Route path="/login" element={<LogIn />} />
