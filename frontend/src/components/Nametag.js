@@ -1,18 +1,29 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Text, HStack } from "@chakra-ui/react";
 import React from "react";
 
 const Nametag = ({ name = "", userID = "" }) => {
   return (
     <Box
-      bg="gray.200"
-      w="80%"
+      bg="#E3F3FD"
+      w="70%"
       p={4}
       color="black"
       margin={5}
       borderRadius="15px"
       fontSize="xl"
+      justifyItems={"center"}
     >
-      Name : {name} User ID : {userID}
+      <HStack justify={"center"}>
+        <Text>
+          <b> Name : </b>
+          {name}
+        </Text>
+        <Text>&nbsp;&nbsp;&nbsp;</Text>
+        <Text>
+          <b>User ID : </b>
+          {userID}
+        </Text>
+      </HStack>
     </Box>
   );
 };

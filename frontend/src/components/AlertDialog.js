@@ -18,9 +18,8 @@ export const CustomAlertDialog = ({
   HearderFsize = "",
   isOpen,
   onClose,
-  onConfirm
+  onConfirm,
 }) => {
-
   return (
     <>
       <AlertDialog
