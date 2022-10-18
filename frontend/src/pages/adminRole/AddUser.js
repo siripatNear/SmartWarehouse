@@ -36,7 +36,12 @@ const schema = yup
     first_name: yup.string().required(),
     last_name: yup.string().required(),
     user_id: yup.string().required(),
-    role: yup.string().required(),
+    role: yup
+      .object({
+        value: yup.string().required(),
+        label: yup.string().required(),
+      })
+      .required(),
     password: yup.string().required(),
     confirmPassword: yup
       .string()
@@ -46,50 +51,44 @@ const schema = yup
   .required();
 
 export default function AddUser() {
-  const [values, setValues] = useState({
-    first_name: "",
-    last_name: "",
-    user_id: "",
-    role: "",
-    password: "",
-    confirmPassword: "",
-  });
+  // const [values, setValues] = useState({
+  //   first_name: "",
+  //   last_name: "",
+  //   user_id: "",
+  //   role: "",
+  //   password: "",
+  //   confirmPassword: "",
+  // });
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const onConfirm = async (e) => {
-    console.log(values);
-    try {
-      const { data } = await onAddUser(values);
-      setError("");
-      setSuccess(data.message);
-      setValues({
-        first_name: "",
-        last_name: "",
-        user_id: "",
-        role: "",
-        password: "",
-        confirmPassword: "",
-      });
-      onClose(); // close popup window
-    } catch (error) {
-      setError(error.response.data.errors[0].msg);
-      setSuccess("");
-      onClose(); // close popup window
-    }
-  };
-
-  const onSubmit = async (x) => {
-    setValues(x);
-    onOpen(); //call popup
-  };
+  // const onConfirm = async (e) => {
+  //   console.log(values);
+  //   try {
+  //     const { data } = await onAddUser(values);
+  //     setError("");
+  //     setSuccess(data.message);
+  //     setValues({
+  //       first_name: "",
+  //       last_name: "",
+  //       user_id: "",
+  //       role: "",
+  //       password: "",
+  //       confirmPassword: "",
+  //     });
+  //     onClose(); // close popup window
+  //   } catch (error) {
+  //     setError(error.response.data.errors[0].msg);
+  //     setSuccess("");
+  //     onClose(); // close popup window
+  //   }
+  // };
 
   // *Password-----------------------------------------
   // const [password, setPassword] = useState("");
   // const [confirmpassword, setConfirmPassword] = useState("");
   // const [setPassword] = useState("");
   // const [setConfirmPassword] = useState("");
-
 
   //-----------------------------------------------
   //* popup
@@ -110,35 +109,39 @@ export default function AddUser() {
     handleSubmit,
     register,
     control,
-    formState: { errors, isSubmitting },
+    reset,
+    getValues,
+    trigger,
+    formState: { errors },
   } = useForm({
+    mode: "onChange",
     resolver: yupResolver(schema),
   });
 
+  const onOpenDialog = async () => {
+    const pass = await trigger();
+    if (pass) {
+      onOpen();
+    }
+  };
+
+  const onSubmit = async (values) => {
+    console.log(values);
+    try {
+      const { data } = await onAddUser(values);
+      setError("");
+      setSuccess(data.message);
+      onClose(); // close popup window
+    } catch (error) {
+      setError(error.response.data.errors[0].msg);
+      setSuccess("");
+      onClose(); // close popup window
+    }
+    reset();
+  };
+
   return (
     <>
-      <CustomAlertDialog
-        isOpen={isOpen}
-        onClose={onClose}
-        onConfirm={onConfirm}
-        HearderFsize="2xl"
-        LbuttonPopup="Cancle"
-        RbuttonPopup="Confirm"
-        ColorRbuttonPopup="whatsapp"
-        textHeader=<HStack>
-          <font> Confirm to </font>
-          <font color="green"> add </font>
-          <font> this user </font>
-        </HStack>
-        textBody=<VStack alignItems="left">
-          <Text fontSize="xl">
-            Name : {values.first_name} {values.last_name}
-          </Text>
-          <Text fontSize="xl">User ID : {values.user_id} </Text>
-          <Text fontSize="xl">Role : {values.role} </Text>
-        </VStack>
-      />
-
       <Flex minH={"93vh"} align={"center"} justify={"center"} bgColor={"white"}>
         <Stack spacing={5} py={30} px={15}>
           <Stack>
@@ -146,6 +149,27 @@ export default function AddUser() {
           </Stack>
           <Box borderRadius="15px" bgColor={"white"} boxShadow={"lg"} p={8}>
             <form onSubmit={handleSubmit(onSubmit)}>
+              <CustomAlertDialog
+                isOpen={isOpen}
+                onClose={onClose}
+                onConfirm={handleSubmit(onSubmit)}
+                HearderFsize="2xl"
+                LbuttonPopup="Cancle"
+                RbuttonPopup="Confirm"
+                ColorRbuttonPopup="whatsapp"
+                textHeader=<HStack>
+                  <font> Confirm to </font>
+                  <font color="green"> add </font>
+                  <font> this user </font>
+                </HStack>
+                textBody=<VStack alignItems="left">
+                  <Text fontSize="xl">
+                    Name : {getValues().first_name} {getValues().last_name}
+                  </Text>
+                  <Text fontSize="xl">User ID : {getValues().user_id} </Text>
+                  <Text fontSize="xl">Role : {getValues().role?.value} </Text>
+                </VStack>
+              />
               <Stack spacing={4}>
                 <HStack>
                   <Box width="100%">
@@ -184,11 +208,13 @@ export default function AddUser() {
                     <FormControl isInvalid={errors.role}>
                       <FormLabel>Role</FormLabel>
                       <Controller
+                        defaultValue={null}
                         name="role"
                         control={control}
                         render={({ field }) => (
                           <Select
-                            onChange={(v) => field.onChange(v.value)}
+                            value={field.value}
+                            onChange={field.onChange}
                             placeholder="Role"
                             closeMenuOnSelect={true}
                             options={roles}
@@ -255,9 +281,11 @@ export default function AddUser() {
 
                 <Stack spacing={10} pt={2}>
                   <CustomButton
+                    onOpen={onOpenDialog}
                     buttonName="Save"
                     buttonColor="whatsapp"
                     buttonSize="lg"
+                    disabledSubmit
                   />
                 </Stack>
               </Stack>
