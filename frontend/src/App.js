@@ -55,6 +55,10 @@ const App = () => {
         </Route>
 
         {/* //?test routes */}
+        <Route path='/add-user' element={<AddUser />} />
+        <Route path='/usermanage' element={<UserManage />} />
+        <Route path='/putaway' element={<PutAwayItem />} />
+        <Route path='/updatemat' element={<UpdateMat />} />
         <Route path="/add-user" element={<AddUser />} />
         <Route path="/UserManage" element={<UserManage />} />
         <Route path="/PickingOrderList" element={<PickingOrderList />} />

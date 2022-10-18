@@ -98,6 +98,9 @@ const UserManage = () => {
                         buttonColor="twitter"
                         HoverColor="twitter.300"
                         buttonSize="sm"
+                        borderRadius="5px"
+                        fontSize="15px"
+                        fontWeight="medium"
                       />
 
                       <CustomButton
@@ -111,6 +114,9 @@ const UserManage = () => {
                         buttonColor="red"
                         buttonSize="sm"
                         HoverColor="red.300"
+                        borderRadius="5px"
+                        fontSize="15px"
+                        fontWeight="medium"
                       />
                     </Td>
                   </Tr>

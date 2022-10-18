@@ -7,6 +7,9 @@ function CustomButton({
   buttonColor = "",
   buttonSize = "",
   HoverColor = "",
+  fontSize = "",
+  fontWeight = "",
+  borderRadius = "",
   onOpen = null,
   disabledSubmit = false,
 }) {
@@ -19,6 +22,9 @@ function CustomButton({
         loadingText="Submitting"
         size={buttonSize}
         color={"white"}
+        borderRadius={borderRadius}
+        fontSize={fontSize}
+        fontWeight={fontWeight}
         _hover={{
           bg: HoverColor,
         }}
