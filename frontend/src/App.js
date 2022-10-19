@@ -14,21 +14,23 @@ import { useSelector } from "react-redux";
 import "./App.css";
 import { useState } from "react";
 
-import Dashboard from "./pages/Dashboard";
-import OrderList from "./pages/OrderList";
 import LogIn from "./pages/LogIn";
-import PickingList from "./pages/Operator/PickingList";
-import OrderDetail from "./pages/OrderDetail";
 
 import AddUser from "./pages/adminRole/AddUser";
 import UserManage from "./pages/adminRole/UserManage";
 
 // Forklift_PutAway_Page
-import ScanTag from "./pages/Forklift_PutAway/ScanTag";
-import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
-import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
-import NavbarAdmin from "./components/NavbarAdmin";
+import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
 import RunPage from "./components/Logout";
+
+// Navvbar
+import NavbarGuest from "./components/NavbarGuest";
+import NavbarFolklift from "./components/NavbarFolklift";
+import NavbarOperator from "./components/NavbarOperator";
+import NavbarAdmin from "./components/NavbarAdmin";
+import ScanTag from "./pages/Forklift_PutAway/ScanTag";
+import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
+import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -45,9 +47,8 @@ const RestrictedRoutes = () => {
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
 
-  return <>{!isAuth ? <Outlet /> : <Navigate to='/dashboard' />}</>
-}
-
+  return <>{!isAuth ? <Outlet /> : <Navigate to="/dashboard" />}</>;
+};
 
 const App = () => {
   return (
@@ -61,12 +62,20 @@ const App = () => {
         </Route>
 
         {/* //?test routes */}
-        <Route path="/UserManage" element={<UserManage />} />
+        <Route path="/add-user" element={<AddUser />} />
+        <Route path="/usermanage" element={<UserManage />} />
+        <Route path="/putaway" element={<PutAway />} />
+        <Route path="/updatemat" element={<UpdateMat />} />
+        <Route path="/PickingOrderList" element={<PickingOrderList />} />
+        <Route path="/ScanTag" element={<ScanTag />} />
+        <Route path="/NavbarGuest" element={<NavbarGuest />} />
+        <Route path="/NavbarFolklift" element={<NavbarFolklift />} />
+        <Route path="/NavbarOperator" element={<NavbarOperator />} />
+        <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
-          <Route path='/login' element={<LogIn />} />
-
+          <Route path="/login" element={<LogIn />} />
         </Route>
       </Routes>
     </BrowserRouter>

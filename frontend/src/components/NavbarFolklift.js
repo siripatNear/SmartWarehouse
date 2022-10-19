@@ -4,7 +4,6 @@ import {
   Flex,
   Avatar,
   HStack,
-  Link,
   IconButton,
   Menu,
   MenuButton,
@@ -14,27 +13,32 @@ import {
   useColorModeValue,
   Stack,
   Text,
+  Link as L,
   VStack,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { MdOutlineLogout } from "react-icons/md";
 import logo from "../assets/logo-kmutt.png";
-import { useSelector } from "react-redux";
 
-const OpLinks = [
-  {
-    name: "Dashboard",
-    link: "dashboard",
-  },
+const Links = [
   {
     name: "Order list",
-    link: "orderlist",
+    link: "orderlist/folklift",
+  },
+  {
+    name: "Put away",
+    link: "putaway",
+  },
+  {
+    name: "History",
+    link: "history",
   },
 ];
 
 const NavLink = ({ children }) => (
-  <Link
+  <L
     px={2}
     py={1}
     rounded={"md"}
@@ -45,12 +49,11 @@ const NavLink = ({ children }) => (
     href={children.link}
   >
     {children.name}
-  </Link>
+  </L>
 );
 
-export default function Navbar() {
+export default function NavbarFolklift() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isAuth } = useSelector((state) => state.auth);
 
   return (
     <>
@@ -82,56 +85,12 @@ export default function Navbar() {
               display={{ base: "none", md: "flex" }}
               fontSize="xl"
             >
-              {/* //? edit */}
-
-              {isAuth
-                ? OpLinks.map((link) => (
-                    <NavLink key={link.name}>{link}</NavLink>
-                  ))
-                : null}
+              {Links.map((link) => (
+                <NavLink key="Dashboard">{link}</NavLink>
+              ))}
             </HStack>
           </HStack>
-
-          {isAuth ? (
-            <Flex alignItems={"center"}>
-              <Menu>
-                <MenuButton
-                  py={2}
-                  transition="all 0.3s"
-                  _focus={{ boxShadow: "none" }}
-                >
-                  <HStack>
-                    <Avatar size="sm" bg="#618296" />
-                    <VStack
-                      display={{ base: "none", md: "flex" }}
-                      alignItems="flex-start"
-                      spacing="1px"
-                      ml="2"
-                    >
-                      <Text marginLeft={4} fontSize="xl">
-                        u071819
-                      </Text>
-                    </VStack>
-                    <Box display={{ base: "none", md: "flex" }}>
-                      <FiChevronDown />
-                    </Box>
-                  </HStack>
-                </MenuButton>
-                <MenuList
-                // bg={useColorModeValue("white", "gray.900")}
-                // borderColor={useColorModeValue("gray.200", "gray.700")}
-                >
-                  <MenuItem icon={<MdOutlineLogout size={"30px"} />}>
-                    <Text marginLeft={4} fontSize="xl">
-                      Sign out
-                    </Text>
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Flex>
-          ) : null}
-
-          {/* <Flex alignItems={"center"}>
+          <Flex alignItems={"center"}>
             <Menu>
               <MenuButton
                 py={2}
@@ -147,7 +106,7 @@ export default function Navbar() {
                     ml="2"
                   >
                     <Text marginLeft={4} fontSize="xl">
-                      u071819
+                      Folklift05
                     </Text>
                   </VStack>
                   <Box display={{ base: "none", md: "flex" }}>
@@ -161,23 +120,23 @@ export default function Navbar() {
               >
                 <MenuItem icon={<MdOutlineLogout size={"30px"} />}>
                   <Text marginLeft={4} fontSize="xl">
-                    Sign out
+                    Log out
                   </Text>
                 </MenuItem>
               </MenuList>
             </Menu>
-          </Flex> */}
+          </Flex>
         </Flex>
 
-        {/* {isAuth ? (
+        {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              {OpLinks.map((link) => (
+              {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
               ))}
             </Stack>
           </Box>
-        ) : null} */}
+        ) : null}
       </Box>
     </>
   );

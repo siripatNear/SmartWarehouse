@@ -18,9 +18,8 @@ export const CustomAlertDialog = ({
   HearderFsize = "",
   isOpen,
   onClose,
-  onConfirm
+  onConfirm,
 }) => {
-
   return (
     <>
       <AlertDialog
@@ -32,7 +31,7 @@ export const CustomAlertDialog = ({
         <AlertDialogOverlay />
 
         <AlertDialogContent borderRadius="15px">
-          <AlertDialogHeader fontSize={HearderFsize}>
+          <AlertDialogHeader fontSize={HearderFsize} marginTop="18px">
             {textHeader}
           </AlertDialogHeader>
           <AlertDialogCloseButton />
