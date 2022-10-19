@@ -10,14 +10,14 @@
     "order_id": "BK009",
     "create_dt": "9/17/2022 11:53",
     "quantity": 1,
-    "order_status": "In progress",
+    "order_status": "Not start",
     "ordered_by": "oflo.5416"
   },
   {
     "order_id": "CQ003",
     "create_dt": "9/20/2022 12:47",
     "quantity": 6,
-    "order_status": "In progress",
+    "order_status": "Not start",
     "ordered_by": "mauj.4142"
   },
   {
@@ -31,7 +31,7 @@
     "order_id": "FE008",
     "create_dt": "9/18/2022 14:54",
     "quantity": 5,
-    "order_status": "In progress",
+    "order_status": "Not start",
     "ordered_by": "wxgc.2322"
   },
   {
@@ -234,7 +234,7 @@
     "order_id": "VU009",
     "create_dt": "9/18/2022 4:24",
     "quantity": 2,
-    "order_status": "In progress",
+    "order_status": "Not start",
     "ordered_by": "igry.1253"
   },
   {
@@ -248,28 +248,28 @@
     "order_id": "WB006",
     "create_dt": "9/21/2022 12:55",
     "quantity": 8,
-    "order_status": "In progress",
+    "order_status": "Not start",
     "ordered_by": "riun.4127"
   },
   {
     "order_id": "WH003",
     "create_dt": "9/18/2022 5:15",
     "quantity": 2,
-    "order_status": "In progress",
+    "order_status": "Not start",
     "ordered_by": "igry.1253"
   },
   {
     "order_id": "WS008",
     "create_dt": "9/21/2022 13:06",
     "quantity": 1,
-    "order_status": "In progress",
+    "order_status": "Not start",
     "ordered_by": "cmba.8644"
   },
   {
     "order_id": "WY001",
     "create_dt": "9/15/2022 15:11",
     "quantity": 2,
-    "order_status": "In progress",
+    "order_status": "Not start",
     "ordered_by": "wxgc.2322"
   },
   {

@@ -31,6 +31,7 @@ import NavbarAdmin from "./components/NavbarAdmin";
 import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
 import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
+import History from "./pages/ForkliftPicking/History";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -62,6 +63,7 @@ const App = () => {
         <Route path="/putaway" element={<PutAway />} />
         <Route path="/updatemat" element={<UpdateMat />} />
         <Route path="/PickingOrderList" element={<PickingOrderList />} />
+        <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
 
         <Route path="/NavbarGuest" element={<NavbarGuest />} />
