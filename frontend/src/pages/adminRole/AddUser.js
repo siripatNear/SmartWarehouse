@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Box,
@@ -19,8 +19,7 @@ import { Select } from "chakra-react-select";
 import CustomButton from "../../components/CustomButton";
 import { CustomAlertDialog } from "../../components/AlertDialog";
 //api
-import { onAddUser } from "../../api/auth";
-
+import { onAddUser, onGetAddUserPage } from "../../api/data";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -62,6 +61,58 @@ export default function AddUser() {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  //* protect route from another role----------------------
+
+  const [loading, setLoading] = useState(true);
+  const [protectedData, setProtectedData] = useState(null);
+  
+  const protectedRoute = async () => {
+    try {
+      const { data } = await onGetAddUserPage();
+      setLoading(false);
+      console.log(data);
+
+    } catch (error) {
+      setProtectedData(error.response.data);
+    }
+  }
+
+  useEffect(() => {
+    protectedRoute();
+  }, [])
+
+
+  //*---------------------------------
+
+  // TODO: Add clear input field after adding user success
+
+  const onConfirm = async (e) => {
+    console.log(values);
+    try {
+      const { data } = await onAddUser(values);
+      setError("");
+      setSuccess(data.message);
+      setValues({
+        first_name: "",
+        last_name: "",
+        user_id: "",
+        role: "",
+        password: "",
+        confirmPassword: "",
+      });
+      onClose(); // close popup window
+    } catch (error) {
+      setError(error.response.data.errors[0].msg);
+      setSuccess("");
+      onClose(); // close popup window
+    }
+  };
+
+  const onSubmit = async (x) => {
+    setValues(x);
+    onOpen(); //call popup
+  };
+
   // const onConfirm = async (e) => {
   //   console.log(values);
   //   try {
@@ -83,12 +134,6 @@ export default function AddUser() {
   //     onClose(); // close popup window
   //   }
   // };
-
-  // *Password-----------------------------------------
-  // const [password, setPassword] = useState("");
-  // const [confirmpassword, setConfirmPassword] = useState("");
-  // const [setPassword] = useState("");
-  // const [setConfirmPassword] = useState("");
 
   //-----------------------------------------------
   //* popup

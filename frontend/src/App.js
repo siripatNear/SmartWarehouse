@@ -35,6 +35,9 @@ import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
 
+  // if logged in -> go to outlet routes.
+  // if not logged in -> go to login page.
+
   return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
 };
 
@@ -53,7 +56,9 @@ const App = () => {
       <Routes>
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
-          <Route path="/dashboard" element={<RunPage />} />
+          <Route path='/dashboard' element={<RunPage />} />
+          <Route path='/add-user' element={<AddUser />} />
+
         </Route>
 
         {/* //?test routes */}
@@ -63,7 +68,6 @@ const App = () => {
         <Route path="/updatemat" element={<UpdateMat />} />
         <Route path="/PickingOrderList" element={<PickingOrderList />} />
         <Route path="/ScanTag" element={<ScanTag />} />
-
         <Route path="/NavbarGuest" element={<NavbarGuest />} />
         <Route path="/NavbarFolklift" element={<NavbarFolklift />} />
         <Route path="/NavbarOperator" element={<NavbarOperator />} />

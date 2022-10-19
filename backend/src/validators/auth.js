@@ -5,13 +5,13 @@ const { compare } = require('bcryptjs')
 //* Add user validation
 //username
 const user_id = check('user_id')
-    .isLength({ min: 3, max: 10 })
-    .withMessage("User's ID has to be between 3 and 10 characters.")
+    .isLength({ min: 5 })
+    .withMessage("User's ID has to more than 5 characters.")
 
 //password
 const password = check('password')
-    .isLength({ min: 3, max: 10 })
-    .withMessage('Password has to be between 3 and 10 characters.')
+    .isLength({ min: 4})
+    .withMessage('Password has to more than 4 characters.')
 
 //role
 const role = check('role')
