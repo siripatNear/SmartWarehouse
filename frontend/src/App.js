@@ -33,6 +33,9 @@ import RunPage from "./components/Logout";
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
 
+  // if logged in -> go to outlet routes.
+  // if not logged in -> go to login page.
+
   return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
 };
 
@@ -53,10 +56,11 @@ const App = () => {
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
           <Route path='/dashboard' element={<RunPage />} />
+          <Route path='/add-user' element={<AddUser />} />
+
         </Route>
 
         {/* //?test routes */}
-        <Route path="/add-user" element={<AddUser />} />
         <Route path="/UserManage" element={<UserManage />} />
 
         <Route element={<RestrictedRoutes />}>

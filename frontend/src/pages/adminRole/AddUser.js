@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Box,
@@ -21,8 +21,7 @@ import { Select } from "chakra-react-select";
 import CustomButton from "../../components/CustomButton";
 import { CustomAlertDialog } from "../../components/AlertDialog";
 //api
-import { onAddUser } from "../../api/auth";
-
+import { onAddUser, onGetAddUserPage } from "../../api/data";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -59,6 +58,31 @@ export default function AddUser() {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  //* protect route from another role----------------------
+
+  const [loading, setLoading] = useState(true);
+  const [protectedData, setProtectedData] = useState(null);
+  
+  const protectedRoute = async () => {
+    try {
+      const { data } = await onGetAddUserPage();
+      setLoading(false);
+      console.log(data);
+
+    } catch (error) {
+      setProtectedData(error.response.data);
+    }
+  }
+
+  useEffect(() => {
+    protectedRoute();
+  }, [])
+
+
+  //*---------------------------------
+
+  // TODO: Add clear input field after adding user success
+
   const onConfirm = async (e) => {
     console.log(values);
     try {
@@ -86,12 +110,6 @@ export default function AddUser() {
     onOpen(); //call popup
   };
 
-  // *Password-----------------------------------------
-  // const [password, setPassword] = useState("");
-  // const [confirmpassword, setConfirmPassword] = useState("");
-  // const [setPassword] = useState("");
-  // const [setConfirmPassword] = useState("");
-
 
   //-----------------------------------------------
   //* popup
@@ -117,7 +135,9 @@ export default function AddUser() {
     resolver: yupResolver(schema),
   });
 
-  return (
+  return protectedData !== null ? (
+    <h1> {protectedData} </h1>
+  ) : (
     <>
       <CustomAlertDialog
         isOpen={isOpen}
