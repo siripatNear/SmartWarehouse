@@ -14,7 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import orderdetailmock from "../assets/orderdetailmock.json";
+import OrderForklift from "../assets/OrderForklift.json";
 import * as dayjs from "dayjs";
 import CustomButton from "./CustomButton";
 import { CustomAlertDialog } from "./AlertDialog";
@@ -23,15 +23,15 @@ export const header = [
   { value: "order_id", label: "Order ID" },
   { value: "create_dt", label: "Date Create" },
   { value: "create_time", label: "Time Create" },
-  { value: "item", label: "Items" },
+  { value: "qt", label: "Quantity" },
   { value: "status", label: "Status" },
   { value: "order_by", label: "Order by" },
   { value: "operation", label: " " },
 ];
 
-const mapStatus = (status) => {
-  switch (status) {
-    case "not_start":
+const mapStatus = (order_status) => {
+  switch (order_status) {
+    case "Not start":
       return (
         <Badge
           variant="subtle"
@@ -42,7 +42,7 @@ const mapStatus = (status) => {
           not start
         </Badge>
       );
-    case "in_progress":
+    case "In progress":
       return (
         <Badge
           variant="subtle"
@@ -58,7 +58,7 @@ const mapStatus = (status) => {
   }
 };
 
-const TablePickingList = () => {
+const TableFPickingList = () => {
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -67,8 +67,8 @@ const TablePickingList = () => {
       <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
-        LbuttonPopup="Cancle"
-        RbuttonPopup="Start"
+        LbuttonPopup="No"
+        RbuttonPopup="Yes"
         ColorRbuttonPopup="twitter"
         HearderFsize="2xl"
         textHeader=<HStack>
@@ -81,8 +81,8 @@ const TablePickingList = () => {
           <Text fontSize="xl">
             Create :{dayjs(object.create_dt).format("DD/MM/YYYY   HH:mm")}
           </Text>
-          <Text fontSize="xl">Quantities : {object.length}</Text>
-          <Text fontSize="xl">Order by : {object.create_by}</Text>
+          <Text fontSize="xl">Quantity : {object.quantity}</Text>
+          <Text fontSize="xl">Order by : {object.ordered_by}</Text>
         </VStack>
       />
       <TableContainer width="90%">
@@ -98,7 +98,7 @@ const TablePickingList = () => {
           </Thead>
 
           <Tbody>
-            {orderdetailmock.map((d) => (
+            {OrderForklift.map((d) => (
               <Tr
                 _hover={{
                   backgroundColor: "#ECF7FE",
@@ -108,9 +108,9 @@ const TablePickingList = () => {
                 <Td>{d.order_id}</Td>
                 <Td>{dayjs(d.create_dt).format("DD / MM / YYYY")}</Td>
                 <Td>{dayjs(d.create_dt).format("HH : mm")}</Td>
-                <Td>{d.create_by}</Td>
-                <Td>{d.length}</Td>
-                <Td>{d.create_by}</Td>
+                <Td>{d.quantity}</Td>
+                <Td>{mapStatus(d.order_status)}</Td>
+                <Td>{d.ordered_by}</Td>
                 <Td textAlign={"center"}>
                   <CustomButton
                     marginX={4}
@@ -134,4 +134,4 @@ const TablePickingList = () => {
   );
 };
 
-export default TablePickingList;
+export default TableFPickingList;

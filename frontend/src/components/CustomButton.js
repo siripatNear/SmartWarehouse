@@ -22,7 +22,7 @@ function CustomButton({
         loadingText="Submitting"
         size={buttonSize}
         color={"white"}
-        borderRadius={borderRadius}
+        borderRadius={"5px"}
         fontSize={fontSize}
         fontWeight={fontWeight}
         _hover={{

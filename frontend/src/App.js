@@ -29,6 +29,8 @@ import NavbarFolklift from "./components/NavbarFolklift";
 import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
 import ScanTag from "./pages/Forklift_PutAway/ScanTag";
+import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
+import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -55,12 +57,10 @@ const App = () => {
         </Route>
 
         {/* //?test routes */}
-        <Route path='/add-user' element={<AddUser />} />
-        <Route path='/usermanage' element={<UserManage />} />
-        <Route path='/putaway' element={<PutAwayItem />} />
-        <Route path='/updatemat' element={<UpdateMat />} />
         <Route path="/add-user" element={<AddUser />} />
-        <Route path="/UserManage" element={<UserManage />} />
+        <Route path="/usermanage" element={<UserManage />} />
+        <Route path="/putaway" element={<PutAway />} />
+        <Route path="/updatemat" element={<UpdateMat />} />
         <Route path="/PickingOrderList" element={<PickingOrderList />} />
         <Route path="/ScanTag" element={<ScanTag />} />
 
