@@ -14,7 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import OrderForklift from "../assets/OrderForklift.json";
+import CompleteOrder from "../assets/CompleteOrder.json";
 import * as dayjs from "dayjs";
 import CustomButton from "./CustomButton";
 import { CustomAlertDialog } from "./AlertDialog";
@@ -31,26 +31,15 @@ export const header = [
 
 const mapStatus = (order_status) => {
   switch (order_status) {
-    case "Not start":
+    case "Completed":
       return (
         <Badge
           variant="subtle"
           textAlign={"center"}
           borderRadius="5px"
-          colorScheme="red"
+          colorScheme="green"
         >
-          not start
-        </Badge>
-      );
-    case "In progress":
-      return (
-        <Badge
-          variant="subtle"
-          textAlign={"center"}
-          borderRadius="5px"
-          colorScheme="yellow"
-        >
-          in progress
+          completed
         </Badge>
       );
     default:
@@ -58,36 +47,24 @@ const mapStatus = (order_status) => {
   }
 };
 
-const TableFPickingList = () => {
+const TableHistory = () => {
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <CustomAlertDialog
+      {/* <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
         LbuttonPopup="No"
         RbuttonPopup="Yes"
-        ColorRbuttonPopup={
-          object.order_status === "Not start" ? "twitter" : "yellow"
-        }
-        HearderFsize={object.order_status === "Not start" ? "2xl" : "xl"}
-        textHeader={
-          object.order_status === "Not start" ? (
-            <HStack>
-              <font> Are you sure to </font>
-              <font color="#1DA1F2"> Start </font>
-              <font> this order ? </font>
-            </HStack>
-          ) : (
-            <HStack>
-              <font> Are you sure to </font>
-              <font color="#FFBF00"> Resume </font>
-              <font> this order ? </font>
-            </HStack>
-          )
-        }
+        ColorRbuttonPopup="twitter"
+        HearderFsize="2xl"
+        textHeader=<HStack>
+          <font> Are you sure to </font>
+          <font color="#1DA1F2"> Start </font>
+          <font> this order ? </font>
+        </HStack>
         textBody=<VStack alignItems="left">
           <Text fontSize="xl">Order : {object.order_id}</Text>
           <Text fontSize="xl">
@@ -96,7 +73,7 @@ const TableFPickingList = () => {
           <Text fontSize="xl">Quantity : {object.quantity}</Text>
           <Text fontSize="xl">Order by : {object.ordered_by}</Text>
         </VStack>
-      />
+      /> */}
       <TableContainer width="90%">
         <Table size="md">
           <Thead>
@@ -110,7 +87,7 @@ const TableFPickingList = () => {
           </Thead>
 
           <Tbody>
-            {OrderForklift.map((d) => (
+            {CompleteOrder.map((d) => (
               <Tr
                 _hover={{
                   backgroundColor: "#ECF7FE",
@@ -131,18 +108,10 @@ const TableFPickingList = () => {
                       onOpen();
                     }}
                     onClose={onClose}
-                    buttonName={
-                      d.order_status === "Not start" ? "Start" : "Resume"
-                    }
-                    buttonColor={
-                      d.order_status === "Not start" ? "blue" : "yellow"
-                    }
+                    buttonName="Detail"
+                    buttonColor="green"
                     buttonSize="sm"
-                    HoverColor={
-                      d.order_status === "Not start"
-                        ? "twitter.300"
-                        : "yellow.300"
-                    }
+                    HoverColor="green.300"
                   />
                 </Td>
               </Tr>
@@ -154,4 +123,4 @@ const TableFPickingList = () => {
   );
 };
 
-export default TableFPickingList;
+export default TableHistory;

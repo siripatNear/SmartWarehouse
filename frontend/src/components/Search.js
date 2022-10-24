@@ -34,8 +34,8 @@ export const cate = [
 const Search = () => {
   return (
     <form style={{ width: "100%" }}>
-      <HStack width={"100%"} paddingRight={8} paddingTop={4}>
-        <FormControl p={4} id="warehouse">
+      <HStack width={"100%"} paddingRight={4} paddingTop={4}>
+        <FormControl p={2} id="warehouse">
           {/* <FormLabel>Warehouse</FormLabel> */}
           <Select
             name="Warehouse"
@@ -65,7 +65,7 @@ const Search = () => {
           />
         </FormControl>
 
-        <FormControl p={4} id="length">
+        <FormControl p={2} id="length">
           {/* <FormLabel>Length</FormLabel> */}
           <Input type="text" placeholder="Search Length" />
         </FormControl>

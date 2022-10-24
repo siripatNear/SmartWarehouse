@@ -173,7 +173,7 @@ export default function AddUser() {
   const onSubmit = async (values) => {
     console.log(values);
     try {
-      const { data } = await onAddUser(values);
+      const { data } = await onAddUser({ ...values, role: values.role.value });
       setError("");
       setSuccess(data.message);
       onClose(); // close popup window
