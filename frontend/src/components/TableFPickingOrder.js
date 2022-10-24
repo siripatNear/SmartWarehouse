@@ -72,12 +72,22 @@ const TableFPickingList = () => {
         ColorRbuttonPopup={
           object.order_status === "Not start" ? "twitter" : "yellow"
         }
-        HearderFsize="2xl"
-        textHeader=<HStack>
-          <font> Are you sure to </font>
-          <font color="#1DA1F2"> Start </font>
-          <font> this order ? </font>
-        </HStack>
+        HearderFsize={object.order_status === "Not start" ? "2xl" : "xl"}
+        textHeader={
+          object.order_status === "Not start" ? (
+            <HStack>
+              <font> Are you sure to </font>
+              <font color="#1DA1F2"> Start </font>
+              <font> this order ? </font>
+            </HStack>
+          ) : (
+            <HStack>
+              <font> Are you sure to </font>
+              <font color="#FFBF00"> Resume </font>
+              <font> this order ? </font>
+            </HStack>
+          )
+        }
         textBody=<VStack alignItems="left">
           <Text fontSize="xl">Order : {object.order_id}</Text>
           <Text fontSize="xl">
@@ -128,7 +138,11 @@ const TableFPickingList = () => {
                       d.order_status === "Not start" ? "blue" : "yellow"
                     }
                     buttonSize="sm"
-                    HoverColor="twitter.300"
+                    HoverColor={
+                      d.order_status === "Not start"
+                        ? "twitter.300"
+                        : "yellow.300"
+                    }
                   />
                 </Td>
               </Tr>

@@ -32,6 +32,8 @@ import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
 import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import History from "./pages/ForkliftPicking/History";
+import Dashboard from "./pages/Dashboard";
+import BoxZone from "./components/BoxZone";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -48,9 +50,27 @@ const RestrictedRoutes = () => {
   return <>{!isAuth ? <Outlet /> : <Navigate to="/dashboard" />}</>;
 };
 
+// !navbar from role don't delete
+const selectNavbar = (role) => {
+  switch (role) {
+    case "Forklift":
+      return <NavbarFolklift />;
+    case "Operator":
+      return <NavbarOperator />;
+    case "Admin":
+      return <NavbarAdmin />;
+    default:
+      return <NavbarGuest />;
+  }
+};
+
 const App = () => {
+  // !navbar from role don't delete
+  const role = "Forklift"; // TODO: fetch from api
   return (
     <BrowserRouter>
+      {/* //! navbar from role don't delete*/}
+      {selectNavbar(role)}
       <Routes>
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
@@ -65,6 +85,8 @@ const App = () => {
         <Route path="/PickingOrderList" element={<PickingOrderList />} />
         <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
+        <Route path="/boxzone" element={<BoxZone />} />
+        <Route path="/d" element={<Dashboard />} />
 
         <Route path="/NavbarGuest" element={<NavbarGuest />} />
         <Route path="/NavbarFolklift" element={<NavbarFolklift />} />
