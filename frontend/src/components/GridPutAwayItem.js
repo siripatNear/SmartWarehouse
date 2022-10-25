@@ -3,16 +3,20 @@ import "../pages/OrderDetail.css";
 
 const DataSecPositions = [
     {
-        "Section": " ",
+        "Section": " ",   
+        // sec1
     },
     {
         "Section": " ",
+        // sec2
     },
     {
         "Section": " "
+        // sec3
     },
     {
         "Section": " "
+        // sec4
     },
 
 ];
