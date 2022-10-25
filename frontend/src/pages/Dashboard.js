@@ -1,37 +1,54 @@
-import React from "react";
-// import "./Dashboard.css";
-// import BoxSectionDashboard from "../components/BoxSectionDashboard";
-// import BoxOverallDashboard from "../components/BoxOverallDashboard";
+import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
-import { Box, Grid, Heading, HStack, VStack } from "@chakra-ui/react";
+import { Box, Grid, Heading, HStack, Spinner, VStack } from "@chakra-ui/react";
 
 import BoxZone from "../components/BoxZone";
 import BoxAll from "../components/BoxAll";
 import axios from "axios";
+import { onGetWarehouseDashboard } from "../api/data";
+import { isNil } from "lodash";
 
 const Dashboard = () => {
-  // const x = axios.get("http://localhost:5000/warehouse/A");
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setIsLoading(true);
+        const { data: result } = await onGetWarehouseDashboard("A");
+        setData(result);
+        console.log(result);
+      } catch (error) {
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetch();
+  }, []);
+
   return (
     <>
-      <HStack paddingBottom={"32px"}>
-        <VStack w="70%">
-          <Search />
-          {/* <Heading as="h1">Warehouse {x.warehouse} </Heading> */}
-          <Heading as="h1" alignSelf={"flex-start"} paddingLeft="20px">
-            Warehouse
-          </Heading>
+      {isLoading || isNil(data) ? (
+        <Spinner />
+      ) : (
+        <HStack paddingBottom={"32px"}>
+          <VStack w="70%">
+            <Search />
+            <Heading as="h1" alignSelf={"flex-start"} paddingLeft="20px">
+              Warehouse {data.warehouse}
+            </Heading>
 
-          <Box paddingLeft={15}>
-            <Grid templateColumns="repeat(3, 2fr)" gap="32px">
-              {/* <BoxZone data={x} /> */}
-              <BoxZone />
-            </Grid>
+            <Box paddingLeft={15}>
+              <Grid templateColumns="repeat(3, 2fr)" gap="32px">
+                <BoxZone warehouseData={data} />
+              </Grid>
+            </Box>
+          </VStack>
+          <Box paddingLeft={"32px"}>
+            <BoxAll />
           </Box>
-        </VStack>
-        <Box paddingLeft={"32px"}>
-          <BoxAll />
-        </Box>
-      </HStack>
+        </HStack>
+      )}
     </>
   );
 };
