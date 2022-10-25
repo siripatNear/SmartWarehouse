@@ -27,8 +27,12 @@ import UserManage from "./pages/adminRole/UserManage";
 import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
-import NavbarAdmin from "./components/NavbarAdmin";
+
+// Forklift_Picking_Page
 import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
+import PickingOrderDetail from "./pages/ForkliftPicking/PickingOrderDetail";
+
+import NavbarAdmin from "./components/NavbarAdmin";
 import RunPage from "./components/Logout";
 
 const PrivateRoutes = () => {
@@ -57,12 +61,14 @@ const App = () => {
 
         {/* //?test routes */}
         <Route path='/add-user' element={<AddUser />} />
-        <Route path='/usermanage' element={<UserManage />} />
-        <Route path='/putaway' element={<PutAwayItem />} />
-        <Route path='/updatemat' element={<UpdateMat />} />
-        <Route path="/add-user" element={<AddUser />} />
         <Route path="/UserManage" element={<UserManage />} />
         <Route path="/PickingOrderList" element={<PickingOrderList />} />
+
+        {/* //?test routes petch */}
+        <Route path='/putaway' element={<PutAwayItem />} />
+        <Route path='/updatemat' element={<UpdateMat />} />
+        <Route path='/OrderDetail' element={<OrderDetail />} />
+        <Route path='/pickingorderdetail' element={<PickingOrderDetail />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}

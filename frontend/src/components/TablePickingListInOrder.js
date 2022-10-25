@@ -8,9 +8,8 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-import * as dayjs from 'dayjs'
+import * as dayjs from 'dayjs';
 
-import Dataorder from "../assets/orderdetailmock.json";
 
 export const header = [
   { value: "item_code", label: "Item Code" },
@@ -40,40 +39,42 @@ const mapCateName = (category) => {
   }
 };
 
-const TablePickingList = () => {
+const TablePickingList = (props) => {
+  const { items } = props
+
   return (
     <div className="ConTablePickingListInOrder">
-    <TableContainer width='70%' >
-      <Table size="md" >
-        <Thead>
-          <Tr backgroundColor='#A3D9FB'>
-            {header.map((head) => (
-              <Th fontSize={16} key={head.value} >
-                {head.label}
-              </Th>
-            ))}
-          </Tr>
-        </Thead>
-        
-        <Tbody >
-          {Dataorder.map((data) => (
-            <Tr
-              _hover={{
-                backgroundColor: "#ECF7FE",
-              }}
-              key={data.value}
-            >
-              <Td>{data.item_code}</Td>
-              <Td>{mapCateName(data.item_cate_code)}</Td>
-              <Td>{data.length}</Td>
-              <Td>{dayjs(data.create_dt).format('DD / MM / YYYY')}</Td>
+      <TableContainer width='70%' >
+        <Table size="md" >
+          <Thead>
+            <Tr backgroundColor='#A3D9FB'>
+              {header.map((head) => (
+                <Th fontSize={16} key={head.value} >
+                  {head.label}
+                </Th>
+              ))}
             </Tr>
-          ))}
+          </Thead>
 
-        </Tbody>
-      </Table>
-    </TableContainer>
-  </div>
+          <Tbody >
+            {/* {console.log(items)} */}
+            {items.map((data) => (
+              <Tr
+                _hover={{
+                  backgroundColor: "#ECF7FE",
+                }}
+                key={data.value}
+              >
+                <Td>{data.item_code}</Td>
+                <Td>{mapCateName(data.category)}</Td>
+                <Td>{data.length}</Td>
+                <Td>{dayjs(data.create_dt).format('DD / MM / YYYY')}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 };
 

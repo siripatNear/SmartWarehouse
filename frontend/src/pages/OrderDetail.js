@@ -20,20 +20,56 @@ function OrderDetail() {
             <div className='BodyOrderDetailPage'>
                 <Tabs variant='enclosed' width='100%'>
                     <TabList>
-                        {Dataorder.map((zone_number) => (
-                            <Tab>
-                                Zone {zone_number.zone}
-                            </Tab>
-                        ))}
+                        <Tab>
+                            Zone 1
+                        </Tab>
+                        <Tab>
+                            Zone 2
+                        </Tab>
+                        <Tab>
+                            Zone 3
+                        </Tab>
+                        <Tab>
+                            Zone 4
+                        </Tab>
+                        <Tab>
+                            Zone 5
+                        </Tab>
+                        <Tab>
+                            Zone 6
+                        </Tab>
                     </TabList>
                     <TabPanels>
-                        {Dataorder.map((zone_number) => (
-                            <TabPanel>
-                                {zone_number.zone}
-                                <GridOrderDetail />
-                                <TablePickingListInOrder />
-                            </TabPanel>
-                        ))}
+                        <TabPanel>
+                            1
+                            <GridOrderDetail />
+                            <TablePickingListInOrder items={Dataorder} />
+                        </TabPanel>
+                        <TabPanel>
+                            2
+                            {/* <GridOrderDetail /> */}
+                            <TablePickingListInOrder items={Dataorder} />
+                        </TabPanel>
+                        <TabPanel>
+                            3
+                            {/* <GridOrderDetail /> */}
+                            <TablePickingListInOrder items={Dataorder} />
+                        </TabPanel>
+                        <TabPanel>
+                            4
+                            {/* <GridOrderDetail /> */}
+                            <TablePickingListInOrder items={Dataorder} />
+                        </TabPanel>
+                        <TabPanel>
+                            5
+                            {/* <GridOrderDetail /> */}
+                            <TablePickingListInOrder items={Dataorder} />
+                        </TabPanel>
+                        <TabPanel>
+                            6
+                            {/* <GridOrderDetail /> */}
+                            <TablePickingListInOrder items={Dataorder} />
+                        </TabPanel>
                     </TabPanels>
                 </Tabs>
             </div>
