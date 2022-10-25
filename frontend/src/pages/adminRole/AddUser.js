@@ -50,14 +50,7 @@ const schema = yup
   .required();
 
 export default function AddUser() {
-  // const [values, setValues] = useState({
-  //   first_name: "",
-  //   last_name: "",
-  //   user_id: "",
-  //   role: "",
-  //   password: "",
-  //   confirmPassword: "",
-  // });
+
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -84,62 +77,10 @@ export default function AddUser() {
 
   //*---------------------------------
 
-  // TODO: Add clear input field after adding user success
-
-  const onConfirm = async (e) => {
-    console.log(values);
-    try {
-      const { data } = await onAddUser(values);
-      setError("");
-      setSuccess(data.message);
-      setValues({
-        first_name: "",
-        last_name: "",
-        user_id: "",
-        role: "",
-        password: "",
-        confirmPassword: "",
-      });
-      onClose(); // close popup window
-    } catch (error) {
-      setError(error.response.data.errors[0].msg);
-      setSuccess("");
-      onClose(); // close popup window
-    }
-  };
-
-  const onSubmit = async (x) => {
-    setValues(x);
-    onOpen(); //call popup
-  };
-
-  // const onConfirm = async (e) => {
-  //   console.log(values);
-  //   try {
-  //     const { data } = await onAddUser(values);
-  //     setError("");
-  //     setSuccess(data.message);
-  //     setValues({
-  //       first_name: "",
-  //       last_name: "",
-  //       user_id: "",
-  //       role: "",
-  //       password: "",
-  //       confirmPassword: "",
-  //     });
-  //     onClose(); // close popup window
-  //   } catch (error) {
-  //     setError(error.response.data.errors[0].msg);
-  //     setSuccess("");
-  //     onClose(); // close popup window
-  //   }
-  // };
-
-  //-----------------------------------------------
   //* popup
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  //--------------------------------------------------
+
   // show password
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
@@ -171,9 +112,9 @@ export default function AddUser() {
   };
 
   const onSubmit = async (values) => {
-    console.log(values);
     try {
-      const { data } = await onAddUser(values);
+      const { data } = await onAddUser({ ...values, role: values.role.value });
+      console.log(values);
       setError("");
       setSuccess(data.message);
       onClose(); // close popup window

@@ -47,7 +47,7 @@ export default function Login() {
             dispatch(authenticateUser())
             localStorage.setItem('isAuth', 'true')
             
-            console.log(data)
+            console.log(data.user)
 
 
         } catch (error) {
