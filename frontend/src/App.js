@@ -75,7 +75,7 @@ const selectNavbar = (role) => {
 
 const App = () => {
   // !navbar from role don't delete
-  const role = "Forklift"; // TODO: fetch from api
+  const role = "Admin"; // TODO: fetch from api
   return (
     <BrowserRouter>
       {/* //! navbar from role don't delete*/}

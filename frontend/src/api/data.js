@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 axios.defaults.withCredentials = true;
 
 //Get warehouse's dashboard by warehouse_id

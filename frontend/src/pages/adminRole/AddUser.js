@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+//form
 import {
   Flex,
   Box,
@@ -18,11 +19,11 @@ import {
 import { Select } from "chakra-react-select";
 import CustomButton from "../../components/CustomButton";
 import { CustomAlertDialog } from "../../components/AlertDialog";
-//api
-import { onAddUser, onGetAddUserPage } from "../../api/data";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+//api
+import { onAddUser, onGetAddUserPage } from "../../api/data";
 
 export const roles = [
   { value: "Operator", label: "Operator" },
@@ -30,6 +31,7 @@ export const roles = [
   { value: "Admin", label: "Admin" },
 ];
 
+//check password and confirm password
 const schema = yup
   .object({
     first_name: yup.string().required(),
@@ -50,31 +52,26 @@ const schema = yup
   .required();
 
 export default function AddUser() {
-
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
   //* protect route from another role----------------------
-
   const [loading, setLoading] = useState(true);
   const [protectedData, setProtectedData] = useState(null);
-  
+
   const protectedRoute = async () => {
     try {
       const { data } = await onGetAddUserPage();
       setLoading(false);
       console.log(data);
-
     } catch (error) {
       setProtectedData(error.response.data);
     }
-  }
+  };
 
   useEffect(() => {
     protectedRoute();
-  }, [])
-
-  //*---------------------------------
+  }, []);
 
   //* popup
 
@@ -89,7 +86,6 @@ export default function AddUser() {
     setShowConfirmPassword(!showConfirmPassword);
 
   //----------------------------------------------------
-
   const {
     handleSubmit,
     register,
@@ -121,7 +117,7 @@ export default function AddUser() {
       setSuccess("");
       onClose(); // close popup window
     }
-    reset();
+    reset(); //reset form
   };
 
   return (
