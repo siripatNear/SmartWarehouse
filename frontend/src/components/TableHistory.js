@@ -9,15 +9,11 @@ import {
   TableContainer,
   Badge,
   useDisclosure,
-  VStack,
-  HStack,
-  Text,
 } from "@chakra-ui/react";
 
 import CompleteOrder from "../assets/CompleteOrder.json";
 import * as dayjs from "dayjs";
 import CustomButton from "./CustomButton";
-import { CustomAlertDialog } from "./AlertDialog";
 
 export const header = [
   { value: "order_id", label: "Order ID" },
@@ -53,27 +49,6 @@ const TableHistory = () => {
 
   return (
     <>
-      {/* <CustomAlertDialog
-        isOpen={isOpen}
-        onClose={onClose}
-        LbuttonPopup="No"
-        RbuttonPopup="Yes"
-        ColorRbuttonPopup="twitter"
-        HearderFsize="2xl"
-        textHeader=<HStack>
-          <font> Are you sure to </font>
-          <font color="#1DA1F2"> Start </font>
-          <font> this order ? </font>
-        </HStack>
-        textBody=<VStack alignItems="left">
-          <Text fontSize="xl">Order : {object.order_id}</Text>
-          <Text fontSize="xl">
-            Create :{dayjs(object.create_dt).format("DD/MM/YYYY   HH:mm")}
-          </Text>
-          <Text fontSize="xl">Quantity : {object.quantity}</Text>
-          <Text fontSize="xl">Order by : {object.ordered_by}</Text>
-        </VStack>
-      /> */}
       <TableContainer width="90%">
         <Table size="md">
           <Thead>

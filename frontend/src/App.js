@@ -20,7 +20,14 @@ import AddUser from "./pages/adminRole/AddUser";
 import UserManage from "./pages/adminRole/UserManage";
 
 // Forklift_PutAway_Page
+import ScanTag from "./pages/Forklift_PutAway/ScanTag";
+import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
+import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
+
+// Forklift_Picking_Page
 import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
+import PickingOrderDetail from "./pages/ForkliftPicking/PickingOrderDetail";
+
 import RunPage from "./components/Logout";
 
 // Navvbar
@@ -28,12 +35,11 @@ import NavbarGuest from "./components/NavbarGuest";
 import NavbarFolklift from "./components/NavbarFolklift";
 import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
-import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
-import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import History from "./pages/ForkliftPicking/History";
 import Dashboard from "./pages/Dashboard";
 import BoxZone from "./components/BoxZone";
+import OrderDetail from "./pages/OrderDetail";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -86,6 +92,7 @@ const App = () => {
         <Route path="/usermanage" element={<UserManage />} />
         <Route path="/putaway" element={<PutAway />} />
         <Route path="/updatemat" element={<UpdateMat />} />
+
         <Route path="/PickingOrderList" element={<PickingOrderList />} />
         <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
@@ -96,6 +103,12 @@ const App = () => {
         <Route path="/NavbarFolklift" element={<NavbarFolklift />} />
         <Route path="/NavbarOperator" element={<NavbarOperator />} />
         <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
+
+        {/* //?test routes petch */}
+        <Route path='/putaway' element={<PutAwayItem />} />
+        <Route path='/updatemat' element={<UpdateMat />} />
+        <Route path='/OrderDetail' element={<OrderDetail />} />
+        <Route path='/pickingorderdetail' element={<PickingOrderDetail />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
