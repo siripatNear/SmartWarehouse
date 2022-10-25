@@ -1,12 +1,12 @@
 const db = require('../db');
 const { hash } = require('bcryptjs');
 const { sign } = require('jsonwebtoken');
-const { SECRET } = require('../constants')
+const { SECRET } = require('../constants');
 
 //* get users
 exports.getUsers = async (req,res) => {
     try {
-        const { rows } = await db.query("SELECT first_name, last_name, role FROM users");
+        const { rows } = await db.query("SELECT user_id, first_name, last_name, role FROM users");
         
         return res.status(200).json({
             success: true,
@@ -30,7 +30,84 @@ exports.addUser = async (req,res) => {
 
         return res.status(201).json({
             success: true,
-            message: 'Adding user was successfull'
+            message: 'Adding user was successful'
+        })
+
+
+    }catch(error) {
+        console.log(error.message);
+        return res.status(500).json({
+            error: error.message,
+        })
+    }
+}
+
+//* GET /edit-user Form by user_id
+exports.getUserByID = async (req, res) => {
+
+    let user_id = req.params.user_id;
+    
+    try {
+        const data = await db.query(`
+            SELECT first_name, last_name, user_id, role
+            FROM users
+            WHERE user_id = $1
+        `, [user_id]);
+
+        return res.status(201).json({
+            success: true,
+            message: 'you have permission to access',
+            user: data.rows
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        })
+    }
+}
+
+//* PUT (update) user
+exports.updateUser = async (req,res) => {
+    const { first_name, last_name, password } = req.body;
+    const user_id = String(req.params.user_id);
+    try {
+
+        const hashedPassword = await hash(password, 10);
+
+        const data =  await db.query(`
+            UPDATE  users SET first_name = $1
+            , last_name = $2, password_hash = $3
+            WHERE user_id = $4
+            `,[first_name, last_name, hashedPassword, user_id ])
+
+        return res.status(201).json({
+            success: true,
+            message: 'Update user was successfull',
+        })
+
+
+    }catch(error) {
+        console.log(error.message);
+        return res.status(500).json({
+            error: error.message,
+        })
+    }
+}
+
+//* DELETE user by user_id
+exports.deleteUser = async (req,res) => {
+    const user_id = String(req.params.user_id);
+    try {
+
+        await db.query(`
+            DELETE FROM users WHERE user_id = $1
+            `,[user_id])
+
+        return res.status(201).json({
+            success: true,
+            message: 'Delete user was successfull',
+            user_id: user_id
         })
 
 

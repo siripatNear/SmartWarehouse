@@ -74,11 +74,12 @@ export default function AddUser() {
     protectedRoute();
   }, [])
 
-  //-----------------------------------------------
+  //*---------------------------------
+
   //* popup
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  //--------------------------------------------------
+
   // show password
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
@@ -110,7 +111,6 @@ export default function AddUser() {
   };
 
   const onSubmit = async (values) => {
-    console.log(values);
     try {
       const { data } = await onAddUser({ ...values, role: values.role.value });
       setError("");
