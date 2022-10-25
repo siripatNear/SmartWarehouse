@@ -16,11 +16,11 @@ export async function onGetAddUserPage(){
 //Get warehouse's dashboard by warehouse_id
 export async function onGetWarehouseDashboard(){
     return await axios.get(
-        'http://localhost:5000/api//warehouse/:id')
+        'http://localhost:5000/warehouse/:id')
 }
 
 //Get Zone's data
 export async function onGetItemsByZone(){
     return await axios.get(
-        'http://localhost:5000/api//warehouse/:wh_id/:zone_id')
+        'http://localhost:5000/warehouse/:wh_id/:zone_id')
 }
