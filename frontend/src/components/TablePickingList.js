@@ -116,7 +116,7 @@ const TablePickingList = () => {
               _hover={{
                 backgroundColor: "#ECF7FE",
               }}
-              key={d.value}
+              key={d.item_code}
             >
               <Td textAlign={"center"}>
                 <Checkbox

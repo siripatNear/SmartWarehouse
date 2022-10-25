@@ -1,16 +1,16 @@
 import { Flex, Heading, HStack, VStack } from "@chakra-ui/react";
 import React from "react";
 import Nametag from "../../components/Nametag";
-import TableFPickingOrder from "../../components/TableFPickingOrder";
+import TableHistory from "../../components/TableHistory";
 
 const users = [
   {
-    user: "Pathomporn Yinganurakwong",
+    user: "Salinthip Talatha",
     id: "0123456789",
   },
 ];
 
-const PickingOrderList = () => {
+const History = () => {
   return (
     <>
       <Flex justify={"center"}>
@@ -24,13 +24,13 @@ const PickingOrderList = () => {
           justify="space-between"
           width="100%"
         >
-          <Heading as="h1">Order List</Heading>
+          <Heading as="h1">History</Heading>
         </HStack>
 
-        <TableFPickingOrder />
+        <TableHistory />
       </VStack>
     </>
   );
 };
 
-export default PickingOrderList;
+export default History;

@@ -11,17 +11,18 @@ function CustomButton({
   fontWeight = "",
   borderRadius = "",
   onOpen = null,
+  disabledSubmit = false,
 }) {
   return (
     <>
       <Button
         marginX={marginX}
-        type={"submit"}
+        type={disabledSubmit ? "button" : "submit"}
         colorScheme={buttonColor}
         loadingText="Submitting"
         size={buttonSize}
         color={"white"}
-        borderRadius={borderRadius}
+        borderRadius={"5px"}
         fontSize={fontSize}
         fontWeight={fontWeight}
         _hover={{

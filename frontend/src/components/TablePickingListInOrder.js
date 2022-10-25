@@ -8,8 +8,8 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-import * as dayjs from 'dayjs';
 
+import * as dayjs from "dayjs";
 
 export const header = [
   { value: "item_code", label: "Item Code" },
@@ -44,21 +44,23 @@ const TablePickingList = (props) => {
 
   return (
     <div className="ConTablePickingListInOrder">
-      <TableContainer width='70%' >
-        <Table size="md" >
+      <TableContainer width="70%">
+        <Table size="md">
           <Thead>
-            <Tr backgroundColor='#A3D9FB'>
+            <Tr backgroundColor="#A3D9FB">
               {header.map((head) => (
-                <Th fontSize={16} key={head.value} >
+                <Th fontSize={16} key={head.value}>
                   {head.label}
                 </Th>
               ))}
             </Tr>
           </Thead>
 
+
           <Tbody >
             {/* {console.log(items)} */}
             {items.map((data) => (
+
               <Tr
                 _hover={{
                   backgroundColor: "#ECF7FE",
@@ -79,8 +81,3 @@ const TablePickingList = (props) => {
 };
 
 export default TablePickingList;
-
-
-
-
-
