@@ -3,7 +3,6 @@ import {
   Box,
   CircularProgress,
   CircularProgressLabel,
-  Grid,
   HStack,
   Text,
   VStack,

@@ -28,7 +28,6 @@ import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
 import PickingOrderDetail from "./pages/ForkliftPicking/PickingOrderDetail";
 
-import NavbarAdmin from "./components/NavbarAdmin";
 import RunPage from "./components/Logout";
 
 // Navvbar
@@ -36,12 +35,11 @@ import NavbarGuest from "./components/NavbarGuest";
 import NavbarFolklift from "./components/NavbarFolklift";
 import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
-import ScanTag from "./pages/Forklift_PutAway/ScanTag";
 import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
-import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import History from "./pages/ForkliftPicking/History";
 import Dashboard from "./pages/Dashboard";
 import BoxZone from "./components/BoxZone";
+import OrderDetail from "./pages/OrderDetail";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
