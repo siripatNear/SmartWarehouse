@@ -4,10 +4,10 @@
   width: 70%;
 }
 
-.Dashboard {
+/* .Dashboard {
   display: flex;
   margin-top: 10px;
-}
+} */
 
 .SectionContainer {
   height: auto;
@@ -21,7 +21,7 @@
   padding-top: 32px;
   /*top right bottom left*/
 
-  /* background-color: rgb(255, 232, 202); */
+  background-color: rgb(255, 232, 202);
   /* background-color for view zone */
 }
 

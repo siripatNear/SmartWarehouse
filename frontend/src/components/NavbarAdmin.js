@@ -84,7 +84,7 @@ export default function NavbarAdmin() {
               fontSize="xl"
             >
               {Links.map((link) => (
-                <NavLink key="Dashboard">{link}</NavLink>
+                <NavLink key={link.link}>{link}</NavLink>
               ))}
             </HStack>
           </HStack>
@@ -140,7 +140,7 @@ export default function NavbarAdmin() {
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <NavLink key={link.link}>{link}</NavLink>
               ))}
             </Stack>
           </Box>

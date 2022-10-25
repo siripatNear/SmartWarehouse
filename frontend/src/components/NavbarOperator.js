@@ -97,7 +97,7 @@ export default function NavbarOperator() {
                     ml="2"
                   >
                     <Text marginLeft={4} fontSize="xl">
-                      Folklift05
+                      Operator05
                     </Text>
                   </VStack>
                   <Box display={{ base: "none", md: "flex" }}>

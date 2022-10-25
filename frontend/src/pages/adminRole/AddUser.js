@@ -74,7 +74,6 @@ export default function AddUser() {
     protectedRoute();
   }, [])
 
-
   //*---------------------------------
 
   //* popup
@@ -114,7 +113,6 @@ export default function AddUser() {
   const onSubmit = async (values) => {
     try {
       const { data } = await onAddUser({ ...values, role: values.role.value });
-      console.log(values);
       setError("");
       setSuccess(data.message);
       onClose(); // close popup window
