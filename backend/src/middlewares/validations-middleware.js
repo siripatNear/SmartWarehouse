@@ -9,6 +9,6 @@ exports.validationMiddleware = (req, res, next) => {
         })
     }
 
-    next()
+    next();
 
 }
