@@ -23,8 +23,9 @@ import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { onAddUser, onGetAddUserPage } from "../../api/UserManagement";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { isNil } from "lodash";
+import { IoIosArrowBack } from "react-icons/io";
 //api
 // import { onAddUser, onGetAddUserPage } from "../../api/data";
 
@@ -60,8 +61,10 @@ export default function AddUser() {
   const { state } = useLocation();
 
   //* protect route from another role----------------------
+  // const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [protectedData, setProtectedData] = useState(null);
+  const navigate = useNavigate();
 
   const protectedRoute = async () => {
     try {
@@ -131,7 +134,16 @@ export default function AddUser() {
 
   return (
     <>
-      <Flex minH={"93vh"} align={"center"} justify={"center"} bgColor={"white"}>
+      <Button
+        leftIcon={<IoIosArrowBack />}
+        margin={"25px"}
+        colorScheme="linkedin"
+        variant="outline"
+        onClick={() => navigate(-1)}
+      >
+        Back
+      </Button>
+      <Flex minH={"83vh"} align={"center"} justify={"center"}>
         <Stack spacing={5} py={30} px={15}>
           <Stack>
             <Heading fontSize={"4xl"}>
