@@ -119,7 +119,7 @@ export default function NavbarAdmin() {
                 <MenuItem
                   icon={<RiUserSettingsLine size={"30px"} />}
                   as={Link}
-                  to="/usermanage"
+                  to="/manage-users"
                 >
                   <Text marginLeft={4} fontSize="xl">
                     User Management
