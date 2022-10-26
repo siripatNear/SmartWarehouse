@@ -20,8 +20,8 @@ const DataBoxOverall = [
 function BoxAll() {
   return (
     <>
-      {DataBoxOverall.map((data) => {
-        const { label, max, usage, empty } = data;
+      {DataBoxOverall.map((v) => {
+        const { label, max, usage, empty } = v;
         return (
           <Box
             bg="#a3d9fb"

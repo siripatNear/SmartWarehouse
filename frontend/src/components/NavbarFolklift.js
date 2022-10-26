@@ -67,17 +67,13 @@ export default function NavbarFolklift() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={9} alignItems={"center"}>
-            <Link href="/">
-              <div>
-                <img
-                  src={logo}
-                  width="200"
-                  height="auto"
-                  alt="Smart Warehouse"
-                  className="Logo"
-                />
-              </div>
-            </Link>
+            <img
+              src={logo}
+              width="200"
+              height="auto"
+              alt="Smart Warehouse"
+              className="Logo"
+            />
 
             <HStack
               as={"nav"}
