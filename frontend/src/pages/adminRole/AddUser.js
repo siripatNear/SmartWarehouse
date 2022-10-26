@@ -22,8 +22,11 @@ import { CustomAlertDialog } from "../../components/AlertDialog";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { onAddUser, onGetAddUserPage } from "../../api/UserManagement";
+import { useLocation } from "react-router-dom";
+import { isNil } from "lodash";
 //api
-import { onAddUser, onGetAddUserPage } from "../../api/data";
+// import { onAddUser, onGetAddUserPage } from "../../api/data";
 
 export const roles = [
   { value: "Operator", label: "Operator" },
@@ -54,6 +57,7 @@ const schema = yup
 export default function AddUser() {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const { state } = useLocation();
 
   //* protect route from another role----------------------
   const [loading, setLoading] = useState(true);
@@ -74,7 +78,6 @@ export default function AddUser() {
   }, []);
 
   //* popup
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // show password
@@ -97,6 +100,12 @@ export default function AddUser() {
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
+    defaultValues: {
+      first_name: state?.first_name,
+      last_name: state?.last_name,
+      role: isNil(state) ? null : { value: state?.role, label: state?.role },
+      user_id: state?.user_id,
+    },
   });
 
   const onOpenDialog = async () => {
@@ -125,7 +134,9 @@ export default function AddUser() {
       <Flex minH={"93vh"} align={"center"} justify={"center"} bgColor={"white"}>
         <Stack spacing={5} py={30} px={15}>
           <Stack>
-            <Heading fontSize={"4xl"}>Add User</Heading>
+            <Heading fontSize={"4xl"}>
+              {!isNil(state) ? "Edit User" : "Add User"}
+            </Heading>
           </Stack>
           <Box borderRadius="15px" bgColor={"white"} boxShadow={"lg"} p={8}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -178,6 +189,7 @@ export default function AddUser() {
                     <FormControl id="userid" isInvalid={errors.user_id}>
                       <FormLabel>User ID</FormLabel>
                       <Input
+                        isDisabled={!isNil(state?.user_id)}
                         type="text"
                         placeholder="User ID"
                         {...register("user_id")}
