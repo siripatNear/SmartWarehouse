@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true;
 //Get warehouse's dashboard by warehouse_id
 export async function onGetWarehouseDashboard(){
     return await axios.get(
-        'http://localhost:5000/warehouse/:id')
+        'http://localhost:5000/:wh_id')
 }
 
 //* for Admin role ONLY
@@ -23,5 +23,5 @@ export async function onGetAddUserPage(){
 //Get Zone's data
 export async function onGetItemsByZone(){
     return await axios.get(
-        'http://localhost:5000/warehouse/:wh_id/:zone_id')
+        'http://localhost:5000/:wh_id/:zone_id')
 }

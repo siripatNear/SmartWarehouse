@@ -10,10 +10,16 @@ const {
 } = require('../controllers/auth');
 const { registerValidation } = require('../validators/auth');
 const { userAuth, authPage } = require('../middlewares/auth-middleware');
-const { getZonesData, getForm, fetchItems, createOrder } = require('../controllers/data');
+const { getForm, 
+        fetchData, 
+        createOrder, 
+        getCurrentOrder, 
+        getCompletedOrder, 
+        fetchFilterItems,
+        deleteOrder} = require('../controllers/data');
 const { validationMiddleware } = require('../middlewares/validations-middleware');
 
-router.get('/warehouse/:id',userAuth, authPage(["Admin", "Operator"]), getZonesData)
+router.get('/warehouse/:wh_id',userAuth, authPage(["Admin", "Operator"]), fetchData, fetchFilterItems)
 
 //Admin routes
 router.get('/add-user', userAuth, authPage(["Admin"]), getForm);
@@ -24,7 +30,9 @@ router.put('/edit-user/:user_id', validationMiddleware, updateUser);
 router.delete('/manage-users/:user_id', deleteUser);
 
 //operator routes
-router.get('/:wh_id/:zone_id',userAuth, authPage(["Operator"]), fetchItems)
-router.get('/create-order', createOrder)
+router.post('/warehouse/:wh_id/picking-list', userAuth, createOrder)
+router.get('/order-list', userAuth, authPage(["Admin","Operator"]), getCurrentOrder)
+router.get('/history-order', userAuth, authPage(["Admin","Operator"]), getCompletedOrder)
+router.delete('/order/:order_id', deleteOrder);
 
 module.exports = router;

@@ -1,44 +1,7 @@
 const db = require('../db');
+const { v4: uuidv4 } = require('uuid');
+var moment = require('moment');  
 
-//*get zone list by warehouse ID
-exports.getZonesData = async (req, res) => {
-
-    const warehouse_id = String(req.params.id);
-
-    try { //get all item in same warehouse
-
-        const data = await db.query(`
-        SELECT rm.position_code 
-        FROM warehouse_trans wh_trans 
-        JOIN raw_materials rm ON rm.position_code = wh_trans.position_code
-        WHERE wh_trans.warehouse_id = $1
-        `, [warehouse_id]);
-
-        const zone_summary = await db.query(`
-        SELECT wh_trans.zone as zone, COUNT(wh_trans.position_code) as total_positions, 
-        COUNT(rm.position_code) as usage,
-        (COUNT(wh_trans.position_code) - COUNT(rm.position_code)) as empty
-        FROM raw_materials rm
-        FULL OUTER JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-        FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-        WHERE wh_trans.warehouse_id = $1
-        GROUP BY wh_trans.zone ORDER BY wh_trans.zone
-        `, [warehouse_id])
-
-
-        return res.status(200).json({
-            message: 'you have permission to access',
-            warehouse: warehouse_id,
-            item_count: data.rowCount,
-            zone_count: zone_summary.rowCount,
-            summary: zone_summary.rows,
-
-        })
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 //* response to get any form page
 exports.getForm = async (req, res, next) => {
@@ -67,37 +30,31 @@ exports.getForm = async (req, res, next) => {
     }
 }
 
-//* Get summary data from specific zone
+//* <<<< Dashboard data
 const getSumByZone = async (wh_id, zone_id) => {
 
     try {
-        const data = await db.query(`
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
+        const { rows } = await db.query(`
+            SELECT COUNT(wh_trans.position_code) as total_positions, 
+            COUNT(rm.position_code) as usage,
+            (COUNT(wh_trans.position_code) - COUNT(rm.position_code)) as empty
             FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
+            FULL OUTER JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
+            FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
+            WHERE wh_trans.warehouse_id = $1 
             AND wh_trans.zone = $2
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            ORDER BY rm.item_status DESC
         `, [wh_id, zone_id]);
 
-        const total_position = await db.query(`
-            SELECT wh_trans.position_code
-            FROM warehouse_trans wh_trans 
-            WHERE wh_trans.warehouse_id = $1 AND wh_trans.zone = $2
-        `, [wh_id, zone_id]);
 
-        return response = {
-            message: 'you have permission to access',
+        response = {
             warehouse: wh_id,
             zone: zone_id,
-            total_positions: total_position.rowCount,
-            usage: data.rowCount,
-            empty: (total_position.rowCount - data.rowCount),
+            positions: rows[0].total_positions,
+            usage: rows[0].usage,
+            empty: rows[0].empty,
         }
+
+        return response;
 
     } catch (error) {
         console.log(error.message);
@@ -180,16 +137,42 @@ exports.fetchData = async (req, res, next) => {
 exports.fetchFilterItems = async (req, res) => {
     try {
         const page = parseInt(req.query.page) - 1 || 0;
-        const limit = parseInt(req.query.limit) || 5; //limit show data
+        const limit = parseInt(req.query.limit) || 10; //limit show data
         let category = req.query.category || "All";
+        let zone = req.query.zone || "All";
 
         const warehouse_id = String(req.params.wh_id);
-        const zone_id = String(req.params.zone_id);
 
-        const summary = await getSumByZone(warehouse_id, zone_id);
+        if (category === "All" && zone === "All") {
+            const items = await db.query(`
+            SELECT rm.item_code, c.item_cate_code as category,
+            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
+            FROM raw_materials rm
+            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
+            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
+            JOIN category c ON rm.item_cate_code = c.item_cate_code
+            WHERE wh_trans.warehouse_id = $1
+            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
+            LIMIT $2
+            OFFSET $3;
+            `, [warehouse_id, limit, page])
+            //overall in a warehouse
+            const overall = await overallWarehouse(warehouse_id);
 
-        if (category === "All") {
-            let items = await db.query(`
+            return res.status(200).json({
+                success: true,
+                warehouse: warehouse_id,
+                positions: overall.positions,
+                usage: overall.usage,
+                empty: overall.empty,
+                page: page + 1,
+                limit,
+                items: items.rows
+            });
+        }
+        else if(category === "All" && zone != "All"){
+            zone = req.query.zone;
+            const items = await db.query(`
             SELECT rm.item_code, c.item_cate_code as category,
             rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
             FROM raw_materials rm
@@ -201,19 +184,54 @@ exports.fetchFilterItems = async (req, res) => {
             AND (rm.item_status = 'stock in' or rm.item_status = 'used')
             LIMIT $3
             OFFSET $4;
-            `, [warehouse_id, zone_id, limit, page])
-            const response = {
-                summary,
-                error: false,
+            `, [warehouse_id, zone, limit, page])
+
+            const overall = await getSumByZone(warehouse_id,zone);
+
+            return res.status(200).json({
+                success: true,
+                warehouse: warehouse_id,
+                zone: zone,
+                positions: overall.positions,
+                usage: overall.usage,
+                empty: overall.empty,
                 page: page + 1,
                 limit,
                 items: items.rows
-            }
-            return res.status(200).json(response);
+            });
+        }
+        else if(category != "All" && zone === "All"){
+            category = req.query.category;
+            const items = await db.query(`
+            SELECT rm.item_code, c.item_cate_code as category,
+            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
+            FROM raw_materials rm
+            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
+            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
+            JOIN category c ON rm.item_cate_code = c.item_cate_code
+            WHERE wh_trans.warehouse_id = $1
+            AND rm.item_cate_code = $2
+            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
+            LIMIT $3
+            OFFSET $4;
+            `, [warehouse_id, category, limit, page])
+            //overall in a warehouse
+            const overall = await overallWarehouse(warehouse_id);
 
+            return res.status(200).json({
+                success: true,
+                warehouse: warehouse_id,
+                positions: overall.positions,
+                usage: overall.usage,
+                empty: overall.empty,
+                page: page + 1,
+                limit,
+                items: items.rows
+            });
         }
         else {
             category = req.query.category;
+            zone = req.query.zone;
             let items = await db.query(`
             SELECT rm.item_code, c.item_cate_code as category,
             rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
@@ -227,15 +245,21 @@ exports.fetchFilterItems = async (req, res) => {
             AND rm.item_cate_code = $3
             LIMIT $4
             OFFSET $5;
-            `, [warehouse_id, zone_id, category, limit, page])
-            const response = {
-                summary,
-                error: false,
+            `, [warehouse_id, zone, category, limit, page])
+
+            const overall = await getSumByZone(warehouse_id,zone);
+
+            return res.status(200).json({
+                success: true,
+                warehouse: warehouse_id,
+                zone: zone,
+                positions: overall.positions,
+                usage: overall.usage,
+                empty: overall.empty,
                 page: page + 1,
                 limit,
                 items: items.rows
-            }
-            return res.status(200).json(response);
+            });
 
         }
 
@@ -314,7 +338,7 @@ exports.deleteOrder = async (req, res) => {
         //? create new column for used/new
 
         await db.query(`
-            UPDATE raw_materials rm SET item_status = 'used'
+            UPDATE raw_materials rm SET item_status = 'stock in'
             FROM order_transaction ot
             WHERE rm.item_code = ot.item_code
             AND order_id = $1
@@ -330,7 +354,7 @@ exports.deleteOrder = async (req, res) => {
         return res.status(201).json({
             success: true,
             message: 'Delete order was successful',
-            user_id: user_id
+            order_id: order_id
         })
 
 
@@ -355,39 +379,41 @@ exports.getCompletedOrder = async (req, res) => {
             order_list: rows
         })
 
-// exports.getCompletedOrder = async (req, res) => {
-//     try {
-//         const data = await db.query(`
-//             SELECT order_id, create_dt, quantity, order_status, 
-//             create_by as ordered_by
-//             FROM orders WHERE order_status = 'Completed'
-//             `, [wh_id, zone_id]);
-
-//         const total_position = await db.query(`
-//             SELECT wh_trans.position_code
-//             FROM warehouse_trans wh_trans 
-//             WHERE wh_trans.warehouse_id = $1 AND wh_trans.zone = $2
-//         `, [wh_id, zone_id]);
-
-//         return response = {
-//             message: 'you have permission to access',
-//             warehouse: wh_id,
-//             zone: zone_id,
-//             total_positions: total_position.rowCount,
-//             usage: data.rowCount,
-//             empty: (total_position.rowCount - data.rowCount),
-//         }
-
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
-exports.getCurrentOrder = (req, res) => {
-
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            error: true,
+            message: "Internal Server error"
+        })
+    }
 }
 
-//Order ID & Order ID trans
+exports.getCurrentOrder = async (req, res) => {
+    try {
+        const { rows } = await db.query(`
+            SELECT order_id, create_dt, quantity, order_status, 
+            create_by as ordered_by, progress_by
+            FROM orders WHERE order_status != 'Completed'
+            ORDER BY order_status DESC
+        `)
+
+        return res.status(200).json({
+            message: 'you have permission to access',
+            order_list: rows
+        })
+
+        
+    } catch (error) {
+        console.log(error.message);
+
+        res.status(500).json({
+            error: true,
+            message: "Internal Server error"
+        })
+    }
+}  
+
+//>>>>Order ID & Order ID trans
 genOrderID = (prev_id) => {
     const prev_order = prev_id;
     const prev_letter = prev_order.slice(0, 2)
@@ -425,32 +451,22 @@ genOrderID = (prev_id) => {
 
 genOrderTrans = (order_id, items) => {
     items.map((item, i) => {
-        item["order_id_trans"] = order_id + "-" + String(i + 1).padStart(2, "0");
+        // item["order_id_trans"] = order_id + "-" + String(i + 1).padStart(2, "0");
+        item["order_id_trans"] = uuidv4();
         item["order_id"] = order_id;
     })
     const response = [{
-        "quantity": quantity,
         items
     }]
 
     return response
 }
 
-exports.createOrder = (req, res) => {
-
-    const order_id = 'AA0000000000';
-    const items = [{
-        "item_code": "FK001"
-    }, {
-        "item_code": "FK002"
-    }, {
-        "item_code": "FK003"
-    }
-    ]
-    try {
-        const response = genOrderTrans(order_id,items)
-        return res.status(200).json(response);
-    } catch (error) {
-        console.log(error.message);
-    }
+validate_order_id = (str) => {
+    const format = /^[A-Z]{2}\d{10}?$/;
+    //if valid return true
+    return format.test(str);
 }
+
+//===============================
+

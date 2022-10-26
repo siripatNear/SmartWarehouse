@@ -33,7 +33,6 @@ exports.addUser = async (req,res) => {
             message: 'Adding user was successful'
         })
 
-
     }catch(error) {
         console.log(error.message);
         return res.status(500).json({
@@ -75,15 +74,15 @@ exports.updateUser = async (req,res) => {
 
         const hashedPassword = await hash(password, 10);
 
-        const data =  await db.query(`
-            UPDATE  users SET first_name = $1
+        await db.query(`
+            UPDATE users SET first_name = $1
             , last_name = $2, password_hash = $3
             WHERE user_id = $4
             `,[first_name, last_name, hashedPassword, user_id ])
 
         return res.status(201).json({
             success: true,
-            message: 'Update user was successfull',
+            message: 'Update user was successful',
         })
 
 
