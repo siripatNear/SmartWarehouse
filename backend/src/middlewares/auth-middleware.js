@@ -2,7 +2,6 @@ const passport = require('passport');
 
 exports.userAuth = passport.authenticate('jwt', { session: false });
 
-
 exports.authPage = (permissions) => {
     return (req, res, next) => {
         console.log("req.user.role : " + req.user.role);
