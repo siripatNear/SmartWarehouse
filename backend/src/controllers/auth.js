@@ -28,21 +28,21 @@ exports.addUser = async (req, res) => {
     await db.query(
       `
             INSERT INTO users(user_id, first_name, last_name, password_hash, role)
-            VALUES ($1,$2,$3,$4,$5)`,
-      [user_id, first_name, last_name, hashedPassword, role]
-    );
+            VALUES ($1,$2,$3,$4,$5)`,[user_id, first_name, last_name, hashedPassword, role ])
 
-    return res.status(201).json({
-      success: true,
-      message: "Adding user was successful",
-    });
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-};
+        return res.status(201).json({
+            success: true,
+            message: 'Adding user was successful'
+        })
+
+    }catch(error) {
+        console.log(error.message);
+        return res.status(500).json({
+            error: error.message,
+        })
+    }
+}
+
 
 //* GET /edit-user Form by user_id
 exports.getUserByID = async (req, res) => {
@@ -54,49 +54,48 @@ exports.getUserByID = async (req, res) => {
             SELECT first_name, last_name, user_id, role
             FROM users
             WHERE user_id = $1
-        `,
-      [user_id]
-    );
+        `, [user_id]);
 
-    return res.status(201).json({
-      success: true,
-      message: "you have permission to access",
-      user: data.rows,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-};
+        return res.status(201).json({
+            success: true,
+            message: 'you have permission to access',
+            user: data.rows
+        })
 
-//* PUT (update) user (when save edit)
-exports.updateUser = async (req, res) => {
-  const { first_name, last_name, password } = req.body;
-  const user_id = String(req.params.user_id);
-  try {
-    const hashedPassword = await hash(password, 10);
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        })
+    }
+}
 
-    const data = await db.query(
-      `
-            UPDATE  users SET first_name = $1
+//* PUT (update) user
+exports.updateUser = async (req,res) => {
+    const { first_name, last_name, password } = req.body;
+    const user_id = String(req.params.user_id);
+    try {
+
+        const hashedPassword = await hash(password, 10);
+
+        await db.query(`
+            UPDATE users SET first_name = $1
             , last_name = $2, password_hash = $3
             WHERE user_id = $4
-            `,
-      [first_name, last_name, hashedPassword, user_id]
-    );
+            `,[first_name, last_name, hashedPassword, user_id ])
 
-    return res.status(201).json({
-      success: true,
-      message: "Update user was successfull",
-    });
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-};
+        return res.status(201).json({
+            success: true,
+            message: 'Update user was successful',
+        })
+
+
+    }catch(error) {
+        console.log(error.message);
+        return res.status(500).json({
+            error: error.message,
+        })
+    }
+}
 
 //* DELETE user by user_id
 exports.deleteUser = async (req, res) => {
