@@ -75,7 +75,7 @@ const selectNavbar = (role) => {
 
 const App = () => {
   // !navbar from role don't delete
-  const role = "Forklift"; // TODO: fetch from api
+  const role = "Admin"; // TODO: fetch from api
   return (
     <BrowserRouter>
       {/* //! navbar from role don't delete*/}
@@ -85,11 +85,12 @@ const App = () => {
           {/* //*Outlet [Need to login before access these routes] */}
           <Route path="/dashboard" element={<RunPage />} />
           <Route path="/add-user" element={<AddUser />} />
+          <Route path="/manage-users" element={<UserManage />} />
         </Route>
 
         {/* //?test routes */}
-        <Route path="/add-user" element={<AddUser />} />
-        <Route path="/usermanage" element={<UserManage />} />
+        {/* <Route path="/add-user" element={<AddUser />} /> */}
+        {/* <Route path="/usermanage" element={<UserManage />} /> */}
         <Route path="/putaway" element={<PutAway />} />
         <Route path="/updatemat" element={<UpdateMat />} />
 
@@ -105,10 +106,10 @@ const App = () => {
         <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
 
         {/* //?test routes petch */}
-        <Route path='/putaway' element={<PutAwayItem />} />
-        <Route path='/updatemat' element={<UpdateMat />} />
-        <Route path='/OrderDetail' element={<OrderDetail />} />
-        <Route path='/pickingorderdetail' element={<PickingOrderDetail />} />
+        <Route path="/putaway" element={<PutAwayItem />} />
+        <Route path="/updatemat" element={<UpdateMat />} />
+        <Route path="/OrderDetail" element={<OrderDetail />} />
+        <Route path="/pickingorderdetail" element={<PickingOrderDetail />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
