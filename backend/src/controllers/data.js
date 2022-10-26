@@ -104,7 +104,80 @@ const getSumByZone = async (wh_id, zone_id) => {
     }
 }
 
-exports.fetchItems = async (req, res) => {
+const overallWarehouse = async (wh_id) => {
+    try {
+        //overall in a warehouse
+        const overall = await  db.query(`
+        SELECT COUNT(wh_trans.position_code) as total_positions, 
+        COUNT(rm.position_code) as usage,
+        (COUNT(wh_trans.position_code) - COUNT(rm.position_code)) as empty
+        FROM raw_materials rm
+        FULL OUTER JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
+        FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
+        WHERE wh_trans.warehouse_id = $1
+        `, [wh_id])
+
+        const response = {
+            success: true,
+            warehouse: wh_id,
+            positions: overall.rows[0].total_positions,
+            usage: overall.rows[0].usage,
+            empty: overall.rows[0].empty,
+        }
+
+        return response
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//*==================
+
+//* (1) Get dashboard by warehouse_id 
+exports.fetchData = async (req, res, next) => {
+
+    const warehouse_id = String(req.params.wh_id);
+
+    try { //get all items in same warehouse to get usage
+
+        if (req.query.zone || req.query.category || req.query.page){
+            next();
+        } else {
+    
+            //summary each zone
+            const zone_summary = await db.query(`
+            SELECT wh_trans.zone as zone, COUNT(wh_trans.position_code) as total_positions, 
+            COUNT(rm.position_code) as usage,
+            (COUNT(wh_trans.position_code) - COUNT(rm.position_code)) as empty
+            FROM raw_materials rm
+            FULL OUTER JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
+            FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
+            WHERE wh_trans.warehouse_id = $1
+            GROUP BY wh_trans.zone ORDER BY wh_trans.zone
+            `, [warehouse_id])
+
+            //overall in a warehouse
+            const overall = await overallWarehouse(warehouse_id);
+
+            return res.status(200).json({
+                success: true,
+                warehouse: warehouse_id,
+                positions: overall.positions,
+                usage: overall.usage,
+                empty: overall.empty,
+                zone_count: zone_summary.rowCount,
+                summary: zone_summary.rows,
+            })
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//* (2) If have any query params from fetchData
+exports.fetchFilterItems = async (req, res) => {
     try {
         const page = parseInt(req.query.page) - 1 || 0;
         const limit = parseInt(req.query.limit) || 5; //limit show data
@@ -176,6 +249,111 @@ exports.fetchItems = async (req, res) => {
     }
 }
 
+//* Order section
+exports.createOrder = async (req, res) => {
+
+    const { items,remarks } = req.body;
+    const user_id = req.user.user_id;
+    let new_order_id = null;
+    try {
+        const prev_order = await db.query(`
+            SELECT order_id FROM orders 
+            ORDER BY create_dt DESC 
+            LIMIT 1
+            `)
+
+        const prev_order_id = prev_order.rows[0].order_id
+
+        console.log("prev_order: "+ prev_order_id);
+
+        if (!validate_order_id(prev_order_id) ) {
+            //if not find the correct format from previous order, create new
+            new_order_id = 'AA0000000000'
+        } else {
+            new_order_id = genOrderID(prev_order_id);
+        }
+
+        genOrderTrans(new_order_id,items)
+
+        //save to database
+        await db.query(`
+            INSERT INTO orders(order_id, order_remark, quantity, create_by)
+            VALUES ($1,$2,$3,$4)`,[new_order_id, remarks, items.length, user_id ])
+
+        items.map(async (item) => {
+            //save order_transaction to database
+            await db.query(`
+            INSERT INTO order_transaction(order_id_trans, item_code, order_id)
+            VALUES ($1,$2,$3)`,[item.order_id_trans, item.item_code, item.order_id ])
+
+            let modify_dt = moment().format('YYYY-MM-DD HH:mm:ss.sss');
+            //update item_status in raw_materials
+            await db.query(`
+            UPDATE  raw_materials SET item_status = 'in progress'
+            , modify_by = $1, modify_dt = $2
+            WHERE item_code = $3
+            `,[user_id, modify_dt, item.item_code ])
+
+        })
+
+        return res.status(201).json({
+            success: true,
+            message: 'Create order was successful',
+        })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+exports.deleteOrder = async (req, res) => {
+    const order_id = String(req.params.order_id);
+    try {
+        //UPDATE item_status
+        //? item_status after delete order should be 'used'?
+        //? create new column for used/new
+
+        await db.query(`
+            UPDATE raw_materials rm SET item_status = 'used'
+            FROM order_transaction ot
+            WHERE rm.item_code = ot.item_code
+            AND order_id = $1
+            `,[order_id])
+        //DELETE from order_transaction before in orders
+        await db.query(`
+            DELETE FROM order_transaction WHERE order_id = $1
+            `,[order_id])
+        await db.query(`
+            DELETE FROM orders WHERE order_id = $1
+            `,[order_id])
+
+        return res.status(201).json({
+            success: true,
+            message: 'Delete order was successful',
+            user_id: user_id
+        })
+
+
+    }catch(error) {
+        console.log(error.message);
+        return res.status(500).json({
+            error: error.message,
+        })
+    }
+}
+
+exports.getCompletedOrder = async (req, res) => {
+    try {
+        const { rows } = await db.query(`
+            SELECT order_id, create_dt, quantity, order_status, 
+            create_by as ordered_by
+            FROM orders WHERE order_status = 'Completed'
+            `);
+
+        return res.status(500).json({
+            message: 'you have permission to access',
+            order_list: rows
+        })
 
 // exports.getCompletedOrder = async (req, res) => {
 //     try {
@@ -246,8 +424,6 @@ genOrderID = (prev_id) => {
 }
 
 genOrderTrans = (order_id, items) => {
-    const quantity = Object.keys(items).length;
-    console.log('test')
     items.map((item, i) => {
         item["order_id_trans"] = order_id + "-" + String(i + 1).padStart(2, "0");
         item["order_id"] = order_id;
