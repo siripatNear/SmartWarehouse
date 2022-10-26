@@ -16,8 +16,8 @@ const SearchUser = () => {
   return (
     <>
       <form style={{ flex: 1 }}>
-        <HStack flex={1} paddingRight={8}>
-          <FormControl width={"30%"} p={4} id="rolesearch">
+        <HStack flex={1} paddingRight={4}>
+          <FormControl width={"30%"} p={2} id="rolesearch">
             <Select
               name="Role"
               options={roleData}
@@ -26,7 +26,7 @@ const SearchUser = () => {
             />
           </FormControl>
 
-          <FormControl width={"70%"} p={4}>
+          <FormControl width={"70%"} p={1}>
             <Input type="text" placeholder="Search User ID or Name..." />
           </FormControl>
           <IconButton
@@ -38,15 +38,11 @@ const SearchUser = () => {
           />
         </HStack>
       </form>
-      <Button
-        marginRight={4}
-        marginLeft={3}
-        colorScheme="whatsapp"
-        as={Link}
-        to="/add-user"
-      >
-        ADD USER
-      </Button>
+      <HStack>
+        <Button marginRight={5} colorScheme="whatsapp" as={Link} to="/add-user">
+          ADD USER
+        </Button>
+      </HStack>
     </>
   );
 };

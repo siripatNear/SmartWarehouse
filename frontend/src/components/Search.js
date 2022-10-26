@@ -6,10 +6,10 @@ import { IconButton } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
 export const warehouse = [
-  { value: "Warehouse 1", label: "Warehouse 1" },
-  { value: "Warehouse 2", label: "Warehouse 2" },
-  { value: "Warehouse 3", label: "Warehouse 3" },
-  { value: "Warehouse 4", label: "Warehouse 4" },
+  { value: "Warehouse 1", label: "Warehouse A" },
+  { value: "Warehouse 2", label: "Warehouse B" },
+  { value: "Warehouse 3", label: "Warehouse C" },
+  { value: "Warehouse 4", label: "Warehouse D" },
 ];
 
 export const zone = [
@@ -36,7 +36,6 @@ const Search = () => {
     <form style={{ width: "100%" }}>
       <HStack width={"100%"} paddingRight={4} paddingTop={4}>
         <FormControl p={2} id="warehouse">
-          {/* <FormLabel>Warehouse</FormLabel> */}
           <Select
             name="Warehouse"
             options={warehouse}
@@ -46,7 +45,6 @@ const Search = () => {
         </FormControl>
 
         <FormControl>
-          {/* <FormLabel>Zone</FormLabel> */}
           <Select
             name="Zone"
             options={zone}
@@ -56,7 +54,6 @@ const Search = () => {
         </FormControl>
 
         <FormControl>
-          {/* <FormLabel>Category</FormLabel> */}
           <Select
             name="Category"
             options={cate}
@@ -66,7 +63,6 @@ const Search = () => {
         </FormControl>
 
         <FormControl p={2} id="length">
-          {/* <FormLabel>Length</FormLabel> */}
           <Input type="text" placeholder="Search Length" />
         </FormControl>
         <IconButton

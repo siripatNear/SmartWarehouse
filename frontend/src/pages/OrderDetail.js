@@ -1,5 +1,6 @@
 import React from 'react'
 import "./OrderDetail.css";
+import * as dayjs from 'dayjs';
 import GridOrderDetail from '../components/GridOrderDetail';
 import TablePickingListInOrder from '../components/TablePickingListInOrder';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
@@ -14,7 +15,7 @@ function OrderDetail() {
                     Order {Dataorder[0].order_id}
                 </div>
                 <div className='OrderBy'>
-                    Ordered by {Dataorder[0].create_by} {Dataorder[0].create_dt}
+                    Ordered by {Dataorder[0].create_by} {dayjs(Dataorder[0].create_dt).format('DD/MM/YYYY HH.mm.ss')}
                 </div>
             </div>
             <div className='BodyOrderDetailPage'>
