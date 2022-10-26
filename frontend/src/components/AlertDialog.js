@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 
 export const CustomAlertDialog = ({
+  isLoading = false,
   textHeader = "",
   textBody = "",
   LbuttonPopup = "",
@@ -37,8 +38,13 @@ export const CustomAlertDialog = ({
           <AlertDialogCloseButton />
           <AlertDialogBody>{textBody}</AlertDialogBody>
           <AlertDialogFooter>
-            <Button onClick={onClose}>{LbuttonPopup}</Button>
-            <Button colorScheme={ColorRbuttonPopup} ml={3} onClick={onConfirm}>
+            {!isLoading && <Button onClick={onClose}>{LbuttonPopup}</Button>}
+            <Button
+              isLoading={isLoading}
+              colorScheme={ColorRbuttonPopup}
+              ml={3}
+              onClick={onConfirm}
+            >
               {RbuttonPopup}
             </Button>
           </AlertDialogFooter>

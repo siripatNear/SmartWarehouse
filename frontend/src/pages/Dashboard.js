@@ -4,7 +4,6 @@ import { Box, Grid, Heading, HStack, Spinner, VStack } from "@chakra-ui/react";
 
 import BoxZone from "../components/BoxZone";
 import BoxAll from "../components/BoxAll";
-import axios from "axios";
 import { onGetWarehouseDashboard } from "../api/data";
 import { isNil } from "lodash";
 
