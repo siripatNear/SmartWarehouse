@@ -71,7 +71,7 @@ exports.getUserByID = async (req, res) => {
 
 //* PUT (update) user
 exports.updateUser = async (req,res) => {
-    const { first_name, last_name, password } = req.body;
+    const { first_name, last_name, role, password } = req.body;
     const user_id = String(req.params.user_id);
     try {
 
@@ -79,15 +79,14 @@ exports.updateUser = async (req,res) => {
 
         await db.query(`
             UPDATE users SET first_name = $1
-            , last_name = $2, password_hash = $3
+            , last_name = $2, role = $3, password_hash = $4
             WHERE user_id = $4
-            `,[first_name, last_name, hashedPassword, user_id ])
+            `,[first_name, last_name, role, hashedPassword, user_id ])
 
         return res.status(201).json({
             success: true,
             message: 'Update user was successful',
         })
-
 
     }catch(error) {
         console.log(error.message);

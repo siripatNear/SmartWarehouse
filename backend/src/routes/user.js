@@ -2,26 +2,24 @@ const { Router } = require("express");
 const router = Router();
 
 const {
-  getUsers,
-  addUser,
-  getUserByID,
-  updateUser,
-  deleteUser,
-} = require("../controllers/auth");
-const { registerValidation } = require("../validators/auth");
-const { userAuth, authPage } = require("../middlewares/auth-middleware");
-const {
-  getForm,
-  fetchData,
-  createOrder,
-  getCurrentOrder,
-  getCompletedOrder,
-  fetchFilterItems,
-  deleteOrder,
-} = require("../controllers/data");
-const {
-  validationMiddleware,
-} = require("../middlewares/validations-middleware");
+    getUsers,
+    addUser,
+    getUserByID,
+    updateUser,
+    deleteUser,
+} = require('../controllers/auth');
+const { registerValidation } = require('../validators/auth');
+const { userAuth, authPage } = require('../middlewares/auth-middleware');
+const { getForm, 
+        fetchData, 
+        createOrder, 
+        getCurrentOrder, 
+        getCompletedOrder, 
+        fetchFilterItems,
+        deleteOrder,
+        getOrderDetail} = require('../controllers/data');
+const { validationMiddleware } = require('../middlewares/validations-middleware');
+
 
 router.get(
   "/warehouse/:wh_id",
@@ -46,19 +44,11 @@ router.put("/edit-user/:user_id", validationMiddleware, updateUser); //complete
 router.delete("/manage-users/:user_id", deleteUser); //complete
 
 //operator routes
-router.post("/warehouse/:wh_id/picking-list", userAuth, createOrder);
-router.get(
-  "/order-list",
-  userAuth,
-  authPage(["Admin", "Operator"]),
-  getCurrentOrder
-);
-router.get(
-  "/history-order",
-  userAuth,
-  authPage(["Admin", "Operator"]),
-  getCompletedOrder
-);
-router.delete("/order/:order_id", deleteOrder);
+router.post('/warehouse/:wh_id/picking-list', userAuth, createOrder)
+router.get('/order-list', userAuth, authPage(["Admin","Operator"]), getCurrentOrder)
+router.get('/history-order', userAuth, authPage(["Admin","Operator"]), getCompletedOrder)
+router.delete('/order/:order_id', deleteOrder);
+router.get('/order/:order_id',userAuth,authPage(["Admin","Operator"]), getOrderDetail);
+
 
 module.exports = router;
