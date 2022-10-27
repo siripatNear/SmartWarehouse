@@ -17,16 +17,18 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
-import CustomButton from "../../components/CustomButton";
-import { CustomAlertDialog } from "../../components/AlertDialog";
+import { IoIosArrowBack } from "react-icons/io";
+import { isNil } from "lodash";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { onAddUser, onGetAddUserPage } from "../../api/UserManagement";
-import { useLocation } from "react-router-dom";
-import { isNil } from "lodash";
+import { CustomAlertDialog } from "../../components/AlertDialog";
+import CustomButton from "../../components/CustomButton";
 //api
-// import { onAddUser, onGetAddUserPage } from "../../api/data";
+import { onGetAddUserPage } from "../../api/data";
+import { api, queryClient } from "../../lib/query";
+import { useMutation } from "@tanstack/react-query";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const roles = [
   { value: "Operator", label: "Operator" },
@@ -55,13 +57,12 @@ const schema = yup
   .required();
 
 export default function AddUser() {
-  const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
   const { state } = useLocation();
 
   //* protect route from another role----------------------
   const [loading, setLoading] = useState(true);
   const [protectedData, setProtectedData] = useState(null);
+  const navigate = useNavigate();
 
   const protectedRoute = async () => {
     try {
@@ -84,7 +85,6 @@ export default function AddUser() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
-
   const handleShowConfirmClick = () =>
     setShowConfirmPassword(!showConfirmPassword);
 
@@ -115,42 +115,75 @@ export default function AddUser() {
     }
   };
 
-  const onSubmit = async (values) => {
-    try {
-      const { data } = await onAddUser({ ...values, role: values.role.value });
-      setError("");
-      setSuccess(data.message);
-      onClose(); // close popup window
-    } catch (error) {
-      setError(error.response.data.errors[0].msg);
-      setSuccess("");
-      onClose(); // close popup window
+  //* api add user
+  const {
+    mutate: addUser,
+    isLoading: isLoadingAddUser,
+    data,
+    error,
+  } = useMutation(
+    (addUserData) =>
+      api.post("/add-user", { ...addUserData, role: addUserData.role.value }),
+    {
+      onSuccess() {
+        onClose();
+        reset();
+      },
     }
-    reset(); //reset form
-  };
+  );
+
+  //* api edit user
+  const { mutate: editUser, isLoading } = useMutation(
+    (v) => api.put(`/edit-user/${v.user_id}`, { ...v, role: v.role.value }),
+    // console.log(v.role.value)
+    {
+      onSuccess() {
+        onClose();
+        queryClient.invalidateQueries(["/manage-users"]); //* update ui
+        navigate("/manage-users");
+      },
+    }
+  );
 
   return (
     <>
-      <Flex minH={"93vh"} align={"center"} justify={"center"} bgColor={"white"}>
+      <Button
+        leftIcon={<IoIosArrowBack />}
+        margin={"25px"}
+        colorScheme="linkedin"
+        variant="outline"
+        onClick={() => navigate("/manage-users")} //back to history
+      >
+        Back
+      </Button>
+
+      <Flex minH={"83vh"} align={"center"} justify={"center"}>
         <Stack spacing={5} py={30} px={15}>
           <Stack>
             <Heading fontSize={"4xl"}>
-              {!isNil(state) ? "Edit User" : "Add User"}
+              {isNil(state) ? "Add User" : "Edit User"}
             </Heading>
           </Stack>
-          <Box borderRadius="15px" bgColor={"white"} boxShadow={"lg"} p={8}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+          <Box borderRadius="15px" boxShadow={"lg"} p={8}>
+            <form>
               <CustomAlertDialog
                 isOpen={isOpen}
                 onClose={onClose}
-                onConfirm={handleSubmit(onSubmit)}
+                onConfirm={handleSubmit((v) => {
+                  if (isNil(state)) {
+                    addUser(v);
+                  } else {
+                    editUser(v);
+                  }
+                })}
+                isLoading={isLoadingAddUser || isLoading}
                 HearderFsize="2xl"
                 LbuttonPopup="Cancle"
                 RbuttonPopup="Confirm"
                 ColorRbuttonPopup="whatsapp"
                 textHeader=<HStack>
                   <font> Confirm to </font>
-                  <font color="green"> add </font>
+                  <font color="green"> {isNil(state) ? "Add" : "Edit"} </font>
                   <font> this user </font>
                 </HStack>
                 textBody=<VStack alignItems="left">
@@ -264,9 +297,11 @@ export default function AddUser() {
 
                 {/* //TODO: manage error and success style */}
 
-                <div style={{ color: "red", margin: "10px 0" }}>{error}</div>
+                <div style={{ color: "red", margin: "10px 0" }}>
+                  {error?.response.data.errors[0].msg}
+                </div>
                 <div style={{ color: "green", margin: "10px 0" }}>
-                  {success}
+                  {data?.message}
                 </div>
 
                 {/* ------------------------------------ */}
