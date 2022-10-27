@@ -52,7 +52,7 @@ const NavLink = ({ children }) => (
   </L>
 );
 
-export default function NavbarFolklift() {
+export default function NavbarForklift() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (

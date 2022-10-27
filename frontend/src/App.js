@@ -32,7 +32,7 @@ import RunPage from "./components/Logout";
 
 // Navvbar
 import NavbarGuest from "./components/NavbarGuest";
-import NavbarFolklift from "./components/NavbarFolklift";
+import NavbarForklift from "./components/NavbarForklift";
 import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
 import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
@@ -56,14 +56,14 @@ const RestrictedRoutes = () => {
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
 
-  return <>{!isAuth ? <Outlet /> : <Navigate to="/dashboard" />}</>;
+  return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
 };
 
 // !navbar from role don't delete
 const selectNavbar = (role) => {
   switch (role) {
     case "Forklift":
-      return <NavbarFolklift />;
+      return <NavbarForklift />;
     case "Operator":
       return <NavbarOperator />;
     case "Admin":
@@ -83,7 +83,7 @@ const App = () => {
       <Routes>
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
-          <Route path="/dashboard" element={<RunPage />} />
+          <Route path="/" element={<RunPage />} />
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/manage-users" element={<UserManage />} />
         </Route>
@@ -101,7 +101,7 @@ const App = () => {
         <Route path="/d" element={<Dashboard />} />
 
         <Route path="/NavbarGuest" element={<NavbarGuest />} />
-        <Route path="/NavbarFolklift" element={<NavbarFolklift />} />
+        <Route path="/NavbarForklift" element={<NavbarForklift />} />
         <Route path="/NavbarOperator" element={<NavbarOperator />} />
         <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
 

@@ -441,8 +441,50 @@ exports.getCurrentOrder = async (req, res) => {
     }
 } 
 
-const positionsGrid = (req, res) => {
+const positionsGrid = async (order_id,zone) => {
+    try {
+        const targets = await db.query(`
+            SELECT w.warehouse_id, r.position_code ,wt.section, wt.col_no, wt.floor_no
+            FROM warehouse_trans wt
+            JOIN warehouse w ON w.warehouse_id = wt.warehouse_id
+            JOIN raw_materials r ON r.position_code = wt.position_code
+            JOIN order_transaction ot ON r.item_code = ot.item_code
+            WHERE ot.order_id = $1 AND wt.zone = $2
+            ORDER BY wt.zone, wt.section, wt.col_no
+        `, [order_id, zone])
 
+        let wh_id = targets.rows[0].warehouse_id;
+
+        const positions = await db.query(`
+            SELECT wt.section, wt.col_no, COUNT(r.position_code)
+            FROM warehouse_trans wt
+            JOIN warehouse w ON w.warehouse_id = wt.warehouse_id
+            FULL OUTER JOIN raw_materials r ON r.position_code = wt.position_code
+            WHERE wt.zone = $1
+            AND w.warehouse_id = $2
+            GROUP BY wt.col_no ,wt.zone, wt.section, wt.col_no, wt.warehouse_id
+            ORDER BY wt.zone, wt.section, wt.col_no
+        `, [zone, wh_id])
+
+
+        positions.rows.map((pos) =>{
+            targets.rows.map((target) =>{
+                if (pos.section === target.section && pos.col_no === target.col_no){
+                    pos.target_in = true
+                }
+            })
+        })
+
+        return {
+            warehouse_id :wh_id,
+            zone: zone,
+            positions: positions.rows,
+            target: targets.rows        
+        }
+        
+    } catch (error) {
+        console.log(error.message)
+    }
 }
 
 exports.getOrderDetail = async (req, res) => {
@@ -461,7 +503,6 @@ exports.getOrderDetail = async (req, res) => {
         `, [order_id])
 
         let zone = parseInt(req.query.zone || zones.rows[0].zone);
-        console.log(order_id)
 
         const items = await db.query(`
             SELECT rm.item_code, c.cate_name as category, rm.length, 
@@ -475,9 +516,14 @@ exports.getOrderDetail = async (req, res) => {
             AND wt.zone = $2
         ` ,[order_id, zone])
 
+        const grid = await positionsGrid(order_id, zone)
+
         return res.status(200).json({
+            warehouse_id: grid.warehouse_id,
             zones : zones.rows,
-            items : items.rows
+            zone : grid.zone,
+            positions_grid : grid.positions,
+            items : items.rows,
         })
         
     } catch (error) {
