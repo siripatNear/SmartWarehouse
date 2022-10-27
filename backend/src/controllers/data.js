@@ -30,6 +30,34 @@ exports.getForm = async (req, res, next) => {
     }
 }
 
+//* for all dropdown data API
+exports.dropDownList = async (req, res) => {
+    try {
+        const warehouse = await db.query(`
+            SELECT warehouse_id,warehouse_desc FROM warehouse`)
+        const zone = await db.query(`
+            SELECT zone FROM warehouse_trans 
+            GROUP BY zone ORDER BY zone`)
+        const category = await db.query(`
+            SELECT item_cate_code,cate_name FROM category`)
+        const role = await db.query(`SELECT role FROM users GROUP BY role`)
+        
+        return res.status(200).json({
+            success: true,
+            warehouse: warehouse.rows,
+            zone: zone.rows,
+            category: category.rows,
+            role: role.rows
+        })
+        
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
 //* <<<< Dashboard data
 const getSumByZone = async (wh_id, zone_id) => {
 
