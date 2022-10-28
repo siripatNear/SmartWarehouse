@@ -12,6 +12,8 @@ function BoxZone({ warehouseData }) {
   return (
     <>
       {warehouseData.summary.map((v) => {
+        const percentage = (Number(v.usage) / Number(v.total_positions)) * 100;
+        console.log(percentage);
         return (
           <Box
             bg="#a3d9fb"
@@ -30,7 +32,7 @@ function BoxZone({ warehouseData }) {
             </VStack>
             <VStack>
               <CircularProgress
-                value={v.usage}
+                value={percentage}
                 size="140px"
                 color="#5677FC"
                 marginTop="8px"
