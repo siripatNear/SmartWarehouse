@@ -85,7 +85,6 @@ export default function AddUser() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
-
   const handleShowConfirmClick = () =>
     setShowConfirmPassword(!showConfirmPassword);
 
@@ -116,6 +115,7 @@ export default function AddUser() {
     }
   };
 
+  //* add user from api
   const {
     mutate: addUser,
     isLoading: isLoadingAddUser,
@@ -132,12 +132,13 @@ export default function AddUser() {
     }
   );
 
-  const { mutate, isLoading } = useMutation(
+  //* edit user from api
+  const { mutate: editUser, isLoading } = useMutation(
     (v) => api.put(`/edit-user/${v.user_id}`, { ...v, role: v.role.value }),
     {
       onSuccess() {
         onClose();
-        queryClient.invalidateQueries(["/manage-users"]); //* update ui
+        queryClient.invalidateQueries(["/manage-users"]); //update ui
         navigate("/manage-users");
       },
     }
@@ -171,7 +172,7 @@ export default function AddUser() {
                   if (isNil(state)) {
                     addUser(v);
                   } else {
-                    mutate(v);
+                    editUser(v);
                   }
                 })}
                 isLoading={isLoadingAddUser || isLoading}

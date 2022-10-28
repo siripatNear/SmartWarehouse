@@ -13,15 +13,23 @@ import {
   useDisclosure,
   Text,
   Spinner,
+  FormControl,
+  Input,
+  IconButton,
+  Button,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import SearchUser from "../../components/SearchUser";
 import CustomButton from "../../components/CustomButton";
 import { CustomAlertDialog } from "../../components/AlertDialog";
-import { isNil } from "lodash";
+import _, { isEmpty, isNil } from "lodash";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api, queryClient } from "../../lib/query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
+import { Select } from "chakra-react-select";
+import { SearchIcon } from "@chakra-ui/icons";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export const header = [
   { value: "userid", label: "User ID" },
@@ -30,13 +38,24 @@ export const header = [
   { value: "  ", label: " " },
 ];
 
+export const roleData = [
+  { value: "Operator", label: "Operator" },
+  { value: "Forklift", label: "Forklift" },
+  { value: "Admin", label: "Admin" },
+];
+
 const UserManage = () => {
   //* popup
+  const [searchRole, setSearchRole] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [filteredData, setFilteredData] = useState(null);
 
+  //* get data from api
   const { data, isLoading } = useQuery(["/manage-users"]);
 
+  //* delete data from api
   const { mutate, isLoading: isDeleting } = useMutation(
     (v) => api.delete(`/manage-users/${v}`),
     {
@@ -48,6 +67,43 @@ const UserManage = () => {
   );
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isEmpty(searchRole) && !isEmpty(searchText)) {
+      setFilteredData(
+        _(data?.users)
+          .filter(
+            (v) =>
+              _(v.role).includes(searchRole.value) &&
+              (_(v.first_name + " " + v.last_name)
+                .toLower()
+                .includes(_(searchText).toLower()) ||
+                _(v.user_id).toLower().includes(_(searchText).toLower()))
+          )
+          .value()
+      );
+    } else if (!isEmpty(searchRole)) {
+      setFilteredData(
+        _(data?.users)
+          .filter((v) => _(v.role).includes(searchRole.value))
+          .value()
+      );
+    } else if (!isEmpty(searchText)) {
+      setFilteredData(
+        _(data?.users)
+          .filter(
+            (v) =>
+              _(v.first_name + " " + v.last_name)
+                .toLower()
+                .includes(_(searchText).toLower()) ||
+              _(v.user_id).toLower().includes(_(searchText).toLower())
+          )
+          .value()
+      );
+    } else {
+      setFilteredData(data?.users);
+    }
+  }, [data, searchRole, searchText]);
 
   return (
     <>
@@ -74,7 +130,7 @@ const UserManage = () => {
           <Text fontSize="xl">Role : {object.role} </Text>
         </VStack>
       />
-      {isLoading || isNil(data) ? (
+      {isLoading || isNil(data) || isNil(filteredData) ? (
         <Spinner />
       ) : (
         <Flex direction={"column"} alignItems={"center"}>
@@ -82,7 +138,45 @@ const UserManage = () => {
             <Heading as="h1" minWidth={"max-content"} marginX={8}>
               User Management
             </Heading>
-            <SearchUser />
+            <>
+              <HStack flex={1} paddingRight={4}>
+                <FormControl width={"30%"} p={2} id="rolesearch">
+                  <Select
+                    isClearable
+                    value={searchRole}
+                    onChange={setSearchRole}
+                    placeholder="Role"
+                    closeMenuOnSelect={true}
+                    options={roleData}
+                  />
+                </FormControl>
+                <FormControl width={"70%"} p={1}>
+                  <Input
+                    type="text"
+                    placeholder="Search User ID or Name..."
+                    value={searchText}
+                    onChange={(v) => setSearchText(v.target.value)}
+                  />
+                </FormControl>
+                <IconButton
+                  colorScheme="blue"
+                  aria-label="Search database"
+                  icon={<SearchIcon />}
+                  type="submit"
+                  form="search"
+                />
+              </HStack>
+              <HStack>
+                <Button
+                  marginRight={5}
+                  colorScheme="whatsapp"
+                  as={Link}
+                  to="/add-user"
+                >
+                  ADD USER
+                </Button>
+              </HStack>
+            </>
           </HStack>
 
           <VStack width={"100%"} marginTop="5">
@@ -99,7 +193,7 @@ const UserManage = () => {
                 </Thead>
 
                 <Tbody>
-                  {data.users.map((User) => (
+                  {filteredData.map((User) => (
                     <Tr
                       _hover={{
                         backgroundColor: "#ECF7FE",

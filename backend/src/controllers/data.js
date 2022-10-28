@@ -30,6 +30,34 @@ exports.getForm = async (req, res, next) => {
     }
 }
 
+//* for all dropdown data API
+exports.dropDownList = async (req, res) => {
+    try {
+        const warehouse = await db.query(`
+            SELECT warehouse_id,warehouse_desc FROM warehouse`)
+        const zone = await db.query(`
+            SELECT zone FROM warehouse_trans 
+            GROUP BY zone ORDER BY zone`)
+        const category = await db.query(`
+            SELECT item_cate_code,cate_name FROM category`)
+        const role = await db.query(`SELECT role FROM users GROUP BY role`)
+        
+        return res.status(200).json({
+            success: true,
+            warehouse: warehouse.rows,
+            zone: zone.rows,
+            category: category.rows,
+            role: role.rows
+        })
+        
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
 //* <<<< Dashboard data
 const getSumByZone = async (wh_id, zone_id) => {
 
@@ -411,7 +439,56 @@ exports.getCurrentOrder = async (req, res) => {
             message: "Internal Server error"
         })
     }
-}  
+} 
+
+const positionsGrid = (req, res) => {
+
+}
+
+exports.getOrderDetail = async (req, res) => {
+
+    const order_id = String(req.params.order_id);
+    
+    try {
+        const zones = await db.query(`
+            SELECT wt.zone 
+            FROM raw_materials rm
+            JOIN order_transaction ot ON rm.item_code = ot.item_code
+            JOIN warehouse_trans wt ON rm.position_code = wt.position_code
+            JOIN category c ON rm.item_cate_code = c.item_cate_code
+            JOIN orders o ON o.order_id = ot.order_id
+            WHERE ot.order_id = $1 GROUP BY wt.zone
+        `, [order_id])
+
+        let zone = parseInt(req.query.zone || zones.rows[0].zone);
+        console.log(order_id)
+
+        const items = await db.query(`
+            SELECT rm.item_code, c.cate_name as category, rm.length, 
+            rm.create_dt, wt.zone
+            FROM raw_materials rm
+            JOIN order_transaction ot ON rm.item_code = ot.item_code
+            JOIN warehouse_trans wt ON rm.position_code = wt.position_code
+            JOIN category c ON rm.item_cate_code = c.item_cate_code
+            JOIN orders o ON o.order_id = ot.order_id
+            WHERE ot.order_id = $1 
+            AND wt.zone = $2
+        ` ,[order_id, zone])
+
+        return res.status(200).json({
+            zones : zones.rows,
+            items : items.rows
+        })
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: true,
+            message: "Internal Server error"
+        })
+    }
+
+}
 
 //>>>>Order ID & Order ID trans
 genOrderID = (prev_id) => {
