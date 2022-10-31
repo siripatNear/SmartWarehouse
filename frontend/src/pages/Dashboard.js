@@ -6,6 +6,7 @@ import BoxZone from "../components/BoxZone";
 import BoxAll from "../components/BoxAll";
 import { onGetWarehouseDashboard } from "../api/data";
 import { isNil } from "lodash";
+import { useQuery } from "@tanstack/react-query";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +26,8 @@ const Dashboard = () => {
     fetch();
   }, []);
 
+  const { data:DataOvell } = useQuery(["/warehouse/A"]);
+
   return (
     <>
       {isLoading || isNil(data) ? (
@@ -34,7 +37,7 @@ const Dashboard = () => {
           <VStack w="70%">
             <Search />
             <Heading as="h1" alignSelf={"flex-start"} paddingLeft="20px">
-              Warehouse {data.warehouse}
+              Warehouse {data.warehouse} 
             </Heading>
 
             <Box paddingLeft={15}>
@@ -44,7 +47,7 @@ const Dashboard = () => {
             </Box>
           </VStack>
           <Box paddingLeft={"32px"}>
-            <BoxAll />
+            <BoxAll DataUsage={DataOvell} />
           </Box>
         </HStack>
       )}

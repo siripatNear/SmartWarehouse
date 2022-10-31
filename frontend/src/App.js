@@ -12,7 +12,6 @@ import "./App.css";
 
 import { useSelector } from "react-redux";
 import "./App.css";
-import { useState } from "react";
 
 import LogIn from "./pages/LogIn";
 
@@ -25,6 +24,7 @@ import UpdateMat from "./pages/Forklift_PutAway/UpdateMat";
 import PutAwayItem from "./pages/Forklift_PutAway/PutAwayItem";
 
 // Forklift_Picking_Page
+import History from "./pages/ForkliftPicking/History";
 import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
 import PickingOrderDetail from "./pages/ForkliftPicking/PickingOrderDetail";
 
@@ -35,10 +35,11 @@ import NavbarGuest from "./components/NavbarGuest";
 import NavbarFolklift from "./components/NavbarFolklift";
 import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
-import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
-import History from "./pages/ForkliftPicking/History";
+
 import Dashboard from "./pages/Dashboard";
+import PickingList from "./pages/Operator/PickingList";
 import BoxZone from "./components/BoxZone";
+import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
 
 const PrivateRoutes = () => {
@@ -91,7 +92,7 @@ const App = () => {
         {/* //?test routes */}
         {/* <Route path="/add-user" element={<AddUser />} /> */}
         {/* <Route path="/usermanage" element={<UserManage />} /> */}
-        <Route path="/putaway" element={<PutAway />} />
+        <Route path="/PutAwayItem" element={<PutAwayItem />} />
         <Route path="/updatemat" element={<UpdateMat />} />
 
         <Route path="/PickingOrderList" element={<PickingOrderList />} />
@@ -106,10 +107,15 @@ const App = () => {
         <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
 
         {/* //?test routes petch */}
+        <Route path="/PickingList" element={<PickingList />} />
         <Route path="/putaway" element={<PutAwayItem />} />
         <Route path="/updatemat" element={<UpdateMat />} />
+
+        <Route path="/OrderList" element={<OrderList />} />
         <Route path="/OrderDetail" element={<OrderDetail />} />
         <Route path="/pickingorderdetail" element={<PickingOrderDetail />} />
+
+        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
