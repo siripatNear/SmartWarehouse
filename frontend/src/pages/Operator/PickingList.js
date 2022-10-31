@@ -6,6 +6,7 @@ import BoxAll from "../../components/BoxAll";
 import TablePickingList from "../../components/TablePickingList";
 import Search from "../../components/Search";
 import AddAlert from "../../components/Addbutton";
+import { useNavigate } from "react-router-dom";
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
@@ -14,7 +15,8 @@ import { useQuery } from "@tanstack/react-query";
 const PickingList = () => {
 
   const { data, isLoading } = useQuery(["/warehouse/A?zone=1"]);
-
+  const navigate = useNavigate();
+  
   return (
     <>
       {isLoading || isNil(data) ? (
@@ -40,9 +42,13 @@ const PickingList = () => {
               width="100%"
             >
               <Heading as="h1">Zone {data.zone}</Heading>
-              <Button colorScheme="twitter" variant="outline" as={Link} to="/">
-                Show All
-              </Button>
+              <Button
+            colorScheme="twitter"
+            variant="outline"
+            onClick={() => navigate("/")}
+          >
+            Show All
+          </Button>
             </HStack>
             <TablePickingList itemlists={data} />
             <Box
@@ -55,7 +61,7 @@ const PickingList = () => {
             </Box>
           </VStack>
           <Box width="30%" paddingTop="160px">
-            <BoxAll DataUsage={data} />
+            <BoxAll data={data} />
           </Box>
         </HStack>
       )}

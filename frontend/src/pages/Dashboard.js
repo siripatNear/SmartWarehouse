@@ -4,27 +4,32 @@ import { Box, Grid, Heading, HStack, Spinner, VStack } from "@chakra-ui/react";
 
 import BoxZone from "../components/BoxZone";
 import BoxAll from "../components/BoxAll";
-import { onGetWarehouseDashboard } from "../api/data";
+// import { onGetWarehouseDashboard } from "../api/data";
 import { isNil } from "lodash";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+// import { api, queryClient } from "../../lib/query";
+
 
 const Dashboard = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setIsLoading(true);
-        const { data: result } = await onGetWarehouseDashboard("A");
-        setData(result);
-        console.log(result);
-      } catch (error) {
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [data, setData] = useState(null);
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     try {
+  //       setIsLoading(true);
+  // const { data: result } = await onGetWarehouseDashboard("A");
+  //       setData(result);
+  //       console.log(result);
+  //     } catch (error) {
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetch();
+  // }, []);
+
+  const { data, isLoading } = useQuery(["/warehouse/A"]);
+  console.log(data);
 
   const { data:DataOvell } = useQuery(["/warehouse/A"]);
 
@@ -46,8 +51,8 @@ const Dashboard = () => {
               </Grid>
             </Box>
           </VStack>
-          <Box paddingLeft={"32px"}>
-            <BoxAll DataUsage={DataOvell} />
+          <Box paddingLeft={"32px"}>\
+            <BoxAll data={data} />
           </Box>
         </HStack>
       )}

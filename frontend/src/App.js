@@ -32,7 +32,7 @@ import RunPage from "./components/Logout";
 
 // Navvbar
 import NavbarGuest from "./components/NavbarGuest";
-import NavbarFolklift from "./components/NavbarFolklift";
+import NavbarForklift from "./components/NavbarForklift";
 import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
 
@@ -64,7 +64,7 @@ const RestrictedRoutes = () => {
 const selectNavbar = (role) => {
   switch (role) {
     case "Forklift":
-      return <NavbarFolklift />;
+      return <NavbarForklift />;
     case "Operator":
       return <NavbarOperator />;
     case "Admin":
@@ -102,7 +102,7 @@ const App = () => {
         <Route path="/d" element={<Dashboard />} />
 
         <Route path="/NavbarGuest" element={<NavbarGuest />} />
-        <Route path="/NavbarFolklift" element={<NavbarFolklift />} />
+        <Route path="/NavbarForklift" element={<NavbarForklift />} />
         <Route path="/NavbarOperator" element={<NavbarOperator />} />
         <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
 
