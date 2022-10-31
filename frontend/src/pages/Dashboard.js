@@ -31,7 +31,7 @@ const Dashboard = () => {
   const { data, isLoading } = useQuery(["/warehouse/A"]);
   console.log(data);
 
-  const { data:DataOvell } = useQuery(["/warehouse/A"]);
+  // const { data:DataOvell } = useQuery(["/warehouse/A"]);
 
   return (
     <>
