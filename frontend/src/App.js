@@ -101,7 +101,7 @@ const App = () => {
         <Route path="/d" element={<Dashboard />} />
 
         <Route path="/NavbarGuest" element={<NavbarGuest />} />
-        <Route path="/NavbarFolklift" element={<NavbarFolklift />} />
+        <Route path="/NavbarForklift" element={<NavbarForklift />} />
         <Route path="/NavbarOperator" element={<NavbarOperator />} />
         <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
 
