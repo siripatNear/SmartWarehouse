@@ -25,11 +25,8 @@ import _, { isEmpty, isNil } from "lodash";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api, queryClient } from "../../lib/query";
 import { Link, useNavigate } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
 import { Select } from "chakra-react-select";
 import { SearchIcon } from "@chakra-ui/icons";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 export const header = [
   { value: "userid", label: "User ID" },
@@ -158,13 +155,6 @@ const UserManage = () => {
                     onChange={(v) => setSearchText(v.target.value)}
                   />
                 </FormControl>
-                <IconButton
-                  colorScheme="blue"
-                  aria-label="Search database"
-                  icon={<SearchIcon />}
-                  type="submit"
-                  form="search"
-                />
               </HStack>
               <HStack>
                 <Button
