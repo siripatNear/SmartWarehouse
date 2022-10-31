@@ -1,6 +1,5 @@
 import React from "react";
 import "../pages/OrderList.css";
-import orderlists from "../assets/mock_data.json";
 import * as dayjs from 'dayjs'
 import {
   Table,
@@ -12,9 +11,7 @@ import {
   TableContainer,
   Badge,
   Button,
-} from "@chakra-ui/react";
 
-import {
   AlertDialog,
   AlertDialogBody,
   AlertDialogFooter,
@@ -22,14 +19,14 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   useDisclosure,
-} from '@chakra-ui/react'
+
+} from "@chakra-ui/react";
 
 export const header = [
-  { value: "no", label: "No" },
   { value: "order_id", label: "Order ID" },
   { value: "create_dt", label: "Date Create" },
   { value: "create_time", label: "Time Create" },
-  { value: "item", label: "Item" },
+  { value: "item", label: "Quantity" },
   { value: "status", label: "Status" },
   { value: "order_by", label: "Order by" },
   { value: "progress_by", label: "Progress by" },
@@ -38,7 +35,7 @@ export const header = [
 
 const mapStatus = (status) => {
   switch (status) {
-    case "not_start":
+    case "Not start":
       return (<Badge variant='subtle'
         width="85%"
         textAlign={"center"}
@@ -46,7 +43,7 @@ const mapStatus = (status) => {
         colorScheme='gray'>
         not start
       </Badge>);
-    case "in_progress":
+    case "In progress":
       return (<Badge variant='subtle'
         width="85%"
         textAlign={"center"}
@@ -119,7 +116,10 @@ function Delete() {
   )
 }
 
-const TableOrderlist = () => {
+const TableOrderlist = (props) => {
+
+  const { Orders } = props
+
   return (
     <TableContainer width="100%">
       <Table size="md">
@@ -134,21 +134,20 @@ const TableOrderlist = () => {
         </Thead>
 
         <Tbody>
-          {orderlists.map((orderlist) => (
+          {Orders.order_list.map((order) => (
             <Tr
               _hover={{
                 backgroundColor: "#ECF7FE",
               }}
-              key={orderlist.value}
+              key={order.value}
             >
-              <Td textAlign={"center"}>{orderlist.internal_id}</Td>
-              <Td textAlign={"center"}>{orderlist.item_code}</Td>
-              <Td textAlign={"center"}>{dayjs(orderlist.create_dt).format('DD-MMM-YYYY')}</Td>
-              <Td textAlign={"center"}>{dayjs(orderlist.create_dt).format('HH:mm')}</Td>
-              <Td textAlign={"center"}>{orderlist.length}</Td>
-              <Td textAlign={"center"}>{mapStatus(orderlist.item_status)}</Td>
-              <Td textAlign={"center"}>{orderlist.create_by}</Td>
-              <Td textAlign={"center"}>{orderlist.modify_by}</Td>
+              <Td textAlign={"center"}>{order.order_id}</Td>
+              <Td textAlign={"center"}>{dayjs(order.create_dt).format('DD-MMM-YYYY')}</Td>
+              <Td textAlign={"center"}>{dayjs(order.create_dt).format('HH:mm')}</Td>
+              <Td textAlign={"center"}>{order.quantity}</Td>
+              <Td textAlign={"center"}>{mapStatus(order.order_status)}</Td>
+              <Td textAlign={"center"}>{order.ordered_by}</Td>
+              <Td textAlign={"center"}>{order.progress_by}</Td>
               {/* <Td textAlign={"center"}>{BtnDetail()} {BtnDelete()}</Td> */}
               <Td textAlign={"center"}>{BtnDetail()} {Delete()}</Td>
             </Tr>

@@ -77,6 +77,7 @@ exports.updateUser = async (req, res) => {
   try {
     const hashedPassword = await hash(password, 10);
 
+
     await db.query(
       `
             UPDATE users SET first_name = $1
@@ -97,6 +98,7 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
+
 
 //* DELETE user by user_id
 exports.deleteUser = async (req, res) => {
