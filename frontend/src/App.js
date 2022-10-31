@@ -32,7 +32,7 @@ import RunPage from "./components/Logout";
 
 // Navvbar
 import NavbarGuest from "./components/NavbarGuest";
-import NavbarFolklift from "./components/NavbarFolklift";
+import NavbarForklift from "./components/NavbarForklift";
 import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
 import PutAway from "./pages/Forklift_PutAway/PutAwayItem";
@@ -63,7 +63,7 @@ const RestrictedRoutes = () => {
 const selectNavbar = (role) => {
   switch (role) {
     case "Forklift":
-      return <NavbarFolklift />;
+      return <NavbarForklift />;
     case "Operator":
       return <NavbarOperator />;
     case "Admin":
