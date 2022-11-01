@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -23,6 +23,10 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { MdOutlineLogout } from "react-icons/md";
 import logo from "../assets/logo-kmutt.png";
+import { useUserStore } from "../store/user";
+import { useDispatch } from "react-redux";
+import { fetchProtectedInfo, onLogout } from "../api/auth";
+import { unauthenticateUser } from "../redux/slices/authSlice";
 
 const Links = [
   {
@@ -56,6 +60,40 @@ const NavLink = ({ children }) => (
 
 export default function NavbarAdmin() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const user = useUserStore((state) => state.user);
+
+  const logoutStore = useUserStore((state) => state.removeUser);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const [protectedData, setProtectedData] = useState(null);
+
+  const logout = async () => {
+    try {
+      await onLogout();
+
+      logoutStore();
+      dispatch(unauthenticateUser()); //set isAuth = false
+      localStorage.removeItem("isAuth");
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  // *cookie
+  const protectedInfo = async () => {
+    try {
+      const { data } = await fetchProtectedInfo();
+
+      setProtectedData(data.info);
+      setLoading(false);
+    } catch (error) {
+      logout();
+    }
+  };
+
+  useEffect(() => {
+    protectedInfo();
+  }, []);
 
   return (
     <>
@@ -104,7 +142,7 @@ export default function NavbarAdmin() {
                     ml="2"
                   >
                     <Text marginLeft={4} fontSize="xl">
-                      Admin1234
+                      {user.user_id}
                     </Text>
                   </VStack>
                   <Box display={{ base: "none", md: "flex" }}>
@@ -126,9 +164,12 @@ export default function NavbarAdmin() {
                   </Text>
                 </MenuItem>
                 <MenuDivider />
-                <MenuItem icon={<MdOutlineLogout size={"30px"} />}>
+                <MenuItem
+                  icon={<MdOutlineLogout size={"30px"} />}
+                  onClick={() => logout()}
+                >
                   <Text marginLeft={4} fontSize="xl">
-                    Sign out
+                    Log out
                   </Text>
                 </MenuItem>
               </MenuList>
