@@ -38,6 +38,7 @@ import NavbarAdmin from "./components/NavbarAdmin";
 
 import Dashboard from "./pages/Dashboard";
 import PickingList from "./pages/Operator/PickingList";
+import ConfirmPicking from "./pages/Operator/ConfirmPicking";
 import BoxZone from "./components/BoxZone";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
@@ -93,7 +94,7 @@ const App = () => {
         {/* <Route path="/add-user" element={<AddUser />} /> */}
         {/* <Route path="/usermanage" element={<UserManage />} /> */}
         <Route path="/PutAwayItem" element={<PutAwayItem />} />
-        <Route path="/updatemat" element={<UpdateMat />} />
+        <Route path="/UpdateMat" element={<UpdateMat />} />
 
         <Route path="/PickingOrderList" element={<PickingOrderList />} />
         <Route path="/history" element={<History />} />
@@ -108,8 +109,7 @@ const App = () => {
 
         {/* //?test routes petch */}
         <Route path="/PickingList" element={<PickingList />} />
-        <Route path="/putaway" element={<PutAwayItem />} />
-        <Route path="/updatemat" element={<UpdateMat />} />
+        <Route path="/ConfirmPicking" element={<ConfirmPicking />} />
 
         <Route path="/OrderList" element={<OrderList />} />
         <Route path="/OrderDetail" element={<OrderDetail />} />

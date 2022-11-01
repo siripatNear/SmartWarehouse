@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   Thead,
@@ -6,12 +6,12 @@ import {
   Tr,
   Th,
   Td,
-  Checkbox,
   TableContainer,
   Badge,
 } from "@chakra-ui/react";
 
 import * as dayjs from "dayjs";
+import _ from 'lodash';
 
 export const header = [
   { value: "checkbox", label: " " },
@@ -97,6 +97,27 @@ const mapStatus = (status) => {
 const TablePickingList = (props) => {
 
   const { itemlists } = props
+  const [ItemState, setItemState] = useState([]);
+
+  useEffect(() => {
+
+    setItemState(
+      itemlists.items.map(d => {
+        return {
+          select: false,
+          item_code: d.item_code,
+          category: d.category,
+          length: d.length,
+          create_dt: d.create_dt,
+          status: d.status
+        };
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    console.log(_(ItemState).filter((v) => v.select === true).value())
+  }, [ItemState])
 
   return (
     <TableContainer width="100%">
@@ -112,7 +133,7 @@ const TablePickingList = (props) => {
         </Thead>
 
         <Tbody>
-          {itemlists.items.map((item) => (
+          {ItemState.map((item) => (
             <Tr
               _hover={{
                 backgroundColor: "#ECF7FE",
@@ -120,11 +141,21 @@ const TablePickingList = (props) => {
               key={item.item_code}
             >
               <Td textAlign={"center"}>
-                <Checkbox
-                  size="lg"
-                  colorScheme="green"
-                  defaultChecked={false}
-                />
+                <input
+                  onChange={event => {
+                    let checked = event.target.checked;
+                    setItemState(
+                      ItemState.map(data => {
+                        if (item.item_code === data.item_code) {
+                          data.select = checked;
+                        }
+                        return data;
+                      })
+                    );
+                  }}
+                  type="checkbox"
+                  checked={item.select}
+                ></input>
               </Td>
               <Td>{item.item_code}</Td>
               <Td>{mapCateName(item.category)}</Td>
