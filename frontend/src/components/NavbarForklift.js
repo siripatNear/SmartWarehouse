@@ -16,6 +16,7 @@ import {
   Link as L,
   VStack,
 } from "@chakra-ui/react";
+
 // import { Link } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
@@ -52,7 +53,8 @@ const NavLink = ({ children }) => (
   </L>
 );
 
-export default function NavbarFolklift() {
+export default function NavbarForklift() {
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (

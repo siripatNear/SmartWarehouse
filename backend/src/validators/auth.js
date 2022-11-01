@@ -27,6 +27,7 @@ const user_idExist = check('user_id').custom(async (value) => {
     }
 })
 
+
 //check if first_name AND last_name are exists
 
 //check if password confirmation matches password 
