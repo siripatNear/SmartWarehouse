@@ -5,6 +5,7 @@ import { Input } from "@chakra-ui/react";
 import { IconButton } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 export const roleData = [
   { value: "Operator", label: "Operator" },
@@ -13,6 +14,8 @@ export const roleData = [
 ];
 
 const SearchUser = () => {
+  const { data, isLoading } = useQuery(["/manage-users"]);
+
   return (
     <>
       <form style={{ flex: 1 }}>
@@ -25,7 +28,6 @@ const SearchUser = () => {
               closeMenuOnSelect={true}
             />
           </FormControl>
-
           <FormControl width={"70%"} p={1}>
             <Input type="text" placeholder="Search User ID or Name..." />
           </FormControl>

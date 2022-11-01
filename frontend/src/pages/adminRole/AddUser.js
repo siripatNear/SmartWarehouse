@@ -115,7 +115,7 @@ export default function AddUser() {
     }
   };
 
-  //* api add user
+  //* add user from api
   const {
     mutate: addUser,
     isLoading: isLoadingAddUser,
@@ -132,14 +132,13 @@ export default function AddUser() {
     }
   );
 
-  //* api edit user
+  //* edit user from api
   const { mutate: editUser, isLoading } = useMutation(
     (v) => api.put(`/edit-user/${v.user_id}`, { ...v, role: v.role.value }),
-    // console.log(v.role.value)
     {
       onSuccess() {
         onClose();
-        queryClient.invalidateQueries(["/manage-users"]); //* update ui
+        queryClient.invalidateQueries(["/manage-users"]); //update ui
         navigate("/manage-users");
       },
     }

@@ -11,7 +11,6 @@ import {
   Badge,
 } from "@chakra-ui/react";
 
-import { data } from "../assets/dataRawMat";
 import * as dayjs from "dayjs";
 
 export const header = [
@@ -19,26 +18,25 @@ export const header = [
   { value: "item_code", label: "Item Code" },
   { value: "cate", label: "Category" },
   { value: "length", label: "Length" },
-  { value: "section", label: "Section" },
   { value: "create_dt", label: "Date Create" },
   { value: "status", label: "Status" },
 ];
 
 const mapCateName = (category) => {
   switch (category) {
-    case 1:
+    case "1":
       return "Kraft";
-    case 2:
+    case "2":
       return "Bleached";
-    case 3:
+    case "3":
       return "Glassine";
-    case 4:
+    case "4":
       return "Wax";
-    case 5:
+    case "5":
       return "PVC";
-    case 6:
+    case "6":
       return "Inkjet";
-    case 7:
+    case "7":
       return "Corrugated";
     default:
       return "";
@@ -96,7 +94,10 @@ const mapStatus = (status) => {
   }
 };
 
-const TablePickingList = () => {
+const TablePickingList = (props) => {
+
+  const { itemlists } = props
+
   return (
     <TableContainer width="100%">
       <Table size="md">
@@ -111,12 +112,12 @@ const TablePickingList = () => {
         </Thead>
 
         <Tbody>
-          {data.map((d) => (
+          {itemlists.items.map((item) => (
             <Tr
               _hover={{
                 backgroundColor: "#ECF7FE",
               }}
-              key={d.item_code}
+              key={item.item_code}
             >
               <Td textAlign={"center"}>
                 <Checkbox
@@ -125,13 +126,11 @@ const TablePickingList = () => {
                   defaultChecked={false}
                 />
               </Td>
-              <Td>{d.item_code}</Td>
-              <Td>{mapCateName(d.item_cate_code)}</Td>
-              <Td>{d.length}</Td>
-              <Td>{d.internal_id}</Td>
-
-              <Td>{dayjs(d.create_dt).format("DD / MM / YYYY")}</Td>
-              <Td>{mapStatus(d.item_status)}</Td>
+              <Td>{item.item_code}</Td>
+              <Td>{mapCateName(item.category)}</Td>
+              <Td>{item.length}</Td>
+              <Td>{dayjs(item.create_dt).format("DD / MM / YYYY")}</Td>
+              <Td>{mapStatus(item.status)}</Td>
             </Tr>
           ))}
         </Tbody>
