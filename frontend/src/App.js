@@ -42,6 +42,8 @@ import BoxZone from "./components/BoxZone";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
 
+import { useUserStore } from "./store/user";
+
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
 
@@ -75,12 +77,10 @@ const selectNavbar = (role) => {
 };
 
 const App = () => {
-  // !navbar from role don't delete
-  const role = "Admin"; // TODO: fetch from api
+  const user = useUserStore((state) => state.user);
   return (
     <BrowserRouter>
-      {/* //! navbar from role don't delete*/}
-      {selectNavbar(role)}
+      {selectNavbar(user?.role)}
       <Routes>
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
@@ -90,8 +90,6 @@ const App = () => {
         </Route>
 
         {/* //?test routes */}
-        {/* <Route path="/add-user" element={<AddUser />} /> */}
-        {/* <Route path="/usermanage" element={<UserManage />} /> */}
         <Route path="/PutAwayItem" element={<PutAwayItem />} />
         <Route path="/updatemat" element={<UpdateMat />} />
 
@@ -101,10 +99,10 @@ const App = () => {
         <Route path="/boxzone" element={<BoxZone />} />
         <Route path="/d" element={<Dashboard />} />
 
-        <Route path="/NavbarGuest" element={<NavbarGuest />} />
+        {/* <Route path="/NavbarGuest" element={<NavbarGuest />} />
         <Route path="/NavbarForklift" element={<NavbarForklift />} />
         <Route path="/NavbarOperator" element={<NavbarOperator />} />
-        <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
+        <Route path="/NavbarAdmin" element={<NavbarAdmin />} /> */}
 
         {/* //?test routes petch */}
         <Route path="/PickingList" element={<PickingList />} />

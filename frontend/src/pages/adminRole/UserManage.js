@@ -15,7 +15,6 @@ import {
   Spinner,
   FormControl,
   Input,
-  IconButton,
   Button,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
@@ -26,7 +25,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { api, queryClient } from "../../lib/query";
 import { Link, useNavigate } from "react-router-dom";
 import { Select } from "chakra-react-select";
-import { SearchIcon } from "@chakra-ui/icons";
 
 export const header = [
   { value: "userid", label: "User ID" },
