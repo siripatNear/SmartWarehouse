@@ -86,6 +86,17 @@ exports.addUser = async (req, res) => {
   }
 }
 
+    return res.status(201).json({
+      success: true,
+      message: "Adding user was successful",
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
 
 //* GET /edit-user Form by user_id
 /*
@@ -98,13 +109,9 @@ exports.getUserByID = async (req, res) => {
             SELECT first_name, last_name, user_id, role
             FROM users
             WHERE user_id = $1
-        `, [user_id]);
-
-        return res.status(201).json({
-            success: true,
-            message: 'you have permission to access',
-            user: data.rows
-        })
+        `,
+      [user_id]
+    );
 
     } catch (error) {
         return res.status(500).json({
@@ -138,6 +145,7 @@ exports.getUserByID = async (req, res) => {
 
 //* PUT (update) user
 /*
+
 exports.updateUser = async (req, res) => {
   const { first_name, last_name, role, password } = req.body;
   const user_id = String(req.params.user_id);
@@ -197,6 +205,7 @@ exports.updateUser = async (req, res) => {
       });
   }
 }
+
 
 //* DELETE user by user_id
 /*

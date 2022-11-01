@@ -8,61 +8,52 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-const DataBoxOverall = [
-  {
-    label: "Overall",
-    max: 100,
-    usage: 80,
-    empty: 20,
-  },
-];
+function BoxAll({ data }) {
+  const percentage = (Number(data.usage) / Number(data.positions)) * 100;
+  console.log(percentage);
 
-function BoxAll() {
   return (
     <>
-      {DataBoxOverall.map((v) => {
-        const { label, max, usage, empty } = v;
-        return (
-          <Box
-            bg="#a3d9fb"
-            borderRadius={"12px"}
-            w="280px"
-            h="280px"
-            key={label}
-            boxShadow="lg"
+      <Box
+        bg="#a3d9fb"
+        borderRadius={"12px"}
+        w="300px"
+        h="300px"
+        key={data.warehouse}
+        boxShadow="lg"
+      >
+        <VStack marginTop="8px">
+          <HStack>
+            <Text fontSize="3xl" fontWeight={"bold"} marginTop="7px">
+              Warehouse {data.warehouse}
+            </Text>
+            <Text fontSize="2xl" marginTop="10px">
+              usage
+            </Text>
+          </HStack>
+        </VStack>
+        <VStack>
+          <CircularProgress
+            value={percentage}
+            size="180px"
+            color="#5677FC"
+            marginTop="8px"
+            marginLeft="8px"
+            fontSize="7xl"
+            fontWeight="bold"
           >
-            <VStack marginTop="8px">
-              <HStack>
-                <Text fontSize="3xl" fontWeight={"bold"}>
-                  {label}
-                </Text>
-                <Text fontSize="xl">usage</Text>
-              </HStack>
-            </VStack>
-            <VStack>
-              <CircularProgress
-                value={usage}
-                size="160px"
-                color="#5677FC"
-                marginTop="8px"
-                marginLeft="8px"
-                fontSize="7xl"
-                fontWeight="bold"
-              >
-                <CircularProgressLabel>
-                  <Text fontSize="2xl">
-                    {usage}/{max}
-                  </Text>
-                  <Text>units</Text>
-                </CircularProgressLabel>
-              </CircularProgress>
-            </VStack>
-            <VStack marginTop="8px" fontSize="lg" marginBottom="8px">
-              <Text>Empty {empty} units</Text>
-            </VStack>
-          </Box>
-        );
-      })}
+            <CircularProgressLabel>
+              <Text fontSize="2xl">
+                {data.usage}/{data.positions}
+              </Text>
+              <Text>units</Text>
+            </CircularProgressLabel>
+          </CircularProgress>
+        </VStack>
+        <VStack marginTop="10px" fontSize="2xl">
+          <Text>Empty {data.empty} units</Text>
+        </VStack>
+      </Box>
     </>
   );
 }
