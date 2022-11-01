@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import "../OrderDetail.css";
 import * as dayjs from 'dayjs';
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Center } from '@chakra-ui/react'
 import CustomButton from "../../components/CustomButton";
 import {
-  VStack,
-  HStack,
-  useDisclosure,
-  Text,
+    VStack,
+    HStack,
+    useDisclosure,
+    Text,
 } from "@chakra-ui/react";
 
 import GridOrderDetail from '../../components/GridOrderDetail';
 import TablePickingListInOrder from '../../components/TablePickingListInOrder';
 import { CustomAlertOneButton } from "../../components/AlertOneButton";
+
+import { isNil } from "lodash";
+import { useQuery } from "@tanstack/react-query";
 
 import Dataorder from "../../assets/orderdetailmock.json";
 
@@ -21,31 +24,39 @@ function PickingOrderDetail() {
     const [object, setObject] = useState({});
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const { data: order, isLoading } = useQuery(["/order/FE008"]);
+    const { data: item_zone_1 } = useQuery(["/order/FE008?zone=1"]);
+    const { data: item_zone_2 } = useQuery(["/order/FE008?zone=2"]);
+    const { data: item_zone_3 } = useQuery(["/order/FE008?zone=3"]);
+    const { data: item_zone_4 } = useQuery(["/order/FE008?zone=4"]);
+    const { data: item_zone_5 } = useQuery(["/order/FE008?zone=5"]);
+    const { data: item_zone_6 } = useQuery(["/order/FE008?zone=6"]);
+
     const mapCateName = (category) => {
         switch (category) {
-          case 1:
-            return "Kraft";
-          case 2:
-            return "Bleached";
-          case 3:
-            return "Glassine";
-          case 4:
-            return "Wax";
-          case 5:
-            return "PVC";
-          case 6:
-            return "Inkjet";
-          case 7:
-            return "Corrugated";
-          default:
-            return "";
+            case 1:
+                return "Kraft";
+            case 2:
+                return "Bleached";
+            case 3:
+                return "Glassine";
+            case 4:
+                return "Wax";
+            case 5:
+                return "PVC";
+            case 6:
+                return "Inkjet";
+            case 7:
+                return "Corrugated";
+            default:
+                return "";
         }
-      };
+    };
 
     return (
         <>
-            {/* Pop-up Match */}
-            <CustomAlertOneButton
+                {/* Pop-up Match */ }
+            < CustomAlertOneButton
                 isOpen={isOpen}
                 onClose={onClose}
                 buttonPopup="OK"
@@ -81,7 +92,18 @@ function PickingOrderDetail() {
                     <Text fontSize="xl">Date create : {dayjs(object.create_dt).format('DD/MM/YYYY')} </Text>
                 </VStack>
             /> */}
-
+            {isLoading || isNil(order) ? (
+                <Center mt='100px'>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                        alignItems
+                    />
+                </Center>
+            ) : (
             <div>
                 <div className='TitleContainer'>
                     <div className='OrderTitle'>
@@ -94,60 +116,60 @@ function PickingOrderDetail() {
                 <div className='BodyOrderDetailPage'>
                     <Tabs variant='enclosed' width='100%'>
                         <TabList>
-                                <Tab>
-                                    Zone 1
-                                </Tab>
-                                <Tab>
-                                    Zone 2
-                                </Tab>
-                                <Tab>
-                                    Zone 3
-                                </Tab>
-                                <Tab>
-                                    Zone 4
-                                </Tab>
-                                <Tab>
-                                    Zone 5
-                                </Tab>
-                                <Tab>
-                                    Zone 6
-                                </Tab>
+                            <Tab>
+                                Zone 1
+                            </Tab>
+                            <Tab>
+                                Zone 2
+                            </Tab>
+                            <Tab>
+                                Zone 3
+                            </Tab>
+                            <Tab>
+                                Zone 4
+                            </Tab>
+                            <Tab>
+                                Zone 5
+                            </Tab>
+                            <Tab>
+                                Zone 6
+                            </Tab>
                         </TabList>
                         <TabPanels>
-                                <TabPanel>
-                                    1
-                                    <GridOrderDetail />
-                                    <TablePickingListInOrder items={Dataorder}/>
-                                </TabPanel>
-                                <TabPanel>
-                                    2
-                                    {/* <GridOrderDetail /> */}
-                                    <TablePickingListInOrder items={Dataorder}/>
-                                </TabPanel>
-                                <TabPanel>
-                                    3
-                                    {/* <GridOrderDetail /> */}
-                                    <TablePickingListInOrder items={Dataorder}/>
-                                </TabPanel>
-                                <TabPanel>
-                                    4
-                                    {/* <GridOrderDetail /> */}
-                                    <TablePickingListInOrder items={Dataorder}/>
-                                </TabPanel>
-                                <TabPanel>
-                                    5
-                                    {/* <GridOrderDetail /> */}
-                                    <TablePickingListInOrder items={Dataorder}/>
-                                </TabPanel>
-                                <TabPanel>
-                                    6
-                                    {/* <GridOrderDetail /> */}
-                                    <TablePickingListInOrder items={Dataorder}/>
-                                </TabPanel>
+                            <TabPanel>
+                                1
+                                <GridOrderDetail />
+                                <TablePickingListInOrder itemlist={item_zone_1} />
+                            </TabPanel>
+                            <TabPanel>
+                                2
+                                <GridOrderDetail />
+                                <TablePickingListInOrder itemlist={item_zone_2} />
+                            </TabPanel>
+                            <TabPanel>
+                                3
+                                <GridOrderDetail />
+                                <TablePickingListInOrder itemlist={item_zone_3} />
+                            </TabPanel>
+                            <TabPanel>
+                                4
+                                <GridOrderDetail />
+                                <TablePickingListInOrder itemlist={item_zone_4} />
+                            </TabPanel>
+                            <TabPanel>
+                                5
+                                <GridOrderDetail />
+                                <TablePickingListInOrder itemlist={item_zone_5} />
+                            </TabPanel>
+                            <TabPanel>
+                                6
+                                <GridOrderDetail />
+                                <TablePickingListInOrder itemlist={item_zone_6} />
+                            </TabPanel>
                         </TabPanels>
                     </Tabs>
                 </div>
-                
+
                 {/* Test Pop-Up Button */}
                 <div className='ContainerBtn'>
                     <CustomButton
@@ -165,8 +187,8 @@ function PickingOrderDetail() {
                         fontWeight="medium"
                     />
                 </div>
-
             </div>
+            )}
         </>
     )
 }
