@@ -1,7 +1,9 @@
 import { Box, Text, HStack } from "@chakra-ui/react";
 import React from "react";
+import { useUserStore } from "../store/user";
 
 const Nametag = ({ name = "", userID = "" }) => {
+  const user = useUserStore((state) => state.user);
   return (
     <Box
       bg="#E3F3FD"
@@ -16,12 +18,12 @@ const Nametag = ({ name = "", userID = "" }) => {
       <HStack justify={"center"}>
         <Text>
           <b> Name : </b>
-          {name}
+          {user.first_name} {user.last_name}
         </Text>
         <Text>&nbsp;&nbsp;&nbsp;</Text>
         <Text>
           <b>User ID : </b>
-          {userID}
+          {user.user_id}
         </Text>
       </HStack>
     </Box>

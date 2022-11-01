@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -20,11 +20,15 @@ import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { MdOutlineLogout } from "react-icons/md";
 import logo from "../assets/logo-kmutt.png";
+import { useUserStore } from "../store/user";
+import { fetchProtectedInfo, onLogout } from "../api/auth";
+import { unauthenticateUser } from "../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 const OpLinks = [
   {
     name: "Dashboard",
-    link: "dashboard",
+    link: "/",
   },
   {
     name: "Order list",
@@ -49,6 +53,41 @@ const NavLink = ({ children }) => (
 
 export default function NavbarOperator() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  // show user
+  const user = useUserStore((state) => state.user);
+  // log out
+  const logoutStore = useUserStore((state) => state.removeUser);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const [protectedData, setProtectedData] = useState(null);
+
+  const logout = async () => {
+    try {
+      await onLogout();
+
+      logoutStore();
+      dispatch(unauthenticateUser()); //set isAuth = false
+      localStorage.removeItem("isAuth");
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  // *cookie
+  const protectedInfo = async () => {
+    try {
+      const { data } = await fetchProtectedInfo();
+
+      setProtectedData(data.info);
+      setLoading(false);
+    } catch (error) {
+      logout();
+    }
+  };
+
+  useEffect(() => {
+    protectedInfo();
+  }, []);
 
   return (
     <>
@@ -97,7 +136,7 @@ export default function NavbarOperator() {
                     ml="2"
                   >
                     <Text marginLeft={4} fontSize="xl">
-                      Operator05
+                      {user.user_id}
                     </Text>
                   </VStack>
                   <Box display={{ base: "none", md: "flex" }}>
@@ -109,7 +148,10 @@ export default function NavbarOperator() {
                 bg={useColorModeValue("white", "gray.900")}
                 borderColor={useColorModeValue("gray.200", "gray.700")}
               >
-                <MenuItem icon={<MdOutlineLogout size={"30px"} />}>
+                <MenuItem
+                  icon={<MdOutlineLogout size={"30px"} />}
+                  onClick={() => logout()}
+                >
                   <Text marginLeft={4} fontSize="xl">
                     Log out
                   </Text>
