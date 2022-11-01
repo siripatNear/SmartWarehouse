@@ -59,7 +59,7 @@ const RestrictedRoutes = () => {
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
 
-  return <>{!isAuth ? <Outlet /> : <Navigate to="/dashboard" />}</>;
+  return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
 };
 
 // !navbar from role don't delete
@@ -84,7 +84,7 @@ const App = () => {
       <Routes>
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
-          <Route path="/dashboard" element={<RunPage />} />
+          <Route path="/" element={<RunPage />} />
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/manage-users" element={<UserManage />} />
         </Route>
