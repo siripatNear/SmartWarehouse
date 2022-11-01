@@ -86,17 +86,6 @@ exports.addUser = async (req, res) => {
   }
 }
 
-    return res.status(201).json({
-      success: true,
-      message: "Adding user was successful",
-    });
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-};
 
 //* GET /edit-user Form by user_id
 /*
