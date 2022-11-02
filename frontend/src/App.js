@@ -37,6 +37,7 @@ import { useUserStore } from "./store/user";
 
 import Dashboard from "./pages/Dashboard";
 import PickingList from "./pages/Operator/PickingList";
+import ConfirmPicking from "./pages/Operator/ConfirmPicking";
 import BoxZone from "./components/BoxZone";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
@@ -103,13 +104,29 @@ const App = () => {
 
         </Route>
 
-        {/* //?test component */}
-
+        {/* //?test routes */}
+        <Route path="/PutAwayItem" element={<PutAwayItem />} />
+        <Route path="/UpdateMat" element={<UpdateMat />} />
 
         <Route path="/picking-order-list" element={<PickingOrderList />} />
         <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
         <Route path="/boxzone" element={<BoxZone />} />
+
+        {/* <Route path="/d" element={<Dashboard />} /> */}
+
+        {/* <Route path="/NavbarGuest" element={<NavbarGuest />} />
+        <Route path="/NavbarForklift" element={<NavbarForklift />} />
+        <Route path="/NavbarOperator" element={<NavbarOperator />} />
+        <Route path="/NavbarAdmin" element={<NavbarAdmin />} /> */}
+
+        {/* //?test routes petch */}
+        <Route path="/PickingList" element={<PickingList />} />
+        <Route path="/ConfirmPicking" element={<ConfirmPicking />} />
+
+        <Route path="/OrderList" element={<OrderList />} />
+        <Route path="/OrderDetail" element={<OrderDetail />} />
+        <Route path="/pickingorderdetail" element={<PickingOrderDetail />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}

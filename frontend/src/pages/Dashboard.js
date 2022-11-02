@@ -13,8 +13,6 @@ const Dashboard = () => {
   const { data, isLoading } = useQuery(["/warehouse/A"]);
   console.log(data);
 
-  const { data:DataOverall } = useQuery(["/warehouse/A"]);
-
   return (
     <>
       {isLoading || isNil(data) ? (
