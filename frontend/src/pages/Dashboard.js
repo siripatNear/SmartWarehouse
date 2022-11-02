@@ -31,7 +31,7 @@ const Dashboard = () => {
   const { data, isLoading } = useQuery(["/warehouse/A"]);
   console.log(data);
 
-  const { data:DataOvell } = useQuery(["/warehouse/A"]);
+  const { data:DataOverall } = useQuery(["/warehouse/A"]);
 
   return (
     <>
@@ -51,7 +51,7 @@ const Dashboard = () => {
               </Grid>
             </Box>
           </VStack>
-          <Box paddingLeft={"32px"}>\
+          <Box paddingLeft={"32px"}>
             <BoxAll data={data} />
           </Box>
         </HStack>

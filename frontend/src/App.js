@@ -28,8 +28,6 @@ import History from "./pages/ForkliftPicking/History";
 import PickingOrderList from "./pages/ForkliftPicking/PickingOrderList";
 import PickingOrderDetail from "./pages/ForkliftPicking/PickingOrderDetail";
 
-import RunPage from "./components/Logout";
-
 // Navvbar
 import NavbarGuest from "./components/NavbarGuest";
 import NavbarForklift from "./components/NavbarForklift";
@@ -83,33 +81,33 @@ const App = () => {
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
           <Route path="/" element={<Dashboard />} />
+
+          {/* //*Admin */}
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/manage-users" element={<UserManage />} />
+
+          {/* //* Operator */}
+          <Route path="/order-list" element={<OrderList />} />
+          <Route path="/order-detail" element={<OrderDetail />} />
+          <Route path="/picking-list" element={<PickingList />} />
+          <Route path="/history" element={<History />} />
+
+          {/* //* Forklift Put away */}
+          <Route path="/put-away" element={<PutAwayItem />} />
+          <Route path="/update-mat" element={<UpdateMat />} />
+
+          {/* //*Forklift Picking */}
+          <Route path="/picking-order-list" element={<PickingOrderList />} />
+          <Route path="/picking-order-detail" element={<PickingOrderDetail />} />
+
+
         </Route>
 
-        {/* //?test routes */}
-        <Route path="/PutAwayItem" element={<PutAwayItem />} />
-        <Route path="/updatemat" element={<UpdateMat />} />
+        {/* //?test component */}
 
-        <Route path="/PickingOrderList" element={<PickingOrderList />} />
-        <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
         <Route path="/boxzone" element={<BoxZone />} />
-        {/* <Route path="/d" element={<Dashboard />} /> */}
 
-        {/* <Route path="/NavbarGuest" element={<NavbarGuest />} />
-        <Route path="/NavbarForklift" element={<NavbarForklift />} />
-        <Route path="/NavbarOperator" element={<NavbarOperator />} />
-        <Route path="/NavbarAdmin" element={<NavbarAdmin />} /> */}
-
-        {/* //?test routes petch */}
-        <Route path="/PickingList" element={<PickingList />} />
-        <Route path="/putaway" element={<PutAwayItem />} />
-        <Route path="/updatemat" element={<UpdateMat />} />
-
-        <Route path="/OrderList" element={<OrderList />} />
-        <Route path="/OrderDetail" element={<OrderDetail />} />
-        <Route path="/pickingorderdetail" element={<PickingOrderDetail />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
