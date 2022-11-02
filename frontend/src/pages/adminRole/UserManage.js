@@ -133,38 +133,36 @@ const UserManage = () => {
             <Heading as="h1" minWidth={"max-content"} marginX={8}>
               User Management
             </Heading>
-            <>
-              <HStack flex={1} paddingRight={4}>
-                <FormControl width={"30%"} p={2} id="rolesearch">
-                  <Select
-                    isClearable
-                    value={searchRole}
-                    onChange={setSearchRole}
-                    placeholder="Role"
-                    closeMenuOnSelect={true}
-                    options={roleData}
-                  />
-                </FormControl>
-                <FormControl width={"70%"} p={1}>
-                  <Input
-                    type="text"
-                    placeholder="Search User ID or Name..."
-                    value={searchText}
-                    onChange={(v) => setSearchText(v.target.value)}
-                  />
-                </FormControl>
-              </HStack>
-              <HStack>
-                <Button
-                  marginRight={5}
-                  colorScheme="whatsapp"
-                  as={Link}
-                  to="/add-user"
-                >
-                  ADD USER
-                </Button>
-              </HStack>
-            </>
+            <HStack flex={1} paddingRight={4}>
+              <FormControl width={"30%"} p={2} id="rolesearch">
+                <Select
+                  isClearable
+                  value={searchRole}
+                  onChange={setSearchRole}
+                  placeholder="Role"
+                  closeMenuOnSelect={true}
+                  options={roleData}
+                />
+              </FormControl>
+              <FormControl width={"70%"} p={1}>
+                <Input
+                  type="text"
+                  placeholder="Search User ID or Name..."
+                  value={searchText}
+                  onChange={(v) => setSearchText(v.target.value)}
+                />
+              </FormControl>
+            </HStack>
+            <HStack>
+              <Button
+                marginRight={5}
+                colorScheme="whatsapp"
+                as={Link}
+                to="/add-user"
+              >
+                ADD USER
+              </Button>
+            </HStack>
           </HStack>
 
           <VStack width={"100%"} marginTop="5">

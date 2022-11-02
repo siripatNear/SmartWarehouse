@@ -105,6 +105,9 @@ const App = () => {
 
         {/* //?test component */}
 
+
+        <Route path="/picking-order-list" element={<PickingOrderList />} />
+        <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
         <Route path="/boxzone" element={<BoxZone />} />
 
