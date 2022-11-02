@@ -17,13 +17,13 @@ import { useDispatch } from "react-redux";
 import { authenticateUser } from "../redux/slices/authSlice";
 
 export default function Login() {
+  const [user, setUser] = useState("");
   const [values, setValues] = useState({
     user_id: "",
     password: "",
   });
 
   const [error, setError] = useState(false);
-  const [user, setUser] = useState("");
   const [role, setRole] = useState("");
 
   const onChange = (e) => {

@@ -38,10 +38,6 @@ export default function RunPage() {
         }
     }
 
-    useEffect(()=>{
-        protectedInfo();
-    },[])
-
     return loading ? (
         <h1> Loading... </h1>
     ):(
