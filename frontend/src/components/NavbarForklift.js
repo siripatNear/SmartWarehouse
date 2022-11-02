@@ -30,11 +30,11 @@ import { unauthenticateUser } from "../redux/slices/authSlice";
 const Links = [
   {
     name: "Order list",
-    link: "orderlist/folklift",
+    link: "/picking-order-list",
   },
   {
     name: "Put away",
-    link: "putaway",
+    link: "/put-away",
   },
   {
     name: "History",

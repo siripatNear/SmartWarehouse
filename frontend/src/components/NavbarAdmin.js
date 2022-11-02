@@ -35,7 +35,7 @@ const Links = [
   },
   {
     name: "Order list",
-    link: "orderlist",
+    link: "order-list",
   },
   {
     name: "Stock",
