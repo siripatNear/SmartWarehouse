@@ -59,8 +59,8 @@ const PickingList = () => {
               alignSelf="flex-end"
               paddingRight="16px"
               paddingTop="20px"
-              paddingBottom="20px"
-            ></Box>
+              paddingBottom="20px">
+            </Box>
           </VStack>
           <Box width="30%" paddingTop="160px">
             <BoxAll data={data} />
