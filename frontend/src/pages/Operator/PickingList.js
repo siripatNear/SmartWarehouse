@@ -24,20 +24,19 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 const PickingList = () => {
-
   const { data, isLoading } = useQuery(["/warehouse/A?zone=1"]);
   const navigate = useNavigate();
 
   return (
     <>
       {isLoading || isNil(data) ? (
-        <Center mt='100px'>
+        <Center mt="100px">
           <Spinner
-            thickness='4px'
-            speed='0.65s'
-            emptyColor='gray.200'
-            color='blue.500'
-            size='xl'
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
             alignItems
           />
         </Center>
