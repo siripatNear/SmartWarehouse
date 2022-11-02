@@ -91,7 +91,8 @@ const App = () => {
         <Route path="/PutAwayItem" element={<PutAwayItem />} />
         <Route path="/updatemat" element={<UpdateMat />} />
 
-        <Route path="/PickingOrderList" element={<PickingOrderList />} />
+        <Route path="/picking-order-list" element={<PickingOrderList />} />
+
         <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
         <Route path="/boxzone" element={<BoxZone />} />
