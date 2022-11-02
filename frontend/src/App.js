@@ -95,12 +95,6 @@ const App = () => {
         <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
         <Route path="/boxzone" element={<BoxZone />} />
-        {/* <Route path="/d" element={<Dashboard />} /> */}
-
-        {/* <Route path="/NavbarGuest" element={<NavbarGuest />} />
-        <Route path="/NavbarForklift" element={<NavbarForklift />} />
-        <Route path="/NavbarOperator" element={<NavbarOperator />} />
-        <Route path="/NavbarAdmin" element={<NavbarAdmin />} /> */}
 
         {/* //?test routes petch */}
         <Route path="/PickingList" element={<PickingList />} />
