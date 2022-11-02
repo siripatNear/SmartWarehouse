@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Box,
@@ -15,16 +15,17 @@ import logo from "../assets/logo-kmutt.png";
 import { onLogin } from "../api/auth";
 import { useDispatch } from "react-redux";
 import { authenticateUser } from "../redux/slices/authSlice";
+import { useUserStore } from "../store/user";
 
 export default function Login() {
-  const [user, setUser] = useState("");
+
+  const { user, setUser } = useUserStore();
   const [values, setValues] = useState({
     user_id: "",
     password: "",
   });
 
   const [error, setError] = useState(false);
-  const [role, setRole] = useState("");
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -36,8 +37,7 @@ export default function Login() {
 
     try {
       await onLogin(values).then((res) => {
-        setUser(res.data.user.first_name);
-        setRole(res.data.user.role);
+        setUser(res.data.user);
       });
       const { data } = await onLogin(values);
       dispatch(authenticateUser());
@@ -45,10 +45,8 @@ export default function Login() {
 
       console.log(data);
     } catch (error) {
-      // console.log(error.response.data.errors[0].msg);
-      // setError(error.response.data.errors[0].msg);
-      console.log(error);
-      setError(error);
+      console.log(error.response.data.errors[0].msg);
+      setError(error.response.data.errors[0].msg);
     }
   };
 
