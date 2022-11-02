@@ -32,7 +32,7 @@ const OpLinks = [
   },
   {
     name: "Order list",
-    link: "orderlist",
+    link: "order-list",
   },
 ];
 
