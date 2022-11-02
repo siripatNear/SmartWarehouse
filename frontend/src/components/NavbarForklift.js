@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -16,11 +16,16 @@ import {
   Link as L,
   VStack,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+
+// import { Link } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { MdOutlineLogout } from "react-icons/md";
 import logo from "../assets/logo-kmutt.png";
+import { useUserStore } from "../store/user";
+import { useDispatch } from "react-redux";
+import { fetchProtectedInfo, onLogout } from "../api/auth";
+import { unauthenticateUser } from "../redux/slices/authSlice";
 
 const Links = [
   {
@@ -33,7 +38,7 @@ const Links = [
   },
   {
     name: "History",
-    link: "history",
+    link: "/history",
   },
 ];
 
@@ -52,8 +57,42 @@ const NavLink = ({ children }) => (
   </L>
 );
 
-export default function NavbarFolklift() {
+export default function NavbarForklift() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const user = useUserStore((state) => state.user);
+
+  const logoutStore = useUserStore((state) => state.removeUser);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+  const [protectedData, setProtectedData] = useState(null);
+
+  const logout = async () => {
+    try {
+      await onLogout();
+
+      logoutStore();
+      dispatch(unauthenticateUser()); //set isAuth = false
+      localStorage.removeItem("isAuth");
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  // *cookie
+  const protectedInfo = async () => {
+    try {
+      const { data } = await fetchProtectedInfo();
+
+      setProtectedData(data.info);
+      setLoading(false);
+    } catch (error) {
+      logout();
+    }
+  };
+
+  useEffect(() => {
+    protectedInfo();
+  }, []);
 
   return (
     <>
@@ -102,7 +141,7 @@ export default function NavbarFolklift() {
                     ml="2"
                   >
                     <Text marginLeft={4} fontSize="xl">
-                      Folklift05
+                      {user.user_id}
                     </Text>
                   </VStack>
                   <Box display={{ base: "none", md: "flex" }}>
@@ -114,7 +153,10 @@ export default function NavbarFolklift() {
                 bg={useColorModeValue("white", "gray.900")}
                 borderColor={useColorModeValue("gray.200", "gray.700")}
               >
-                <MenuItem icon={<MdOutlineLogout size={"30px"} />}>
+                <MenuItem
+                  icon={<MdOutlineLogout size={"30px"} />}
+                  onClick={() => logout()}
+                >
                   <Text marginLeft={4} fontSize="xl">
                     Log out
                   </Text>

@@ -35,6 +35,7 @@ import NavbarGuest from "./components/NavbarGuest";
 import NavbarForklift from "./components/NavbarForklift";
 import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
+import { useUserStore } from "./store/user";
 
 import Dashboard from "./pages/Dashboard";
 import PickingList from "./pages/Operator/PickingList";
@@ -58,10 +59,9 @@ const RestrictedRoutes = () => {
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
 
-  return <>{!isAuth ? <Outlet /> : <Navigate to="/dashboard" />}</>;
+  return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
 };
 
-// !navbar from role don't delete
 const selectNavbar = (role) => {
   switch (role) {
     case "Forklift":
@@ -76,23 +76,19 @@ const selectNavbar = (role) => {
 };
 
 const App = () => {
-  // !navbar from role don't delete
-  const role = "Admin"; // TODO: fetch from api
+  const user = useUserStore((state) => state.user);
   return (
     <BrowserRouter>
-      {/* //! navbar from role don't delete*/}
-      {selectNavbar(role)}
+      {selectNavbar(user?.role)}
       <Routes>
         <Route element={<PrivateRoutes />}>
           {/* //*Outlet [Need to login before access these routes] */}
-          <Route path="/dashboard" element={<RunPage />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/manage-users" element={<UserManage />} />
         </Route>
 
         {/* //?test routes */}
-        {/* <Route path="/add-user" element={<AddUser />} /> */}
-        {/* <Route path="/usermanage" element={<UserManage />} /> */}
         <Route path="/PutAwayItem" element={<PutAwayItem />} />
         <Route path="/UpdateMat" element={<UpdateMat />} />
 
@@ -100,12 +96,12 @@ const App = () => {
         <Route path="/history" element={<History />} />
         <Route path="/ScanTag" element={<ScanTag />} />
         <Route path="/boxzone" element={<BoxZone />} />
-        <Route path="/d" element={<Dashboard />} />
+        {/* <Route path="/d" element={<Dashboard />} /> */}
 
-        <Route path="/NavbarGuest" element={<NavbarGuest />} />
+        {/* <Route path="/NavbarGuest" element={<NavbarGuest />} />
         <Route path="/NavbarForklift" element={<NavbarForklift />} />
         <Route path="/NavbarOperator" element={<NavbarOperator />} />
-        <Route path="/NavbarAdmin" element={<NavbarAdmin />} />
+        <Route path="/NavbarAdmin" element={<NavbarAdmin />} /> */}
 
         {/* //?test routes petch */}
         <Route path="/PickingList" element={<PickingList />} />
@@ -114,8 +110,6 @@ const App = () => {
         <Route path="/OrderList" element={<OrderList />} />
         <Route path="/OrderDetail" element={<OrderDetail />} />
         <Route path="/pickingorderdetail" element={<PickingOrderDetail />} />
-
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
