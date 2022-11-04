@@ -37,6 +37,7 @@ import { useUserStore } from "./store/user";
 
 import Dashboard from "./pages/Dashboard";
 import PickingList from "./pages/Operator/PickingList";
+import ConfirmPicking from "./pages/Operator/ConfirmPicking";
 import BoxZone from "./components/BoxZone";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
@@ -100,16 +101,7 @@ const App = () => {
           <Route path="/picking-order-list" element={<PickingOrderList />} />
           <Route path="/picking-order-detail" element={<PickingOrderDetail />} />
 
-
         </Route>
-
-        {/* //?test component */}
-
-
-        <Route path="/picking-order-list" element={<PickingOrderList />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/ScanTag" element={<ScanTag />} />
-        <Route path="/boxzone" element={<BoxZone />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}

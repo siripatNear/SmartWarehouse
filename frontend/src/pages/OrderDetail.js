@@ -13,12 +13,12 @@ import Dataorder from "../assets/orderdetailmock.json";
 function OrderDetail() {
 
     const { data: order, isLoading } = useQuery(["/order/FE008"]);
-    const { data: item_zone_1 } = useQuery(["/order/FE008?zone=1"]);
+    // const { data: item_zone_1 } = useQuery(["/order/FE008?zone=1"]);
     const { data: item_zone_2 } = useQuery(["/order/FE008?zone=2"]);
     const { data: item_zone_3 } = useQuery(["/order/FE008?zone=3"]);
     const { data: item_zone_4 } = useQuery(["/order/FE008?zone=4"]);
     const { data: item_zone_5 } = useQuery(["/order/FE008?zone=5"]);
-    const { data: item_zone_6 } = useQuery(["/order/FE008?zone=6"]);
+    // const { data: item_zone_6 } = useQuery(["/order/FE008?zone=6"]);
 
     return (
         <>
@@ -69,7 +69,7 @@ function OrderDetail() {
                                 <TabPanel>
                                     1
                                     <GridOrderDetail />
-                                    <TablePickingListInOrder itemlist={item_zone_1} />
+                                    {/* <TablePickingListInOrder itemlist={item_zone_1} /> */}
                                 </TabPanel>
                                 <TabPanel>
                                     2
@@ -94,7 +94,7 @@ function OrderDetail() {
                                 <TabPanel>
                                     6
                                     <GridOrderDetail />
-                                    <TablePickingListInOrder itemlist={item_zone_6} />
+                                    {/* <TablePickingListInOrder itemlist={item_zone_6} /> */}
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

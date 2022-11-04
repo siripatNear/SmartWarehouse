@@ -25,12 +25,12 @@ function PickingOrderDetail() {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const { data: order, isLoading } = useQuery(["/order/FE008"]);
-    const { data: item_zone_1 } = useQuery(["/order/FE008?zone=1"]);
+    // const { data: item_zone_1 } = useQuery(["/order/FE008?zone=1"]);
     const { data: item_zone_2 } = useQuery(["/order/FE008?zone=2"]);
     const { data: item_zone_3 } = useQuery(["/order/FE008?zone=3"]);
     const { data: item_zone_4 } = useQuery(["/order/FE008?zone=4"]);
     const { data: item_zone_5 } = useQuery(["/order/FE008?zone=5"]);
-    const { data: item_zone_6 } = useQuery(["/order/FE008?zone=6"]);
+    // const { data: item_zone_6 } = useQuery(["/order/FE008?zone=6"]);
 
     const mapCateName = (category) => {
         switch (category) {
@@ -139,7 +139,7 @@ function PickingOrderDetail() {
                             <TabPanel>
                                 1
                                 <GridOrderDetail />
-                                <TablePickingListInOrder itemlist={item_zone_1} />
+                                {/* <TablePickingListInOrder itemlist={item_zone_1} /> */}
                             </TabPanel>
                             <TabPanel>
                                 2
@@ -164,7 +164,7 @@ function PickingOrderDetail() {
                             <TabPanel>
                                 6
                                 <GridOrderDetail />
-                                <TablePickingListInOrder itemlist={item_zone_6} />
+                                {/* <TablePickingListInOrder itemlist={item_zone_6} /> */}
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
