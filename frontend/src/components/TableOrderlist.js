@@ -118,7 +118,7 @@ function Delete() {
 
 const TableOrderlist = (props) => {
 
-  const { Orders } = props
+  const { orders } = props
 
   return (
     <TableContainer width="100%">
@@ -134,7 +134,7 @@ const TableOrderlist = (props) => {
         </Thead>
 
         <Tbody>
-          {Orders.order_list.map((order) => (
+          {orders.order_list.map((order) => (
             <Tr
               _hover={{
                 backgroundColor: "#ECF7FE",

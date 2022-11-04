@@ -9,11 +9,11 @@ import { Spinner, Center } from "@chakra-ui/react";
 
 const OrderList = () => {
 
-  const { data: Orders, isLoading } = useQuery(["/order-list"]);
+  const { data: orders, isLoading } = useQuery(["/order-list"]);
 
   return (
     <>
-      {isLoading || isNil(Orders) ? (
+      {isLoading || isNil(orders) ? (
         <Center mt='100px'>
           <Spinner
             thickness='4px'
@@ -30,7 +30,7 @@ const OrderList = () => {
             Order List
           </div>
           <div className='TableOrderlist'>
-            <TableOrderlist Orders={Orders} />
+            <TableOrderlist orders={orders} />
           </div>
         </div>
       )}

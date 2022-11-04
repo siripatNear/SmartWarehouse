@@ -30,7 +30,10 @@ function GridOrderDetail(props) {
                     <div className='SecContainer'>
                         {sec1.map((data) => {
                             return (
-                                <div className="BoxPositions">
+                                <div 
+                                className="BoxPositions"
+                                // background-color data.target_in === 'true' ? '#A3D9FB' : 'yellow'
+                                >
                                     <div className="TextBoxPosition">
                                         {data.count}
                                     </div>
