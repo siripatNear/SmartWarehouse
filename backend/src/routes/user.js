@@ -24,13 +24,31 @@ const {
   validationMiddleware,
 } = require("../middlewares/validations-middleware");
 
-router.get("/warehouse/:wh_id",userAuth,authPage(["Admin", "Operator"]),fetchData,fetchFilterItems);
+router.get(
+  "/warehouse/:wh_id",
+  userAuth,
+  authPage(["Admin", "Operator"]),
+  fetchData,
+  fetchFilterItems
+);
 
 //Admin routes
 router.get("/add-user", userAuth, authPage(["Admin"]), getForm); //complete
-router.post("/add-user", registerValidation, validationMiddleware, userAuth, addUser); //complete
+router.post(
+  "/add-user",
+  registerValidation,
+  validationMiddleware,
+  userAuth,
+  addUser
+); //complete
 router.get("/manage-users", userAuth, authPage(["Admin"]), getUsers); //complete
-router.get("/edit-user/:user_id",userAuth,authPage(["Admin"]),getForm,getUserByID); //not use
+router.get(
+  "/edit-user/:user_id",
+  userAuth,
+  authPage(["Admin"]),
+  getForm,
+  getUserByID
+); //not use
 router.put("/edit-user/:user_id", validationMiddleware, userAuth, updateUser); //complete
 
 router.delete("/manage-users/:user_id", deleteUser); //complete
@@ -43,12 +61,7 @@ router.get(
   authPage(["Admin", "Operator"]),
   getCurrentOrder
 );
-router.get(
-  "/history-order",
-  userAuth,
-  authPage(["Admin", "Operator"]),
-  getCompletedOrder
-);
+router.get("/history-order", getCompletedOrder);
 router.delete("/order/:order_id", deleteOrder);
 router.get(
   "/order/:order_id",
@@ -56,6 +69,5 @@ router.get(
   authPage(["Admin", "Operator"]),
   getOrderDetail
 );
-
 
 module.exports = router;

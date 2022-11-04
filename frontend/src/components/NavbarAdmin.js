@@ -41,6 +41,10 @@ const Links = [
     name: "Stock",
     link: "stock",
   },
+  {
+    name: "History",
+    link: "/history",
+  },
 ];
 
 const NavLink = ({ children }) => (

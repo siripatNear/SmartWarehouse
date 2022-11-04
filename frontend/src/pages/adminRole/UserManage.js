@@ -16,6 +16,7 @@ import {
   FormControl,
   Input,
   Button,
+  Center,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
@@ -45,6 +46,7 @@ const UserManage = () => {
   const [searchText, setSearchText] = useState("");
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  //* filter
   const [filteredData, setFilteredData] = useState(null);
 
   //* get data from api
@@ -126,7 +128,16 @@ const UserManage = () => {
         </VStack>
       />
       {isLoading || isNil(data) || isNil(filteredData) ? (
-        <Spinner />
+        <Center mt="100px">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+            alignItems
+          />
+        </Center>
       ) : (
         <Flex direction={"column"} alignItems={"center"}>
           <HStack width={"100%"} marginTop="5">
