@@ -24,13 +24,13 @@ function PickingOrderDetail() {
     const [object, setObject] = useState({});
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { data: order, isLoading } = useQuery(["/order/FE008"]);
-    // const { data: item_zone_1 } = useQuery(["/order/FE008?zone=1"]);
-    const { data: item_zone_2 } = useQuery(["/order/FE008?zone=2"]);
-    const { data: item_zone_3 } = useQuery(["/order/FE008?zone=3"]);
-    const { data: item_zone_4 } = useQuery(["/order/FE008?zone=4"]);
-    const { data: item_zone_5 } = useQuery(["/order/FE008?zone=5"]);
-    // const { data: item_zone_6 } = useQuery(["/order/FE008?zone=6"]);
+    const { data: order, isLoading } = useQuery(["/order/KL004"]);
+    // const { data: item_zone_1 } = useQuery(["/order/KL004?zone=1"]);
+    // const { data: item_zone_2 } = useQuery(["/order/KL004?zone=2"]);
+    const { data: item_zone_3 } = useQuery(["/order/KL004?zone=3"]);
+    const { data: item_zone_4 } = useQuery(["/order/KL004?zone=4"]);
+    const { data: item_zone_5 } = useQuery(["/order/KL004?zone=5"]);
+    // const { data: item_zone_6 } = useQuery(["/order/KL004?zone=6"]);
 
     const mapCateName = (category) => {
         switch (category) {
@@ -55,7 +55,7 @@ function PickingOrderDetail() {
 
     return (
         <>
-                {/* Pop-up Match */ }
+            {/* Pop-up Match */}
             < CustomAlertOneButton
                 isOpen={isOpen}
                 onClose={onClose}
@@ -104,90 +104,90 @@ function PickingOrderDetail() {
                     />
                 </Center>
             ) : (
-            <div>
-                <div className='TitleContainer'>
-                    <div className='OrderTitle'>
-                        Order {Dataorder[0].order_id}
+                <div>
+                    <div className='TitleContainer'>
+                        <div className='OrderTitle'>
+                            Order {Dataorder[0].order_id}
+                        </div>
+                        <div className='OrderBy'>
+                            Ordered by {Dataorder[0].create_by} {dayjs(Dataorder[0].create_dt).format('DD/MM/YYYY HH.mm.ss')}
+                        </div>
                     </div>
-                    <div className='OrderBy'>
-                        Ordered by {Dataorder[0].create_by} {dayjs(Dataorder[0].create_dt).format('DD/MM/YYYY HH.mm.ss')}
+                    <div className='BodyOrderDetailPage'>
+                        <Tabs variant='enclosed' width='100%'>
+                            <TabList>
+                                <Tab>
+                                    Zone 1
+                                </Tab>
+                                <Tab>
+                                    Zone 2
+                                </Tab>
+                                <Tab>
+                                    Zone 3
+                                </Tab>
+                                <Tab>
+                                    Zone 4
+                                </Tab>
+                                <Tab>
+                                    Zone 5
+                                </Tab>
+                                <Tab>
+                                    Zone 6
+                                </Tab>
+                            </TabList>
+                            <TabPanels>
+                                <TabPanel>
+                                    1
+                                    {/* <GridOrderDetail itemlist={item_zone_1} /> */}
+                                    {/* <TablePickingListInOrder itemlist={item_zone_1} /> */}
+                                </TabPanel>
+                                <TabPanel>
+                                    2
+                                    {/* <GridOrderDetail itemlist={item_zone_2} /> */}
+                                    {/* <TablePickingListInOrder itemlist={item_zone_2} /> */}
+                                </TabPanel>
+                                <TabPanel>
+                                    3
+                                    <GridOrderDetail itemlist={item_zone_3} />
+                                    <TablePickingListInOrder itemlist={item_zone_3} />
+                                </TabPanel>
+                                <TabPanel>
+                                    4
+                                    <GridOrderDetail itemlist={item_zone_4} />
+                                    <TablePickingListInOrder itemlist={item_zone_4} />
+                                </TabPanel>
+                                <TabPanel>
+                                    5
+                                    <GridOrderDetail itemlist={item_zone_5} />
+                                    <TablePickingListInOrder itemlist={item_zone_5} />
+                                </TabPanel>
+                                <TabPanel>
+                                    6
+                                    {/* <GridOrderDetail itemlist={item_zone_6} /> */}
+                                    {/* <TablePickingListInOrder itemlist={item_zone_6} /> */}
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
                     </div>
-                </div>
-                <div className='BodyOrderDetailPage'>
-                    <Tabs variant='enclosed' width='100%'>
-                        <TabList>
-                            <Tab>
-                                Zone 1
-                            </Tab>
-                            <Tab>
-                                Zone 2
-                            </Tab>
-                            <Tab>
-                                Zone 3
-                            </Tab>
-                            <Tab>
-                                Zone 4
-                            </Tab>
-                            <Tab>
-                                Zone 5
-                            </Tab>
-                            <Tab>
-                                Zone 6
-                            </Tab>
-                        </TabList>
-                        <TabPanels>
-                            <TabPanel>
-                                1
-                                <GridOrderDetail />
-                                {/* <TablePickingListInOrder itemlist={item_zone_1} /> */}
-                            </TabPanel>
-                            <TabPanel>
-                                2
-                                <GridOrderDetail />
-                                <TablePickingListInOrder itemlist={item_zone_2} />
-                            </TabPanel>
-                            <TabPanel>
-                                3
-                                <GridOrderDetail />
-                                <TablePickingListInOrder itemlist={item_zone_3} />
-                            </TabPanel>
-                            <TabPanel>
-                                4
-                                <GridOrderDetail />
-                                <TablePickingListInOrder itemlist={item_zone_4} />
-                            </TabPanel>
-                            <TabPanel>
-                                5
-                                <GridOrderDetail />
-                                <TablePickingListInOrder itemlist={item_zone_5} />
-                            </TabPanel>
-                            <TabPanel>
-                                6
-                                <GridOrderDetail />
-                                {/* <TablePickingListInOrder itemlist={item_zone_6} /> */}
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>
-                </div>
 
-                {/* Test Pop-Up Button */}
-                <div className='ContainerBtn'>
-                    <CustomButton
-                        marginX={4}
-                        onOpen={() => {
-                            setObject(Dataorder[0]);
-                            onOpen();
-                        }}
-                        buttonName="Test Pop-Up"
-                        buttonColor="twitter"
-                        HoverColor="twitter.300"
-                        buttonSize="lg"
-                        borderRadius="10px"
-                        fontSize="22px"
-                        fontWeight="medium"
-                    />
+                    {/* Test Pop-Up Button */}
+                    <div className='ContainerBtn'>
+                        <CustomButton
+                            marginX={4}
+                            onOpen={() => {
+                                setObject(Dataorder[0]);
+                                onOpen();
+                            }}
+                            buttonName="Test Pop-Up"
+                            buttonColor="twitter"
+                            HoverColor="twitter.300"
+                            buttonSize="lg"
+                            borderRadius="10px"
+                            fontSize="22px"
+                            fontWeight="medium"
+                        />
+                    </div>
                 </div>
-            </div>
             )}
         </>
     )
