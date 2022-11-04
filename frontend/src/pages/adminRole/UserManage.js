@@ -200,7 +200,7 @@ const UserManage = () => {
                           borderRadius="5px"
                           fontSize="15px"
                           fontWeight="medium"
-                          onOpen={() => navigate("/add-user", { state: User })}
+                          onOpen={() => navigate("/edit-user", { state: User })}
                         />
                         <CustomButton
                           marginX={4}

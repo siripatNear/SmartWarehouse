@@ -85,6 +85,7 @@ const App = () => {
 
           {/* //*Admin */}
           <Route path="/add-user" element={<AddUser />} />
+          <Route path="/edit-user" element={<AddUser />} />
           <Route path="/manage-users" element={<UserManage />} />
 
           {/* //* Operator */}
@@ -99,8 +100,10 @@ const App = () => {
 
           {/* //*Forklift Picking */}
           <Route path="/picking-order-list" element={<PickingOrderList />} />
-          <Route path="/picking-order-detail" element={<PickingOrderDetail />} />
-
+          <Route
+            path="/picking-order-detail"
+            element={<PickingOrderDetail />}
+          />
         </Route>
 
         <Route element={<RestrictedRoutes />}>
