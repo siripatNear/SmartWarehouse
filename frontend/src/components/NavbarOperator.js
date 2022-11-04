@@ -34,6 +34,10 @@ const OpLinks = [
     name: "Order list",
     link: "order-list",
   },
+  {
+    name: "History",
+    link: "/history",
+  },
 ];
 
 const NavLink = ({ children }) => (
