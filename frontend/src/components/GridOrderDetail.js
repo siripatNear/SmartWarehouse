@@ -1,7 +1,7 @@
 import React from 'react'
 import "../pages/OrderDetail.css";
 import { isNil } from "lodash";
-import { Spinner, Center } from "@chakra-ui/react";
+import { Spinner, Center, Box } from "@chakra-ui/react";
 
 function GridOrderDetail(props) {
 
@@ -10,6 +10,10 @@ function GridOrderDetail(props) {
     const sec2 = itemlist.positions_grid.filter((positions) => { return positions.section === 2 })
     const sec3 = itemlist.positions_grid.filter((positions) => { return positions.section === 3 })
     const sec4 = itemlist.positions_grid.filter((positions) => { return positions.section === 4 })
+    console.log(sec1);
+    console.log(sec2);
+    console.log(sec3);
+    console.log(sec4);
 
     return (
         <>
@@ -30,52 +34,82 @@ function GridOrderDetail(props) {
                     <div className='SecContainer'>
                         {sec1.map((data) => {
                             return (
-                                <div 
-                                className="BoxPositions"
-                                // background-color data.target_in === 'true' ? '#A3D9FB' : 'yellow'
+                                <Box
+                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    width='70px'
+                                    height='70px'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    borderRadius='12px'
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}
                                     </div>
-                                </div>
+                                </Box>
                             );
                         })}
                     </div>
                     <div className='SecContainer'>
                         {sec2.map((data) => {
                             return (
-                                <div className="BoxPositions">
+                                <Box
+                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    width='70px'
+                                    height='70px'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    borderRadius='12px'
+                                >
                                     <div className="TextBoxPosition">
                                         {data.count}
                                     </div>
-                                </div>
+                                </Box>
                             );
                         })}
                     </div>
                     <div className='SecContainer'>
                         {sec3.map((data) => {
                             return (
-                                <div className="BoxPositions">
+                                <Box
+                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    width='70px'
+                                    height='70px'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    borderRadius='12px'
+                                >
                                     <div className="TextBoxPosition">
                                         {data.count}
                                     </div>
-                                </div>
+                                </Box>
                             );
                         })}
                     </div>
                     <div className='SecContainer'>
                         {sec4.map((data) => {
                             return (
-                                <div className="BoxPositions">
+                                <Box
+                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    width='70px'
+                                    height='70px'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    borderRadius='12px'
+                                >
                                     <div className="TextBoxPosition">
                                         {data.count}
                                     </div>
-                                </div>
+                                </Box>
                             );
                         })}
                     </div>
                 </div>
-            )}
+            )
+            }
         </>
     );
 };
