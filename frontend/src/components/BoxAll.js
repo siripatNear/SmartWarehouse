@@ -10,7 +10,6 @@ import {
 
 function BoxAll({ data }) {
   const percentage = (Number(data.usage) / Number(data.positions)) * 100;
-  console.log(percentage);
 
   return (
     <>

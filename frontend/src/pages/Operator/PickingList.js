@@ -12,8 +12,6 @@ import {
   AlertTitle,
   AlertDescription,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-
 import Search from "../../components/Search";
 import BoxAll from "../../components/BoxAll";
 import CustomButton from "../../components/CustomButton";
@@ -69,7 +67,7 @@ const PickingList = () => {
               paddingBottom="20px"
               gap="10px"
             >
-              <Alert status='error'>
+              <Alert status="error">
                 <AlertIcon />
                 <AlertTitle>Please select item!</AlertTitle>
                 <AlertDescription>before click "Add" button</AlertDescription>
@@ -79,7 +77,7 @@ const PickingList = () => {
                 buttonName="Add"
                 buttonColor="twitter"
                 buttonSize="lg"
-              // disabledSubmit
+                // disabledSubmit
               />
             </Box>
           </VStack>

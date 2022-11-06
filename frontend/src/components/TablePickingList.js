@@ -8,10 +8,14 @@ import {
   Td,
   TableContainer,
   Badge,
+  Box,
+  Alert,
+  useToast,
 } from "@chakra-ui/react";
 
 import * as dayjs from "dayjs";
-import _ from 'lodash';
+import _, { isEmpty } from "lodash";
+import CustomButton from "./CustomButton";
 
 export const header = [
   { value: "checkbox", label: " " },
@@ -95,78 +99,122 @@ const mapStatus = (status) => {
 };
 
 const TablePickingList = (props) => {
-
-  const { itemlists } = props
+  const { itemlists } = props;
   const [ItemState, setItemState] = useState([]);
+  const [selectedItem, setSelectedItem] = useState([]);
 
   useEffect(() => {
-
     setItemState(
-      itemlists.items.map(d => {
+      itemlists.items.map((d) => {
         return {
           select: false,
           item_code: d.item_code,
           category: d.category,
           length: d.length,
           create_dt: d.create_dt,
-          status: d.status
+          status: d.status,
         };
       })
     );
-  }, []);
+  }, [itemlists]);
 
   useEffect(() => {
-    console.log(_(ItemState).filter((v) => v.select === true).value())
-  }, [ItemState])
+    console.log(
+      _(ItemState)
+        .filter((v) => v.select === true)
+        .value()
+    );
+    setSelectedItem(
+      _(ItemState)
+        .filter((v) => v.select === true)
+        .value()
+    );
+  }, [ItemState]);
+
+  const toast = useToast();
 
   return (
-    <TableContainer width="100%">
-      <Table size="md">
-        <Thead>
-          <Tr>
-            {header.map((head) => (
-              <Th fontSize={16} key={head.value}>
-                {head.label}
-              </Th>
-            ))}
-          </Tr>
-        </Thead>
-
-        <Tbody>
-          {ItemState.map((item) => (
-            <Tr
-              _hover={{
-                backgroundColor: "#ECF7FE",
-              }}
-              key={item.item_code}
-            >
-              <Td textAlign={"center"}>
-                <input
-                  onChange={event => {
-                    let checked = event.target.checked;
-                    setItemState(
-                      ItemState.map(data => {
-                        if (item.item_code === data.item_code) {
-                          data.select = checked;
-                        }
-                        return data;
-                      })
-                    );
-                  }}
-                  type="checkbox"
-                  checked={item.select}
-                ></input>
-              </Td>
-              <Td>{item.item_code}</Td>
-              <Td>{mapCateName(item.category)}</Td>
-              <Td>{item.length}</Td>
-              <Td>{dayjs(item.create_dt).format("DD / MM / YYYY")}</Td>
-              <Td>{mapStatus(item.status)}</Td>
+    <>
+      <TableContainer width="100%">
+        <Table size="md">
+          <Thead>
+            <Tr>
+              {header.map((head) => (
+                <Th fontSize={16} key={head.value}>
+                  {head.label}
+                </Th>
+              ))}
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
+          </Thead>
+
+          <Tbody>
+            {ItemState.map((item) => (
+              <Tr
+                _hover={{
+                  backgroundColor: "#ECF7FE",
+                }}
+                key={item.item_code}
+              >
+                <Td textAlign={"center"}>
+                  <input
+                    onChange={(event) => {
+                      let checked = event.target.checked;
+                      setItemState(
+                        ItemState.map((data) => {
+                          if (item.item_code === data.item_code) {
+                            data.select = checked;
+                          }
+                          return data;
+                        })
+                      );
+                    }}
+                    type="checkbox"
+                    checked={item.select}
+                  ></input>
+                </Td>
+                <Td>{item.item_code}</Td>
+                <Td>{mapCateName(item.category)}</Td>
+                <Td>{item.length}</Td>
+                <Td>{dayjs(item.create_dt).format("DD / MM / YYYY")}</Td>
+                <Td>{mapStatus(item.status)}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      <Box
+        alignSelf="flex-end"
+        display="flex"
+        paddingRight="16px"
+        paddingTop="20px"
+        paddingBottom="20px"
+        gap="10px"
+      >
+        {/* <Alert status="error">
+          <AlertIcon />
+          <AlertTitle>Please select item!</AlertTitle>
+          <AlertDescription>before click "Add" button</AlertDescription>
+        </Alert> */}
+        <CustomButton
+          // onOpen={onOpenDialog}
+          buttonName="Add"
+          buttonColor="twitter"
+          buttonSize="lg"
+          onOpen={() => {
+            if (isEmpty(selectedItem)) {
+              toast({
+                title: "Please select item!",
+                description: 'before click "Add" button',
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+              });
+            }
+          }}
+          // disabledSubmit
+        />
+      </Box>
+    </>
   );
 };
 
