@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
-import { Box, Grid, Heading, HStack, Spinner, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Grid,
+  Heading,
+  HStack,
+  Spinner,
+  VStack,
+} from "@chakra-ui/react";
 
 import BoxZone from "../components/BoxZone";
 import BoxAll from "../components/BoxAll";
-// import { onGetWarehouseDashboard } from "../api/data";
 import { isNil } from "lodash";
-import { useMutation, useQuery } from "@tanstack/react-query";
-// import { api, queryClient } from "../../lib/query";
+import { useQuery } from "@tanstack/react-query";
 
 const Dashboard = () => {
   const { data, isLoading } = useQuery(["/warehouse/A"]);
@@ -16,7 +22,16 @@ const Dashboard = () => {
   return (
     <>
       {isLoading || isNil(data) ? (
-        <Spinner />
+        <Center mt="100px">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+            alignItems
+          />
+        </Center>
       ) : (
         <HStack paddingBottom={"32px"}>
           <VStack w="70%">
