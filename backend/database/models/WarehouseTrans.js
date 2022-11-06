@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'WarehouseTrans',
     tableName: 'warehouse_trans',
     createdAt: 'create_dt',
-    updatedAt: 'modify_by',
+    updatedAt: 'modify_dt',
     underscore: true,
   });
   return WarehouseTrans;

@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         modelName: 'Orders',
         tableName: 'orders',
         createdAt: 'create_dt',
-        updatedAt: 'modify_by',
+        updatedAt: 'modify_dt',
         underscore: true,
     },
     );

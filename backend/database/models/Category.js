@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'Category',
             tableName: 'category',
             createdAt: 'create_dt',
-            updatedAt: 'modify_by',
+            updatedAt: 'modify_dt',
             underscore: true,
         },
     );

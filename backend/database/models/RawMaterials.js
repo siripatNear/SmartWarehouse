@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'RawMaterials',
             tableName: 'raw_materials',
             createdAt: 'create_dt',
-            updatedAt: 'modify_by',
+            updatedAt: 'modify_dt',
             underscore: true,
         },
     );
