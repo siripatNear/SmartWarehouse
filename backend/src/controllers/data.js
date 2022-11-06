@@ -190,135 +190,7 @@ exports.fetchData = async (req, res, next) => {
 //* (2) If have any query params from fetchData
 exports.fetchFilterItems = async (req, res) => {
     try {
-        /*
-        const page = parseInt(req.query.page) - 1 || 0;
-        const limit = parseInt(req.query.limit) || 10; //limit show data
-        let category = req.query.category || "All";
-        let zone = req.query.zone || "All";
-
-        const warehouse_id = String(req.params.wh_id);
-
-        if (category === "All" && zone === "All") {
-            const items = await db.query(`
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
-            FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            LIMIT $2
-            OFFSET $3;
-            `, [warehouse_id, limit, page])
-            //overall in a warehouse
-            const overall = await overallWarehouse(warehouse_id);
-
-            return res.status(200).json({
-                success: true,
-                warehouse: warehouse_id,
-                positions: overall.positions,
-                usage: overall.usage,
-                empty: overall.empty,
-                page: page + 1,
-                limit,
-                items: items.rows
-            });
-        }
-        else if (category === "All" && zone != "All") {
-            zone = req.query.zone;
-            const items = await db.query(`
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
-            FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
-            AND wh_trans.zone = $2
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            LIMIT $3
-            OFFSET $4;
-            `, [warehouse_id, zone, limit, page])
-
-            const overall = await getSumByZone(warehouse_id, zone);
-
-            return res.status(200).json({
-                success: true,
-                warehouse: warehouse_id,
-                zone: zone,
-                positions: overall.positions,
-                usage: overall.usage,
-                empty: overall.empty,
-                page: page + 1,
-                limit,
-                items: items.rows
-            });
-        }
-        else if (category != "All" && zone === "All") {
-            category = req.query.category;
-            const items = await db.query(`
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
-            FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
-            AND rm.item_cate_code = $2
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            LIMIT $3
-            OFFSET $4;
-            `, [warehouse_id, category, limit, page])
-            //overall in a warehouse
-            const overall = await overallWarehouse(warehouse_id);
-
-            return res.status(200).json({
-                success: true,
-                warehouse: warehouse_id,
-                positions: overall.positions,
-                usage: overall.usage,
-                empty: overall.empty,
-                page: page + 1,
-                limit,
-                items: items.rows
-            });
-        }
-        else {
-            category = req.query.category;
-            zone = req.query.zone;
-            let items = await db.query(`
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
-            FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
-            AND wh_trans.zone = $2
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            AND rm.item_cate_code = $3
-            LIMIT $4
-            OFFSET $5;
-            `, [warehouse_id, zone, category, limit, page])
-
-            const overall = await getSumByZone(warehouse_id, zone);
-
-            return res.status(200).json({
-                success: true,
-                warehouse: warehouse_id,
-                zone: zone,
-                positions: overall.positions,
-                usage: overall.usage,
-                empty: overall.empty,
-                page: page + 1,
-                limit,
-                items: items.rows
-            });
-
-        }
-*/
-
+        
         const page = parseInt(req.query.page) - 1 || 0;
         const limit = parseInt(req.query.limit) || 10; //limit show data
         const search = req.query.search || "";
@@ -407,7 +279,7 @@ exports.fetchFilterItems = async (req, res) => {
 
         res.status(500).json({
             success: true,
-            message: "You have permission to access",
+            message: "You have permission to access this",
             items
         })
 
