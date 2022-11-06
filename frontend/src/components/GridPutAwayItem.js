@@ -1,75 +1,105 @@
 import React from 'react'
 import "../pages/OrderDetail.css";
-
-const DataSecPositions = [
-    {
-        "Section": " ",   
-        // sec1
-    },
-    {
-        "Section": " ",
-        // sec2
-    },
-    {
-        "Section": " "
-        // sec3
-    },
-    {
-        "Section": " "
-        // sec4
-    },
-
-];
+import { isNil } from "lodash";
+import { Spinner, Center } from "@chakra-ui/react";
 
 const DataPositions = [
     {
-        "Position": "1",
+      "Position": "1",
     },
     {
-        "Position": "2",
+      "Position": "2",
     },
     {
-        "Position": "3"
+      "Position": "3"
     },
     {
-        "Position": "full"
+      "Position": "full"
     },
     {
-        "Position": "full"
+      "Position": "full"
     },
     {
-        "Position": "3"
+      "Position": "3"
     },
     {
-        "Position": "2"
+      "Position": "2"
     },
     {
-        "Position": "1"
+      "Position": "1"
     }
-];
+  ];
 
-function GridPutAwayItem() {
+function GridPutAwayItem(props) {
+
+    const { itemlist, isLoading } = props
+    // const sec1 = itemlist.positions_grid.filter((positions) => { return positions.section === 1 })
+    // const sec2 = itemlist.positions_grid.filter((positions) => { return positions.section === 2 })
+    // const sec3 = itemlist.positions_grid.filter((positions) => { return positions.section === 3 })
+    // const sec4 = itemlist.positions_grid.filter((positions) => { return positions.section === 4 })
+
     return (
-        <div className='GridPutAwayContainer'>
-            {DataSecPositions.map((data) => {
-                const { Section } = data;
-                return (
+        <>
+            {isLoading || isNil(itemlist) ? (
+                <Center mt='100px'>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                        alignItems
+                    />
+                </Center>
+            ) : (
+                <div className='GridPutAwayContainer'>
                     <div className='SecPutAwayContainer'>
-                        { Section }
                         {DataPositions.map((data) => {
-                            const { Position } = data;
                             return (
                                 <div className="BoxPutAwayPositions">
                                     <div className="TextBoxPutAwayPosition">
-                                        {Position}
+                                        {data.Position}
                                     </div>
                                 </div>
                             );
                         })}
                     </div>
-                );
-            })}
-        </div>
+                    <div className='SecPutAwayContainer'>
+                        {DataPositions.map((data) => {
+                            return (
+                                <div className="BoxPutAwayPositions">
+                                    <div className="TextBoxPutAwayPosition">
+                                        {data.Position}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className='SecPutAwayContainer'>
+                        {DataPositions.map((data) => {
+                            return (
+                                <div className="BoxPutAwayPositions">
+                                    <div className="TextBoxPutAwayPosition">
+                                        {data.Position}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className='SecPutAwayContainer'>
+                        {DataPositions.map((data) => {
+                            return (
+                                <div className="BoxPutAwayPositions">
+                                    <div className="TextBoxPutAwayPosition">
+                                        {data.Position}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

@@ -35,10 +35,10 @@ import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
 import { useUserStore } from "./store/user";
 
+// Operator
 import Dashboard from "./pages/Dashboard";
 import PickingList from "./pages/Operator/PickingList";
 import ConfirmPicking from "./pages/Operator/ConfirmPicking";
-import BoxZone from "./components/BoxZone";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
 
@@ -92,9 +92,11 @@ const App = () => {
           <Route path="/order-list" element={<OrderList />} />
           <Route path="/order-detail" element={<OrderDetail />} />
           <Route path="/picking-list" element={<PickingList />} />
+          <Route path="/confirm-picking" element={<ConfirmPicking />} />
           <Route path="/history" element={<History />} />
 
           {/* //* Forklift Put away */}
+          <Route path="/scan-tag" element={<ScanTag />} />
           <Route path="/put-away" element={<PutAwayItem />} />
           <Route path="/update-mat" element={<UpdateMat />} />
 

@@ -5,13 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Spinner, Center, Heading, VStack, HStack } from "@chakra-ui/react";
 
 const OrderList = () => {
-  //* get data from api
-  const { data: Orders, isLoading } = useQuery(["/order-list"]);
+
+  const { data: orders, isLoading } = useQuery(["/order-list"]);
 
   return (
     <>
-      {isLoading || isNil(Orders) ? (
-        <Center mt="100px">
+      {isLoading || isNil(orders) ? (
+        <Center mt='100px'>
+
           <Spinner
             thickness="4px"
             speed="0.65s"
@@ -33,7 +34,7 @@ const OrderList = () => {
             <Heading as="h1">Order List</Heading>
           </HStack>
 
-          <TableOrderlist Orders={Orders} />
+          <TableOrderlist Orders={orders} />
         </VStack>
       )}
     </>
