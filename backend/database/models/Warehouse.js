@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Warehouse.hasMany(models.WarehouseTrans, {
         foreignKey: 'warehouse_id',
-        as: 'warehouseId',
+        // as: 'warehouseId',
         onDelete: 'CASCADE',
     })
     }

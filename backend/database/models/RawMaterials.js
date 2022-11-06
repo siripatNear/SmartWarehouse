@@ -10,17 +10,17 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             RawMaterials.belongsTo(models.WarehouseTrans, {
                 foreignKey: 'position_code',
-                as: 'positionCode',
+                // as: 'positionCode',
                 onDelete: 'CASCADE',
             }),
             RawMaterials.belongsTo(models.Category, {
                 foreignKey: 'item_cate_code',
-                as: 'itemCateCode',
+                as: 'category',
                 onDelete: 'CASCADE',
             }),
             RawMaterials.hasOne(models.OrderTrans, {
                 foreignKey: 'item_code',
-                as: 'itemCode',
+                // as: 'itemCode',
                 onDelete: 'CASCADE',
             })
         }

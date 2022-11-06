@@ -1,7 +1,9 @@
 const db = require('../db');
 const { v4: uuidv4 } = require('uuid');
-var moment = require('moment');  
-
+var moment = require('moment');
+const models = require("../../database/models");
+const { Sequelize } = require("../../database/models");
+const { Op } = require("sequelize");
 
 //* response to get any form page
 exports.getForm = async (req, res, next) => {
@@ -33,6 +35,7 @@ exports.getForm = async (req, res, next) => {
 //* for all dropdown data API
 exports.dropDownList = async (req, res) => {
     try {
+        /*
         const warehouse = await db.query(`
             SELECT warehouse_id,warehouse_desc FROM warehouse`)
         const zone = await db.query(`
@@ -41,15 +44,36 @@ exports.dropDownList = async (req, res) => {
         const category = await db.query(`
             SELECT item_cate_code,cate_name FROM category`)
         const role = await db.query(`SELECT role FROM users GROUP BY role`)
-        
+        */
+        const warehouse = await models.Warehouse.findAll(
+            { attributes: ['warehouse_id', 'warehouse_desc'] }
+        )
+        const zone = await models.WarehouseTrans.findAll({
+            attributes: ['zone'],
+            group: 'zone',
+            order: [
+                ['zone']
+            ]
+        })
+        const category = await models.Category.findAll(
+            { attributes: ['item_cate_code', 'cate_name'] },
+        )
+        const role = await models.Users.findAll({
+            attributes: ['role'],
+            group: 'role',
+            order: [
+                ['role']
+            ]
+        })
+
         return res.status(200).json({
             success: true,
-            warehouse: warehouse.rows,
-            zone: zone.rows,
-            category: category.rows,
-            role: role.rows
+            warehouse: warehouse,
+            zone: zone,
+            category: category,
+            role: role
         })
-        
+
     } catch (error) {
         return res.status(400).json({
             success: false,
@@ -92,7 +116,7 @@ const getSumByZone = async (wh_id, zone_id) => {
 const overallWarehouse = async (wh_id) => {
     try {
         //overall in a warehouse
-        const overall = await  db.query(`
+        const overall = await db.query(`
         SELECT COUNT(wh_trans.position_code) as total_positions, 
         COUNT(rm.position_code) as usage,
         (COUNT(wh_trans.position_code) - COUNT(rm.position_code)) as empty
@@ -126,10 +150,12 @@ exports.fetchData = async (req, res, next) => {
 
     try { //get all items in same warehouse to get usage
 
-        if (req.query.zone || req.query.category || req.query.page){
+        // req.query.category||req.query.page||req.query.length||req.query.zone
+        if (Object.keys(req.query).length > 0) {
+            console.log(req.query)
             next();
+
         } else {
-    
             //summary each zone
             const zone_summary = await db.query(`
             SELECT wh_trans.zone as zone, COUNT(wh_trans.position_code) as total_positions, 
@@ -155,7 +181,7 @@ exports.fetchData = async (req, res, next) => {
                 summary: zone_summary.rows,
             })
         }
-        
+
     } catch (error) {
         console.log(error.message);
     }
@@ -164,6 +190,7 @@ exports.fetchData = async (req, res, next) => {
 //* (2) If have any query params from fetchData
 exports.fetchFilterItems = async (req, res) => {
     try {
+        /*
         const page = parseInt(req.query.page) - 1 || 0;
         const limit = parseInt(req.query.limit) || 10; //limit show data
         let category = req.query.category || "All";
@@ -198,7 +225,7 @@ exports.fetchFilterItems = async (req, res) => {
                 items: items.rows
             });
         }
-        else if(category === "All" && zone != "All"){
+        else if (category === "All" && zone != "All") {
             zone = req.query.zone;
             const items = await db.query(`
             SELECT rm.item_code, c.item_cate_code as category,
@@ -214,7 +241,7 @@ exports.fetchFilterItems = async (req, res) => {
             OFFSET $4;
             `, [warehouse_id, zone, limit, page])
 
-            const overall = await getSumByZone(warehouse_id,zone);
+            const overall = await getSumByZone(warehouse_id, zone);
 
             return res.status(200).json({
                 success: true,
@@ -228,7 +255,7 @@ exports.fetchFilterItems = async (req, res) => {
                 items: items.rows
             });
         }
-        else if(category != "All" && zone === "All"){
+        else if (category != "All" && zone === "All") {
             category = req.query.category;
             const items = await db.query(`
             SELECT rm.item_code, c.item_cate_code as category,
@@ -275,7 +302,7 @@ exports.fetchFilterItems = async (req, res) => {
             OFFSET $5;
             `, [warehouse_id, zone, category, limit, page])
 
-            const overall = await getSumByZone(warehouse_id,zone);
+            const overall = await getSumByZone(warehouse_id, zone);
 
             return res.status(200).json({
                 success: true,
@@ -290,6 +317,99 @@ exports.fetchFilterItems = async (req, res) => {
             });
 
         }
+*/
+
+        const page = parseInt(req.query.page) - 1 || 0;
+        const limit = parseInt(req.query.limit) || 10; //limit show data
+        const search = req.query.search || "";
+        let category = req.query.category || "All";
+        let zone = req.query.zone || "All";
+
+        const warehouse_id = String(req.params.wh_id);
+        // Get All category
+        const allCategoryJson = await models.Category.findAll({
+            attributes: [
+                'item_cate_code'
+            ]
+        })
+        let categoryList = []
+        allCategoryJson.map((c) => {
+            categoryList.push(Object.values(c.dataValues)[0])
+        })
+        // Get All zone
+        const allZoneJson = await models.WarehouseTrans.findAll({
+            attributes: [
+                'zone'
+            ],
+            group: 'zone',
+
+        })
+        let zoneList = []
+        allZoneJson.map((z) => {
+            zoneList.push(Object.values(z.dataValues)[0])
+        })
+
+        // Filtering
+        category === "All"
+            ? (category = categoryList)
+            : (category = [req.query.category]);
+        zone === "All"
+            ? (zone = zoneList)
+            : (zone = [req.query.zone]);
+
+        console.log('category: ' + category)
+        console.log('zone: ' + zone)
+
+        const items = await models.RawMaterials.findAll({
+            attributes: [
+                'item_code',
+                'item_cate_code',
+                [Sequelize.col('category.cate_name'),'category'],
+                'sub_cate_code',
+                'length',
+                'create_dt',
+                'item_status'
+            ],
+            where: {
+                item_status: {
+                    [Op.in]: ['used', 'stock in']
+                },
+                sub_cate_code: {
+                    [Op.like]: '%'+ search +'%'
+                }
+            },
+            include: [
+                {
+                    model: models.WarehouseTrans,
+                    attributes: [],
+                    where: { 
+                        warehouse_id: warehouse_id ,
+                        zone: {
+                            [Op.in]: zone
+                        }
+                    }
+                },
+                {
+                    model: models.Category,
+                    as: 'category',
+                    attributes: [],
+                    where: { 
+                        item_cate_code: {
+                            [Op.in]: category
+                        } 
+                    }
+                },
+            ],
+            offset: page,
+            limit: limit,
+            raw: true
+        });
+
+        res.status(500).json({
+            success: true,
+            message: "You have permission to access",
+            items
+        })
 
     } catch (error) {
         console.log(error);
@@ -304,7 +424,7 @@ exports.fetchFilterItems = async (req, res) => {
 //* Order section
 exports.createOrder = async (req, res) => {
 
-    const { items,remarks } = req.body;
+    const { items, remarks } = req.body;
     const user_id = req.user.user_id;
     let new_order_id = null;
     try {
@@ -316,27 +436,27 @@ exports.createOrder = async (req, res) => {
 
         const prev_order_id = prev_order.rows[0].order_id
 
-        console.log("prev_order: "+ prev_order_id);
+        console.log("prev_order: " + prev_order_id);
 
-        if (!validate_order_id(prev_order_id) ) {
+        if (!validate_order_id(prev_order_id)) {
             //if not find the correct format from previous order, create new
             new_order_id = 'AA0000000000'
         } else {
             new_order_id = genOrderID(prev_order_id);
         }
 
-        genOrderTrans(new_order_id,items)
+        genOrderTrans(new_order_id, items)
 
         //save to database
         await db.query(`
             INSERT INTO orders(order_id, order_remark, quantity, create_by)
-            VALUES ($1,$2,$3,$4)`,[new_order_id, remarks, items.length, user_id ])
+            VALUES ($1,$2,$3,$4)`, [new_order_id, remarks, items.length, user_id])
 
         items.map(async (item) => {
             //save order_transaction to database
             await db.query(`
             INSERT INTO order_transaction(order_id_trans, item_code, order_id)
-            VALUES ($1,$2,$3)`,[item.order_id_trans, item.item_code, item.order_id ])
+            VALUES ($1,$2,$3)`, [item.order_id_trans, item.item_code, item.order_id])
 
             let modify_dt = moment().format('YYYY-MM-DD HH:mm:ss.sss');
             //update item_status in raw_materials
@@ -344,7 +464,7 @@ exports.createOrder = async (req, res) => {
             UPDATE  raw_materials SET item_status = 'in progress'
             , modify_by = $1, modify_dt = $2
             WHERE item_code = $3
-            `,[user_id, modify_dt, item.item_code ])
+            `, [user_id, modify_dt, item.item_code])
 
         })
 
@@ -370,14 +490,14 @@ exports.deleteOrder = async (req, res) => {
             FROM order_transaction ot
             WHERE rm.item_code = ot.item_code
             AND order_id = $1
-            `,[order_id])
+            `, [order_id])
         //DELETE from order_transaction before in orders
         await db.query(`
             DELETE FROM order_transaction WHERE order_id = $1
-            `,[order_id])
+            `, [order_id])
         await db.query(`
             DELETE FROM orders WHERE order_id = $1
-            `,[order_id])
+            `, [order_id])
 
         return res.status(201).json({
             success: true,
@@ -386,7 +506,7 @@ exports.deleteOrder = async (req, res) => {
         })
 
 
-    }catch(error) {
+    } catch (error) {
         console.log(error.message);
         return res.status(500).json({
             error: error.message,
@@ -430,7 +550,7 @@ exports.getCurrentOrder = async (req, res) => {
             order_list: rows
         })
 
-        
+
     } catch (error) {
         console.log(error.message);
 
@@ -439,9 +559,9 @@ exports.getCurrentOrder = async (req, res) => {
             message: "Internal Server error"
         })
     }
-} 
+}
 
-const positionsGrid = async (order_id,zone) => {
+const positionsGrid = async (order_id, zone) => {
     try {
         const targets = await db.query(`
             SELECT w.warehouse_id, r.position_code ,wt.section, wt.col_no, wt.floor_no
@@ -467,21 +587,21 @@ const positionsGrid = async (order_id,zone) => {
         `, [zone, wh_id])
 
 
-        positions.rows.map((pos) =>{
-            targets.rows.map((target) =>{
-                if (pos.section === target.section && pos.col_no === target.col_no){
+        positions.rows.map((pos) => {
+            targets.rows.map((target) => {
+                if (pos.section === target.section && pos.col_no === target.col_no) {
                     pos.target_in = true
                 }
             })
         })
 
         return {
-            warehouse_id :wh_id,
+            warehouse_id: wh_id,
             zone: zone,
             positions: positions.rows,
-            target: targets.rows        
+            target: targets.rows
         }
-        
+
     } catch (error) {
         console.log(error.message)
     }
@@ -490,7 +610,7 @@ const positionsGrid = async (order_id,zone) => {
 exports.getOrderDetail = async (req, res) => {
 
     const order_id = String(req.params.order_id);
-    
+
     try {
         const zones = await db.query(`
             SELECT wt.zone 
@@ -514,18 +634,18 @@ exports.getOrderDetail = async (req, res) => {
             JOIN orders o ON o.order_id = ot.order_id
             WHERE ot.order_id = $1 
             AND wt.zone = $2
-        ` ,[order_id, zone])
+        ` , [order_id, zone])
 
         const grid = await positionsGrid(order_id, zone)
 
         return res.status(200).json({
             warehouse_id: grid.warehouse_id,
-            zones : zones.rows,
-            zone : grid.zone,
-            positions_grid : grid.positions,
-            items : items.rows,
+            zones: zones.rows,
+            zone: grid.zone,
+            positions_grid: grid.positions,
+            items: items.rows,
         })
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({

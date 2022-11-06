@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Orders.hasMany(models.OrderTrans, {
-                foreignKey: 'order_id_trans',
-                as: 'order_id_trans',
+                foreignKey: 'order_id',
+                // as: 'orderIdTrans',
                 onDelete: 'CASCADE',
             });
         }

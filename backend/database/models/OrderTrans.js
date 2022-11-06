@@ -9,12 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             OrderTrans.belongsTo(models.Orders, {
                 foreignKey: 'order_id',
-                as: 'orderId',
+                // as: 'orderId',
                 onDelete: 'CASCADE',
             }),
             OrderTrans.belongsTo(models.RawMaterials, {
                 foreignKey: 'item_code',
-                as: 'itemCode',
+                // as: 'itemCode',
                 onDelete: 'CASCADE',
             })
         }

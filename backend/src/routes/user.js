@@ -45,8 +45,6 @@ router.get(
 );
 router.get(
   "/history-order",
-  userAuth,
-  authPage(["Admin", "Operator"]),
   getCompletedOrder
 );
 router.delete("/order/:order_id", deleteOrder);

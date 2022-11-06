@@ -4,6 +4,7 @@ const { PORT, CLIENT_URL } = require('./constants');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const cors = require('cors');
+const { sequelize } = require('./../database/models')
 
 //import passport middleware
 require('./middlewares/passport-middleware')
@@ -24,11 +25,13 @@ app.use('/api', auth)
 app.use('/', user)
 
 //app start
-const appStart = () => {
+const appStart = async () => {
     try {
         app.listen(PORT, async ()=>{
             console.log(`Server port: ${PORT} started successfully`);
         })
+        await sequelize.authenticate()
+        console.log('Database Connected!')
     }catch (err) {
         console.log(`Error: ${err.message}`);
     }
