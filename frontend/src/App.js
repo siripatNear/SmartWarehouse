@@ -108,7 +108,6 @@ const App = () => {
         <Route path="/ScanTag" element={<ScanTag />} />
         <Route path="/boxzone" element={<BoxZone />} />
 
-
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
           <Route path="/login" element={<LogIn />} />
