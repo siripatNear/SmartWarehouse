@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import "../OrderDetail.css";
 import * as dayjs from 'dayjs';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Center } from '@chakra-ui/react'
-import CustomButton from "../../components/CustomButton";
-import {
-    VStack,
-    HStack,
-    useDisclosure,
-    Text,
-} from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Center, VStack, HStack, useDisclosure, Text, } from '@chakra-ui/react'
 
+import CustomButton from "../../components/CustomButton";
 import GridOrderDetail from '../../components/GridOrderDetail';
 import TablePickingListInOrder from '../../components/TablePickingListInOrder';
 import { CustomAlertOneButton } from "../../components/AlertOneButton";

@@ -8,7 +8,12 @@ import {
   HStack,
   useDisclosure,
   Text,
+  Spinner,
+  Center
 } from "@chakra-ui/react";
+
+import { isNil } from "lodash";
+import { useQuery } from "@tanstack/react-query";
 
 const MockDataPutAway = [
   {
@@ -24,9 +29,11 @@ function PutAway() {
 
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { data, isLoading } = useQuery(["/warehouse/A?zone=1"]);
+  
   return (
     <>
+      
       <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
@@ -45,12 +52,24 @@ function PutAway() {
         </VStack>
       />
 
+      {isLoading || isNil(data) ? (
+        <Center mt="100px">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+            alignItems
+          />
+        </Center>
+      ) : (
       <div className='ContentPutAwayItemPage'>
         <div className='ZoneTitle'>
           Zone {MockDataPutAway[0].zone}
         </div>
         <div>
-          <GridPutAwayItem />
+          <GridPutAwayItem itemlist={data}/>
         </div>
         <div className='ContainerContent'>
           <div className='ContainerNoteBox'>
@@ -85,6 +104,7 @@ function PutAway() {
           </div>
         </div>
       </div>
+      )}
     </>
   )
 }
