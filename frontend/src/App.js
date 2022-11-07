@@ -91,7 +91,6 @@ const App = () => {
           {/* //* Operator */}
           <Route path="/order-list" element={<OrderList />} />
           <Route path="/order-detail" element={<OrderDetail />} />
-          <Route path="/picking-list" element={<PickingList />} />
           <Route path="/confirm-picking" element={<ConfirmPicking />} />
           <Route path="/history" element={<History />} />
 
