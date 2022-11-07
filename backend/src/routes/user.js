@@ -55,12 +55,7 @@ router.delete("/manage-users/:user_id", deleteUser); //complete
 
 //operator routes
 router.post("/warehouse/:wh_id/picking-list", userAuth, createOrder);
-router.get(
-  "/order-list",
-  userAuth,
-  authPage(["Admin", "Operator"]),
-  getCurrentOrder
-);
+router.get("/order-list", getCurrentOrder);
 router.get("/history-order", getCompletedOrder);
 router.delete("/order/:order_id", deleteOrder);
 router.get(

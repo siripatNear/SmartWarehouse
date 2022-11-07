@@ -1,6 +1,12 @@
 import React from "react";
-import { Flex, Heading, HStack, VStack, Spinner, Center } from "@chakra-ui/react";
-
+import {
+  Flex,
+  Heading,
+  HStack,
+  VStack,
+  Spinner,
+  Center,
+} from "@chakra-ui/react";
 import Nametag from "../../components/Nametag";
 import TableFPickingOrder from "../../components/TableFPickingOrder";
 
@@ -8,19 +14,18 @@ import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 
 const PickingOrderList = () => {
-
   const { data: orders, isLoading } = useQuery(["/order-list"]);
 
   return (
     <>
       {isLoading || isNil(orders) ? (
-        <Center mt='100px'>
+        <Center mt="100px">
           <Spinner
-            thickness='4px'
-            speed='0.65s'
-            emptyColor='gray.200'
-            color='blue.500'
-            size='xl'
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
             alignItems
           />
         </Center>
