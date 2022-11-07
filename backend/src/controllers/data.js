@@ -294,7 +294,6 @@ exports.createOrder = async (req, res) => {
             limit: 1
         })
 
-        console.log(JSON.stringify(prev_order))
         let prev_order_id = null;
 
         if(prev_order.length){
