@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       WarehouseTrans.belongsTo(models.Warehouse, {
         foreignKey: 'warehouse_id',
-        as: 'warehouseId',
+        // as: 'warehouseId',
         onDelete: 'CASCADE',
       }),
       WarehouseTrans.hasOne(models.RawMaterials, {
         foreignKey: 'position_code',
-        as: 'positionCode',
+        as: 'item',
         onDelete: 'CASCADE',
       })
     }
@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'WarehouseTrans',
     tableName: 'warehouse_trans',
     createdAt: 'create_dt',
-    updatedAt: 'modify_by',
+    updatedAt: 'modify_dt',
     underscore: true,
   });
   return WarehouseTrans;

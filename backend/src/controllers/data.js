@@ -1,6 +1,9 @@
 const db = require("../db");
 const { v4: uuidv4 } = require("uuid");
 var moment = require("moment");
+const models = require("../../database/models");
+const { Sequelize } = require("../../database/models");
+const { Op } = require("sequelize");
 
 //* response to get any form page
 exports.getForm = async (req, res, next) => {
@@ -29,21 +32,39 @@ exports.getForm = async (req, res, next) => {
 //* for all dropdown data API
 exports.dropDownList = async (req, res) => {
   try {
-    const warehouse = await db.query(`
-            SELECT warehouse_id,warehouse_desc FROM warehouse`);
-    const zone = await db.query(`
+    /*
+        const warehouse = await db.query(`
+            SELECT warehouse_id,warehouse_desc FROM warehouse`)
+        const zone = await db.query(`
             SELECT zone FROM warehouse_trans 
-            GROUP BY zone ORDER BY zone`);
-    const category = await db.query(`
-            SELECT item_cate_code,cate_name FROM category`);
-    const role = await db.query(`SELECT role FROM users GROUP BY role`);
+            GROUP BY zone ORDER BY zone`)
+        const category = await db.query(`
+            SELECT item_cate_code,cate_name FROM category`)
+        const role = await db.query(`SELECT role FROM users GROUP BY role`)
+        */
+    const warehouse = await models.Warehouse.findAll({
+      attributes: ["warehouse_id", "warehouse_desc"],
+    });
+    const zone = await models.WarehouseTrans.findAll({
+      attributes: ["zone"],
+      group: "zone",
+      order: [["zone"]],
+    });
+    const category = await models.Category.findAll({
+      attributes: ["item_cate_code", "cate_name"],
+    });
+    const role = await models.Users.findAll({
+      attributes: ["role"],
+      group: "role",
+      order: [["role"]],
+    });
 
     return res.status(200).json({
       success: true,
-      warehouse: warehouse.rows,
-      zone: zone.rows,
-      category: category.rows,
-      role: role.rows,
+      warehouse: warehouse,
+      zone: zone,
+      category: category,
+      role: role,
     });
   } catch (error) {
     return res.status(400).json({
@@ -123,7 +144,9 @@ exports.fetchData = async (req, res, next) => {
   try {
     //get all items in same warehouse to get usage
 
-    if (req.query.zone || req.query.category || req.query.page) {
+    // req.query.category||req.query.page||req.query.length||req.query.zone
+    if (Object.keys(req.query).length > 0) {
+      console.log(req.query);
       next();
     } else {
       //summary each zone
@@ -164,138 +187,88 @@ exports.fetchFilterItems = async (req, res) => {
   try {
     const page = parseInt(req.query.page) - 1 || 0;
     const limit = parseInt(req.query.limit) || 10; //limit show data
+    const search = req.query.search || "";
     let category = req.query.category || "All";
     let zone = req.query.zone || "All";
 
     const warehouse_id = String(req.params.wh_id);
+    // Get All category
+    const allCategoryJson = await models.Category.findAll({
+      attributes: ["item_cate_code"],
+    });
+    let categoryList = [];
+    allCategoryJson.map((c) => {
+      categoryList.push(Object.values(c.dataValues)[0]);
+    });
+    // Get All zone
+    const allZoneJson = await models.WarehouseTrans.findAll({
+      attributes: ["zone"],
+      group: "zone",
+    });
+    let zoneList = [];
+    allZoneJson.map((z) => {
+      zoneList.push(Object.values(z.dataValues)[0]);
+    });
 
-    if (category === "All" && zone === "All") {
-      const items = await db.query(
-        `
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
-            FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            LIMIT $2
-            OFFSET $3;
-            `,
-        [warehouse_id, limit, page]
-      );
-      //overall in a warehouse
-      const overall = await overallWarehouse(warehouse_id);
+    // Filtering
+    category === "All"
+      ? (category = categoryList)
+      : (category = [req.query.category]);
+    zone === "All" ? (zone = zoneList) : (zone = [req.query.zone]);
 
-      return res.status(200).json({
-        success: true,
-        warehouse: warehouse_id,
-        positions: overall.positions,
-        usage: overall.usage,
-        empty: overall.empty,
-        page: page + 1,
-        limit,
-        items: items.rows,
-      });
-    } else if (category === "All" && zone != "All") {
-      zone = req.query.zone;
-      const items = await db.query(
-        `
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
-            FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
-            AND wh_trans.zone = $2
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            LIMIT $3
-            OFFSET $4;
-            `,
-        [warehouse_id, zone, limit, page]
-      );
+    console.log("category: " + category);
+    console.log("zone: " + zone);
 
-      const overall = await getSumByZone(warehouse_id, zone);
+    const items = await models.RawMaterials.findAll({
+      attributes: [
+        "item_code",
+        "item_cate_code",
+        [Sequelize.col("category.cate_name"), "category"],
+        "sub_cate_code",
+        "length",
+        "create_dt",
+        "item_status",
+      ],
+      where: {
+        item_status: {
+          [Op.in]: ["used", "stock in"],
+        },
+        sub_cate_code: {
+          [Op.like]: "%" + search + "%",
+        },
+      },
+      include: [
+        {
+          model: models.WarehouseTrans,
+          attributes: [],
+          where: {
+            warehouse_id: warehouse_id,
+            zone: {
+              [Op.in]: zone,
+            },
+          },
+        },
+        {
+          model: models.Category,
+          as: "category",
+          attributes: [],
+          where: {
+            item_cate_code: {
+              [Op.in]: category,
+            },
+          },
+        },
+      ],
+      offset: page,
+      limit: limit,
+      raw: true,
+    });
 
-      return res.status(200).json({
-        success: true,
-        warehouse: warehouse_id,
-        zone: zone,
-        positions: overall.positions,
-        usage: overall.usage,
-        empty: overall.empty,
-        page: page + 1,
-        limit,
-        items: items.rows,
-      });
-    } else if (category != "All" && zone === "All") {
-      category = req.query.category;
-      const items = await db.query(
-        `
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
-            FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
-            AND rm.item_cate_code = $2
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            LIMIT $3
-            OFFSET $4;
-            `,
-        [warehouse_id, category, limit, page]
-      );
-      //overall in a warehouse
-      const overall = await overallWarehouse(warehouse_id);
-
-      return res.status(200).json({
-        success: true,
-        warehouse: warehouse_id,
-        positions: overall.positions,
-        usage: overall.usage,
-        empty: overall.empty,
-        page: page + 1,
-        limit,
-        items: items.rows,
-      });
-    } else {
-      category = req.query.category;
-      zone = req.query.zone;
-      let items = await db.query(
-        `
-            SELECT rm.item_code, c.item_cate_code as category,
-            rm.length, wh_trans.section, rm.create_dt, rm.item_status as status
-            FROM raw_materials rm
-            JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
-            JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            WHERE wh_trans.warehouse_id = $1
-            AND wh_trans.zone = $2
-            AND (rm.item_status = 'stock in' or rm.item_status = 'used')
-            AND rm.item_cate_code = $3
-            LIMIT $4
-            OFFSET $5;
-            `,
-        [warehouse_id, zone, category, limit, page]
-      );
-
-      const overall = await getSumByZone(warehouse_id, zone);
-
-      return res.status(200).json({
-        success: true,
-        warehouse: warehouse_id,
-        zone: zone,
-        positions: overall.positions,
-        usage: overall.usage,
-        empty: overall.empty,
-        page: page + 1,
-        limit,
-        items: items.rows,
-      });
-    }
+    res.status(500).json({
+      success: true,
+      message: "You have permission to access this",
+      items,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -311,18 +284,19 @@ exports.createOrder = async (req, res) => {
   const user_id = req.user.user_id;
   let new_order_id = null;
   try {
-    const prev_order = await db.query(`
-            SELECT order_id FROM orders 
-            ORDER BY create_dt DESC 
-            LIMIT 1
-            `);
+    //* 1. Create Order ( run from previous order_id )
 
-    const prev_order_id = prev_order.rows[0].order_id;
+    const prev_order = await models.Orders.findAll({
+      attributes: ["order_id"],
+      order: [["create_dt", "DESC"]],
+      limit: 1,
+    });
 
+    const prev_order_id = prev_order[0].dataValues["order_id"];
     console.log("prev_order: " + prev_order_id);
 
     if (!validate_order_id(prev_order_id)) {
-      //if not find the correct format from previous order, create new
+      //if not find the correct format from previous order, create the first one
       new_order_id = "AA0000000000";
     } else {
       new_order_id = genOrderID(prev_order_id);
@@ -330,38 +304,40 @@ exports.createOrder = async (req, res) => {
 
     genOrderTrans(new_order_id, items);
 
-    //save to database
-    await db.query(
-      `
-            INSERT INTO orders(order_id, order_remark, quantity, create_by)
-            VALUES ($1,$2,$3,$4)`,
-      [new_order_id, remarks, items.length, user_id]
-    );
+    //* 2. Add new order to database
+    const data = {
+      order_id: new_order_id,
+      order_status: "Not started",
+      order_remark: remarks,
+      quantity: items.length,
+      create_by: user_id,
+    };
+    await models.Orders.create(data);
 
-    items.map(async (item) => {
-      //save order_transaction to database
-      await db.query(
-        `
-            INSERT INTO order_transaction(order_id_trans, item_code, order_id)
-            VALUES ($1,$2,$3)`,
-        [item.order_id_trans, item.item_code, item.order_id]
-      );
+    //* 3. Create order transaction
+    items.forEach(async (item) => {
+      //Add each item to database
+      await models.OrderTrans.create(item);
+    });
 
-      let modify_dt = moment().format("YYYY-MM-DD HH:mm:ss.sss");
-      //update item_status in raw_materials
-      await db.query(
-        `
-            UPDATE  raw_materials SET item_status = 'in progress'
-            , modify_by = $1, modify_dt = $2
-            WHERE item_code = $3
-            `,
-        [user_id, modify_dt, item.item_code]
-      );
+    //* 4. Update raw material status, modify_dt and modify_by
+    items.forEach(async (item) => {
+      let data = {
+        item_status: "in progress",
+        modify_by: user_id,
+        modify_dt: new Date(),
+      };
+      console.log(data);
+      await models.RawMaterials.update(data, {
+        where: {
+          item_code: item.item_code,
+        },
+      });
     });
 
     return res.status(201).json({
       success: true,
-      message: "Create order was successful",
+      message: `Create order: ${new_order_id} was successful`,
     });
   } catch (error) {
     console.log(error.message);
@@ -370,39 +346,47 @@ exports.createOrder = async (req, res) => {
 
 exports.deleteOrder = async (req, res) => {
   const order_id = String(req.params.order_id);
+  const user_id = String(req.user.user_id);
   try {
-    //UPDATE item_status
-    //? item_status after delete order should be 'used'?
-    //? create new column for used/new
-
-    await db.query(
-      `
-            UPDATE raw_materials rm SET item_status = 'stock in'
-            FROM order_transaction ot
-            WHERE rm.item_code = ot.item_code
-            AND order_id = $1
-            `,
-      [order_id]
-    );
-    //DELETE from order_transaction before in orders
-    await db.query(
-      `
-            DELETE FROM order_transaction WHERE order_id = $1
-            `,
-      [order_id]
-    );
-    await db.query(
-      `
-            DELETE FROM orders WHERE order_id = $1
-            `,
-      [order_id]
-    );
-
-    return res.status(201).json({
-      success: true,
-      message: "Delete order was successful",
-      order_id: order_id,
+    //* item_status after delete order wil be 'used'?
+    //* 1. update item status to 'Used' and update modify_dt, modify_by
+    const update_data = {
+      item_status: "used",
+      modify_by: user_id,
+      modify_dt: new Date(),
+    };
+    await models.RawMaterials.update(update_data, {
+      where: {},
+      include: {
+        model: models.OrderTrans,
+        as: "orders",
+        attributes: [],
+        where: { order_id: order_id },
+      },
+      raw: true,
     });
+
+    //* 2. Delete order_transaction where order_id = req.params.order_id
+    await models.OrderTrans.destroy({
+      where: {
+        order_id: order_id,
+      },
+    });
+
+    //* 3. Delete orders where order_id = req.params.order_id
+    const deleted = await models.Orders.destroy({
+      where: {
+        order_id: order_id,
+      },
+    });
+
+    if (deleted) {
+      return res.status(201).json({
+        success: true,
+        message: `Order was deleted by ${user_id}`,
+      });
+    }
+    throw new Error("Order was not found");
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({
@@ -418,7 +402,6 @@ exports.getCompletedOrder = async (req, res) => {
             create_by as ordered_by
             FROM orders WHERE order_status = 'Completed'
             `);
-
     return res.status(200).json({
       message: "you have permission to access",
       order_list: rows,
@@ -438,7 +421,7 @@ exports.getCurrentOrder = async (req, res) => {
             SELECT order_id, create_dt, quantity, order_status, 
             create_by as ordered_by, progress_by
             FROM orders WHERE order_status != 'Completed'
-            ORDER BY order_status 
+            ORDER BY order_status DESC
         `);
 
     return res.status(200).json({
@@ -448,6 +431,57 @@ exports.getCurrentOrder = async (req, res) => {
   } catch (error) {
     console.log(error.message);
 
+    res.status(500).json({
+      error: true,
+      message: "Internal Server error",
+    });
+  }
+};
+
+exports.getOrderDetail = async (req, res) => {
+  const order_id = String(req.params.order_id);
+
+  try {
+    const zones = await db.query(
+      `
+            SELECT wt.zone 
+            FROM raw_materials rm
+            JOIN order_transaction ot ON rm.item_code = ot.item_code
+            JOIN warehouse_trans wt ON rm.position_code = wt.position_code
+            JOIN category c ON rm.item_cate_code = c.item_cate_code
+            JOIN orders o ON o.order_id = ot.order_id
+            WHERE ot.order_id = $1 GROUP BY wt.zone
+        `,
+      [order_id]
+    );
+
+    let zone = parseInt(req.query.zone || zones.rows[0].zone);
+
+    const items = await db.query(
+      `
+            SELECT rm.item_code, c.cate_name as category, rm.length, 
+            rm.create_dt, wt.zone
+            FROM raw_materials rm
+            JOIN order_transaction ot ON rm.item_code = ot.item_code
+            JOIN warehouse_trans wt ON rm.position_code = wt.position_code
+            JOIN category c ON rm.item_cate_code = c.item_cate_code
+            JOIN orders o ON o.order_id = ot.order_id
+            WHERE ot.order_id = $1 
+            AND wt.zone = $2
+        `,
+      [order_id, zone]
+    );
+
+    const grid = await positionsGrid(order_id, zone);
+    return res.status(200).json({
+      warehouse_id: grid.warehouse_id,
+      zones: zones.rows,
+      zone: grid.zone,
+      positions_grid: grid.positions,
+      items: items.rows,
+    });
+  } catch (error) {
+    console.log(error);
     res.status(500).json({
       error: true,
       message: "Internal Server error",
@@ -502,58 +536,6 @@ const positionsGrid = async (order_id, zone) => {
     };
   } catch (error) {
     console.log(error.message);
-  }
-};
-
-exports.getOrderDetail = async (req, res) => {
-  const order_id = String(req.params.order_id);
-
-  try {
-    const zones = await db.query(
-      `
-            SELECT wt.zone 
-            FROM raw_materials rm
-            JOIN order_transaction ot ON rm.item_code = ot.item_code
-            JOIN warehouse_trans wt ON rm.position_code = wt.position_code
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            JOIN orders o ON o.order_id = ot.order_id
-            WHERE ot.order_id = $1 GROUP BY wt.zone
-        `,
-      [order_id]
-    );
-
-    let zone = parseInt(req.query.zone || zones.rows[0].zone);
-
-    const items = await db.query(
-      `
-            SELECT rm.item_code, c.cate_name as category, rm.length, 
-            rm.create_dt, wt.zone
-            FROM raw_materials rm
-            JOIN order_transaction ot ON rm.item_code = ot.item_code
-            JOIN warehouse_trans wt ON rm.position_code = wt.position_code
-            JOIN category c ON rm.item_cate_code = c.item_cate_code
-            JOIN orders o ON o.order_id = ot.order_id
-            WHERE ot.order_id = $1 
-            AND wt.zone = $2
-        `,
-      [order_id, zone]
-    );
-
-    const grid = await positionsGrid(order_id, zone);
-
-    return res.status(200).json({
-      warehouse_id: grid.warehouse_id,
-      zones: zones.rows,
-      zone: grid.zone,
-      positions_grid: grid.positions,
-      items: items.rows,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      error: true,
-      message: "Internal Server error",
-    });
   }
 };
 
