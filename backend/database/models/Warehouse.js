@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Warehouse.hasMany(models.WarehouseTrans, {
         foreignKey: 'warehouse_id',
-        as: 'warehouseId',
+        // as: 'warehouseId',
         onDelete: 'CASCADE',
     })
     }
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Warehouse',
     tableName: 'warehouse',
     createdAt: 'create_dt',
-    updatedAt: 'modify_by',
+    updatedAt: 'modify_dt',
     underscore: true,
   }
   );
