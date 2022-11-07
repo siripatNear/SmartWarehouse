@@ -108,10 +108,10 @@ const TablePickingList = (props) => {
         return {
           select: false,
           item_code: d.item_code,
-          category: d.category,
+          category: d.item_cate_code,
           length: d.length,
           create_dt: d.create_dt,
-          status: d.status,
+          status: d.item_status,
         };
       })
     );
