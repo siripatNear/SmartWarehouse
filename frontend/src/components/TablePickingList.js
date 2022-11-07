@@ -189,13 +189,7 @@ const TablePickingList = (props) => {
         paddingBottom="20px"
         gap="10px"
       >
-        {/* <Alert status="error">
-          <AlertIcon />
-          <AlertTitle>Please select item!</AlertTitle>
-          <AlertDescription>before click "Add" button</AlertDescription>
-        </Alert> */}
         <CustomButton
-          // onOpen={onOpenDialog}
           buttonName="Add"
           buttonColor="twitter"
           buttonSize="lg"
@@ -210,7 +204,6 @@ const TablePickingList = (props) => {
               });
             }
           }}
-          // disabledSubmit
         />
       </Box>
     </>
