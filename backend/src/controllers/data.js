@@ -118,20 +118,20 @@ const overallWarehouse = async (wh_id) => {
         FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
         WHERE wh_trans.warehouse_id = $1
         `,
-            [wh_id]
-        );
+      [wh_id]
+    );
 
-        const response = {
-            warehouse: wh_id,
-            positions: overall.rows[0].total_positions,
-            usage: overall.rows[0].usage,
-            empty: overall.rows[0].empty,
-        };
+    const response = {
+      warehouse: wh_id,
+      positions: overall.rows[0].total_positions,
+      usage: overall.rows[0].usage,
+      empty: overall.rows[0].empty,
+    };
 
-        return response;
-    } catch (error) {
-        console.log(error.message);
-    }
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 //*==================
@@ -180,7 +180,6 @@ exports.fetchData = async (req, res, next) => {
     console.log(error.message);
   }
 };
-
 //* (2) If have any query params from fetchData
 exports.fetchFilterItems = async (req, res) => {
   try {
@@ -239,66 +238,55 @@ exports.fetchFilterItems = async (req, res) => {
       include: [
         {
           model: models.WarehouseTrans,
+          as: "item",
           attributes: [],
           where: {
             warehouse_id: warehouse_id,
             zone: {
               [Op.in]: zone,
             },
-            include: [
-                {
-                    model: models.WarehouseTrans,
-                    as: 'item',
-                    attributes: [],
-                    where: {
-                        warehouse_id: warehouse_id,
-                        zone: {
-                            [Op.in]: zone
-                        }
-                    }
-                },
-                {
-                    model: models.Category,
-                    as: 'category',
-                    attributes: [],
-                    where: {
-                        item_cate_code: {
-                            [Op.in]: category
-                        }
-                    }
-                },
-            ],
-            offset: page,
-            limit: limit,
-            raw: true
-        });
+          },
+        },
+        {
+          model: models.Category,
+          as: "category",
+          attributes: [],
+          where: {
+            item_cate_code: {
+              [Op.in]: category,
+            },
+          },
+        },
+      ],
+      offset: page,
+      limit: limit,
+      raw: true,
+    });
 
-        if (zone.length === 1 ){
-            const summary = await getSumByZone(warehouse_id,zone[0])
-            res.status(200).json({
-                success: true,
-                message: "You have permission to access this",
-                summary,
-                items
-            })
-        } else{
-            const summary = await overallWarehouse(warehouse_id);
-            res.status(200).json({
-                success: true,
-                message: "You have permission to access this",
-                summary,
-                items
-            })
-        }
-
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            error: true,
-            message: "Internal Server error"
-        })
+    if (zone.length === 1) {
+      const summary = await getSumByZone(warehouse_id, zone[0]);
+      res.status(200).json({
+        success: true,
+        message: "You have permission to access this",
+        summary,
+        items,
+      });
+    } else {
+      const summary = await overallWarehouse(warehouse_id);
+      res.status(200).json({
+        success: true,
+        message: "You have permission to access this",
+        summary,
+        items,
+      });
     }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: true,
+      message: "Internal Server error",
+    });
+  }
 };
 
 //* Order section
@@ -444,7 +432,7 @@ exports.getCurrentOrder = async (req, res) => {
             SELECT order_id, create_dt, quantity, order_status, 
             create_by as ordered_by, progress_by
             FROM orders WHERE order_status != 'Completed'
-            ORDER BY order_status DESC
+            ORDER BY order_status 
         `);
 
     return res.status(200).json({
