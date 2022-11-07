@@ -118,21 +118,20 @@ const overallWarehouse = async (wh_id) => {
         FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
         WHERE wh_trans.warehouse_id = $1
         `,
-      [wh_id]
-    );
+            [wh_id]
+        );
 
-    const response = {
-      success: true,
-      warehouse: wh_id,
-      positions: overall.rows[0].total_positions,
-      usage: overall.rows[0].usage,
-      empty: overall.rows[0].empty,
-    };
+        const response = {
+            warehouse: wh_id,
+            positions: overall.rows[0].total_positions,
+            usage: overall.rows[0].usage,
+            empty: overall.rows[0].empty,
+        };
 
-    return response;
-  } catch (error) {
-    console.log(error.message);
-  }
+        return response;
+    } catch (error) {
+        console.log(error.message);
+    }
 };
 
 //*==================
@@ -246,36 +245,60 @@ exports.fetchFilterItems = async (req, res) => {
             zone: {
               [Op.in]: zone,
             },
-          },
-        },
-        {
-          model: models.Category,
-          as: "category",
-          attributes: [],
-          where: {
-            item_cate_code: {
-              [Op.in]: category,
-            },
-          },
-        },
-      ],
-      offset: page,
-      limit: limit,
-      raw: true,
-    });
+            include: [
+                {
+                    model: models.WarehouseTrans,
+                    as: 'item',
+                    attributes: [],
+                    where: {
+                        warehouse_id: warehouse_id,
+                        zone: {
+                            [Op.in]: zone
+                        }
+                    }
+                },
+                {
+                    model: models.Category,
+                    as: 'category',
+                    attributes: [],
+                    where: {
+                        item_cate_code: {
+                            [Op.in]: category
+                        }
+                    }
+                },
+            ],
+            offset: page,
+            limit: limit,
+            raw: true
+        });
 
-    res.status(500).json({
-      success: true,
-      message: "You have permission to access this",
-      items,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      error: true,
-      message: "Internal Server error",
-    });
-  }
+        if (zone.length === 1 ){
+            const summary = await getSumByZone(warehouse_id,zone[0])
+            res.status(200).json({
+                success: true,
+                message: "You have permission to access this",
+                summary,
+                items
+            })
+        } else{
+            const summary = await overallWarehouse(warehouse_id);
+            res.status(200).json({
+                success: true,
+                message: "You have permission to access this",
+                summary,
+                items
+            })
+        }
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: true,
+            message: "Internal Server error"
+        })
+    }
 };
 
 //* Order section

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Search from "../components/Search";
 import {
   Box,
@@ -16,7 +16,6 @@ import BoxAll from "../components/BoxAll";
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import TablePickingList from "../components/TablePickingList";
-import CustomButton from "../components/CustomButton";
 
 const Dashboard = () => {
   const [warehouse, setWarehouse] = useState({
