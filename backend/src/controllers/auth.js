@@ -89,19 +89,6 @@ exports.addUser = async (req, res) => {
   }
 };
 
-
-//     return res.status(201).json({
-//       success: true,
-//       message: "Adding user was successful",
-//     });
-//   } catch (error) {
-//     console.log(error.message);
-//     return res.status(500).json({
-//       error: error.message,
-//     });
-//   }
-// };
-
 //* GET /edit-user Form by user_id
 /*
 exports.getUserByID = async (req, res) => {
@@ -247,7 +234,7 @@ exports.deleteUser = async (req, res) => {
         user_id: user_id,
       });
     }
-    throw new Error("Post not found");
+    throw new Error("User_id was not found");
   } catch (error) {
     return res.status(500).send(error.message);
   }

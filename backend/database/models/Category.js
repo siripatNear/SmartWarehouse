@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             Category.hasMany(models.RawMaterials, {
                 foreignKey: 'item_cate_code',
-                as: 'itemCateCode',
+                as: 'category',
                 onDelete: 'CASCADE',
             })
         }
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'Category',
             tableName: 'category',
             createdAt: 'create_dt',
-            updatedAt: 'modify_by',
+            updatedAt: 'modify_dt',
             underscore: true,
         },
     );
