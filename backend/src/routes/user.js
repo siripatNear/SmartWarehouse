@@ -32,15 +32,13 @@ router.post("/add-user", registerValidation, validationMiddleware, userAuth, add
 router.get("/manage-users", userAuth, authPage(["Admin"]), getUsers); //complete
 router.get("/edit-user/:user_id",userAuth,authPage(["Admin"]),getForm,getUserByID); //not use
 router.put("/edit-user/:user_id", validationMiddleware, userAuth, updateUser); //complete
-
 router.delete("/manage-users/:user_id", deleteUser); //complete
+
 
 //operator routes
 router.post("/warehouse/:wh_id/picking-list", userAuth, createOrder);
 router.get(
   "/order-list",
-  userAuth,
-  authPage(["Admin", "Operator"]),
   getCurrentOrder
 );
 router.get(
