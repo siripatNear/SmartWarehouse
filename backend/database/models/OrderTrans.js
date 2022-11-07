@@ -10,11 +10,12 @@ module.exports = (sequelize, DataTypes) => {
             OrderTrans.belongsTo(models.Orders, {
                 foreignKey: 'order_id',
                 // as: 'orderId',
+                targetKey: 'order_id',
                 onDelete: 'CASCADE',
             }),
-            OrderTrans.belongsTo(models.RawMaterials, {
+            OrderTrans.hasOne(models.RawMaterials, {
                 foreignKey: 'item_code',
-                as: 'order',
+                sourceKey: 'item_code',
                 onDelete: 'CASCADE',
             })
         }

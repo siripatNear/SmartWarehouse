@@ -1,6 +1,5 @@
 const db = require('../db');
 const { v4: uuidv4 } = require('uuid');
-var moment = require('moment');
 const models = require("../../database/models");
 const { Sequelize } = require("../../database/models");
 const { Op } = require("sequelize");
@@ -33,7 +32,7 @@ exports.getForm = async (req, res, next) => {
 exports.dropDownList = async (req, res) => {
 
     try {
-        /*
+
         const warehouse = await db.query(`
             SELECT warehouse_id,warehouse_desc FROM warehouse`)
         const zone = await db.query(`
@@ -42,27 +41,6 @@ exports.dropDownList = async (req, res) => {
         const category = await db.query(`
             SELECT item_cate_code,cate_name FROM category`)
         const role = await db.query(`SELECT role FROM users GROUP BY role`)
-        */
-        const warehouse = await models.Warehouse.findAll(
-            { attributes: ['warehouse_id', 'warehouse_desc'] }
-        )
-        const zone = await models.WarehouseTrans.findAll({
-            attributes: ['zone'],
-            group: 'zone',
-            order: [
-                ['zone']
-            ]
-        })
-        const category = await models.Category.findAll(
-            { attributes: ['item_cate_code', 'cate_name'] },
-        )
-        const role = await models.Users.findAll({
-            attributes: ['role'],
-            group: 'role',
-            order: [
-                ['role']
-            ]
-        })
 
         return res.status(200).json({
             success: true,
@@ -228,9 +206,6 @@ exports.fetchFilterItems = async (req, res) => {
             ? (zone = zoneList)
             : (zone = [req.query.zone]);
 
-        console.log('category: ' + category)
-        console.log('zone: ' + zone)
-
         const items = await models.RawMaterials.findAll({
             attributes: [
                 'item_code',
@@ -252,7 +227,6 @@ exports.fetchFilterItems = async (req, res) => {
             include: [
                 {
                     model: models.WarehouseTrans,
-                    as: 'item',
                     attributes: [],
                     where: {
                         warehouse_id: warehouse_id,
@@ -281,7 +255,7 @@ exports.fetchFilterItems = async (req, res) => {
             const summary = await getSumByZone(warehouse_id,zone[0])
             res.status(200).json({
                 success: true,
-                message: "You have permission to access this",
+                message: "You have permission to access",
                 summary,
                 items
             })
@@ -289,7 +263,7 @@ exports.fetchFilterItems = async (req, res) => {
             const summary = await overallWarehouse(warehouse_id);
             res.status(200).json({
                 success: true,
-                message: "You have permission to access this",
+                message: "You have permission to access",
                 summary,
                 items
             })
@@ -320,7 +294,13 @@ exports.createOrder = async (req, res) => {
             limit: 1
         })
 
-        const prev_order_id = prev_order[0].dataValues['order_id'];
+        console.log(JSON.stringify(prev_order))
+        let prev_order_id = null;
+
+        if(prev_order.length){
+            let prev_order_id = prev_order[0].dataValues['order_id'];
+        }
+
         console.log("prev_order: " + prev_order_id);
 
         if (!validate_order_id(prev_order_id)) {
@@ -352,7 +332,7 @@ exports.createOrder = async (req, res) => {
         //* 4. Update raw material status, modify_dt and modify_by
         items.forEach(async (item) => {
             let data = {
-                item_status: 'in progress',
+                item_status: 'In progress',
                 modify_by: user_id,
                 modify_dt: new Date()
             }
@@ -380,25 +360,21 @@ exports.deleteOrder = async (req, res) => {
     const order_id = String(req.params.order_id);
     const user_id = String(req.user.user_id);
     try {
-        //* item_status after delete order wil be 'used'?
+        //* item_status after delete order wil be 'used'
         //* 1. update item status to 'Used' and update modify_dt, modify_by
-        const update_data = {
-            item_status: 'used',
-            modify_by: user_id,
-            modify_dt: new Date()
-        }
-        await models.RawMaterials.update(update_data, {
-            where: {},
-            include: {
-                model: models.OrderTrans,
-                as: 'orders',
-                attributes: [],
-                where: { order_id: order_id }
-            },
-            raw: true
-        })
+
+        const modify_by = user_id
+        const modify_dt = new Date()
+        await db.query(`
+        UPDATE raw_materials rm SET item_status = 'used',
+        modify_by = $1, modify_dt = $2
+        FROM order_transaction ot
+        WHERE rm.item_code = ot.item_code
+        AND order_id = $3
+        `,[modify_by,modify_dt,order_id])
 
         //* 2. Delete order_transaction where order_id = req.params.order_id
+
         await models.OrderTrans.destroy({
             where: {
                 order_id: order_id
@@ -569,6 +545,30 @@ const positionsGrid = async (order_id, zone) => {
 
     } catch (error) {
         console.log(error.message)
+    }
+}
+
+// GET summary of each category for Admin
+exports.getStock = async (req, res) => {
+    try {
+        const cate = await db.query(`
+            SELECT c.cate_name, COUNT(*)
+            FROM category c
+            JOIN raw_materials r ON c.item_cate_code = r.item_cate_code
+            GROUP BY c.cate_name
+        `)
+        return res.status(200).json({ 
+            success: true,
+            message: 'You have permission to access',
+            category: cate            
+
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            message: "Internal Server error"
+        })
     }
 }
 

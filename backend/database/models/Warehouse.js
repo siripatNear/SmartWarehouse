@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       Warehouse.hasMany(models.WarehouseTrans, {
         foreignKey: 'warehouse_id',
         // as: 'warehouseId',
+        sourceKey: 'warehouse_id',
         onDelete: 'CASCADE',
     })
     }
