@@ -50,12 +50,12 @@ const PrivateRoutes = () => {
   return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
 };
 
-const RestrictedRoutes = () => {
+const RestrictedRoutes = (role) => {
   const { isAuth } = useSelector((state) => state.auth);
-
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
 
+  // return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
   return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
 };
 
