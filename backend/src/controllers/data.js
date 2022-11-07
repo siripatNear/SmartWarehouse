@@ -7,33 +7,31 @@ const { Op } = require("sequelize");
 
 //* response to get any form page
 exports.getForm = async (req, res, next) => {
-    try {
-        if (String(req.params)) {
-
-            console.log({
-                message: 'you have permission to access',
-                params: req.params
-            })
-            next();
-
-        } else {
-
-            return res.status(200).json({
-                success: true,
-                message: 'you have permission to access'
-            })
-        }
-    } catch (error) {
-        return res.status(400).json({
-            success: false,
-            role: req.user.role,
-            message: "you don't have permission to access"
-        })
+  try {
+    if (String(req.params)) {
+      console.log({
+        message: "you have permission to access",
+        params: req.params,
+      });
+      next();
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: "you have permission to access",
+      });
     }
-}
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      role: req.user.role,
+      message: "you don't have permission to access",
+    });
+  }
+};
 
 //* for all dropdown data API
 exports.dropDownList = async (req, res) => {
+
     try {
         /*
         const warehouse = await db.query(`
@@ -82,11 +80,12 @@ exports.dropDownList = async (req, res) => {
     }
 }
 
+
 //* <<<< Dashboard data
 const getSumByZone = async (wh_id, zone_id) => {
-
-    try {
-        const { rows } = await db.query(`
+  try {
+    const { rows } = await db.query(
+      `
             SELECT COUNT(wh_trans.position_code) as total_positions, 
             COUNT(rm.position_code) as usage,
             (COUNT(wh_trans.position_code) - COUNT(rm.position_code)) as empty
@@ -95,23 +94,23 @@ const getSumByZone = async (wh_id, zone_id) => {
             FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
             WHERE wh_trans.warehouse_id = $1 
             AND wh_trans.zone = $2
-        `, [wh_id, zone_id]);
+        `,
+      [wh_id, zone_id]
+    );
 
+    response = {
+      warehouse: wh_id,
+      zone: zone_id,
+      positions: rows[0].total_positions,
+      usage: rows[0].usage,
+      empty: rows[0].empty,
+    };
 
-        response = {
-            warehouse: wh_id,
-            zone: zone_id,
-            positions: rows[0].total_positions,
-            usage: rows[0].usage,
-            empty: rows[0].empty,
-        }
-
-        return response;
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 const overallWarehouse = async (wh_id) => {
     try {
@@ -124,31 +123,32 @@ const overallWarehouse = async (wh_id) => {
         FULL OUTER JOIN warehouse_trans wh_trans ON rm.position_code = wh_trans.position_code 
         FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
         WHERE wh_trans.warehouse_id = $1
-        `, [wh_id])
+        `,
+      [wh_id]
+    );
 
-        const response = {
-            success: true,
-            warehouse: wh_id,
-            positions: overall.rows[0].total_positions,
-            usage: overall.rows[0].usage,
-            empty: overall.rows[0].empty,
-        }
+    const response = {
+      success: true,
+      warehouse: wh_id,
+      positions: overall.rows[0].total_positions,
+      usage: overall.rows[0].usage,
+      empty: overall.rows[0].empty,
+    };
 
-        return response
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+    return response;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 //*==================
 
-//* (1) Get dashboard by warehouse_id 
+//* (1) Get dashboard by warehouse_id
 exports.fetchData = async (req, res, next) => {
+  const warehouse_id = String(req.params.wh_id);
 
-    const warehouse_id = String(req.params.wh_id);
-
-    try { //get all items in same warehouse to get usage
+  try {
+    //get all items in same warehouse to get usage
 
         // req.query.category||req.query.page||req.query.length||req.query.zone
         if (Object.keys(req.query).length > 0) {
@@ -185,7 +185,10 @@ exports.fetchData = async (req, res, next) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 //* (2) If have any query params from fetchData
 exports.fetchFilterItems = async (req, res) => {
@@ -289,13 +292,18 @@ exports.fetchFilterItems = async (req, res) => {
             error: true,
             message: "Internal Server error"
         })
-
     }
-}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: true,
+      message: "Internal Server error",
+    });
+  }
+};
 
 //* Order section
 exports.createOrder = async (req, res) => {
-
     const { items, remarks } = req.body;
     const user_id = req.user.user_id;
     let new_order_id = null;
@@ -418,8 +426,8 @@ exports.deleteOrder = async (req, res) => {
 }
 
 exports.getCompletedOrder = async (req, res) => {
-    try {
-        const { rows } = await db.query(`
+  try {
+    const { rows } = await db.query(`
             SELECT order_id, create_dt, quantity, order_status, 
             create_by as ordered_by
             FROM orders WHERE order_status = 'Completed'
@@ -439,8 +447,8 @@ exports.getCompletedOrder = async (req, res) => {
 }
 
 exports.getCurrentOrder = async (req, res) => {
-    try {
-        const { rows } = await db.query(`
+  try {
+    const { rows } = await db.query(`
             SELECT order_id, create_dt, quantity, order_status, 
             create_by as ordered_by, progress_by
             FROM orders WHERE order_status != 'Completed'
@@ -464,6 +472,7 @@ exports.getCurrentOrder = async (req, res) => {
 }
 
 exports.getOrderDetail = async (req, res) => {
+  const order_id = String(req.params.order_id);
 
     const order_id = String(req.params.order_id);
 
@@ -477,11 +486,14 @@ exports.getOrderDetail = async (req, res) => {
             JOIN category c ON rm.item_cate_code = c.item_cate_code
             JOIN orders o ON o.order_id = ot.order_id
             WHERE ot.order_id = $1 GROUP BY wt.zone
-        `, [order_id])
+        `,
+      [order_id]
+    );
 
-        let zone = parseInt(req.query.zone || zones.rows[0].zone);
+    let zone = parseInt(req.query.zone || zones.rows[0].zone);
 
-        const items = await db.query(`
+    const items = await db.query(
+      `
             SELECT rm.item_code, c.cate_name as category, rm.length, 
             rm.create_dt, wt.zone
             FROM raw_materials rm
@@ -561,58 +573,55 @@ const positionsGrid = async (order_id, zone) => {
 
 //>>>>Order ID & Order ID trans
 genOrderID = (prev_id) => {
-    const prev_order = prev_id;
-    const prev_letter = prev_order.slice(0, 2)
-    const prev_num = parseInt(prev_order.slice(2));
-    const last_num = 9999999999;
-    let new_order = null
-    let new_num = null
-    let new_letter = null
-    if (prev_num === last_num) {
-        if ((prev_letter[0] === 'Z') && (prev_letter[1] === 'Z')) {
-            new_letter = 'AA';
-        }
-        else if (prev_letter[1] === 'Z') {
-            const new_num_letter0 = prev_letter[0].charCodeAt(0) + 1;
-            const new_letter0 = String.fromCharCode(new_num_letter0);
-            const new_letter1 = 'A'
-            new_letter = new_letter0 + new_letter1;
-
-        }
-        else {
-            const new_letter0 = prev_letter[0];
-            const new_num_letter1 = prev_letter[1].charCodeAt(0) + 1;
-            const new_letter1 = String.fromCharCode(new_num_letter1);
-            new_letter = new_letter0 + new_letter1;
-        }
-        new_num = '0000000000';
-        new_order = new_letter + new_num
-
+  const prev_order = prev_id;
+  const prev_letter = prev_order.slice(0, 2);
+  const prev_num = parseInt(prev_order.slice(2));
+  const last_num = 9999999999;
+  let new_order = null;
+  let new_num = null;
+  let new_letter = null;
+  if (prev_num === last_num) {
+    if (prev_letter[0] === "Z" && prev_letter[1] === "Z") {
+      new_letter = "AA";
+    } else if (prev_letter[1] === "Z") {
+      const new_num_letter0 = prev_letter[0].charCodeAt(0) + 1;
+      const new_letter0 = String.fromCharCode(new_num_letter0);
+      const new_letter1 = "A";
+      new_letter = new_letter0 + new_letter1;
     } else {
-        new_num = String(prev_num + 1);
-        new_order = prev_letter + new_num.padStart(10, "0")
+      const new_letter0 = prev_letter[0];
+      const new_num_letter1 = prev_letter[1].charCodeAt(0) + 1;
+      const new_letter1 = String.fromCharCode(new_num_letter1);
+      new_letter = new_letter0 + new_letter1;
     }
-    return new_order
-}
+    new_num = "0000000000";
+    new_order = new_letter + new_num;
+  } else {
+    new_num = String(prev_num + 1);
+    new_order = prev_letter + new_num.padStart(10, "0");
+  }
+  return new_order;
+};
 
 genOrderTrans = (order_id, items) => {
-    items.map((item, i) => {
-        // item["order_id_trans"] = order_id + "-" + String(i + 1).padStart(2, "0");
-        item["order_id_trans"] = uuidv4();
-        item["order_id"] = order_id;
-    })
-    const response = [{
-        items
-    }]
+  items.map((item, i) => {
+    // item["order_id_trans"] = order_id + "-" + String(i + 1).padStart(2, "0");
+    item["order_id_trans"] = uuidv4();
+    item["order_id"] = order_id;
+  });
+  const response = [
+    {
+      items,
+    },
+  ];
 
-    return response
-}
+  return response;
+};
 
 validate_order_id = (str) => {
-    const format = /^[A-Z]{2}\d{10}?$/;
-    //if valid return true
-    return format.test(str);
-}
+  const format = /^[A-Z]{2}\d{10}?$/;
+  //if valid return true
+  return format.test(str);
+};
 
 //===============================
-

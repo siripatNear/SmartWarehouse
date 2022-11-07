@@ -1,43 +1,109 @@
 import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
-import { Box, Grid, Heading, HStack, Spinner, VStack } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Button,
+  Center,
+  Grid,
+  Heading,
+  HStack,
+  Spinner,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 
 import BoxZone from "../components/BoxZone";
 import BoxAll from "../components/BoxAll";
-// import { onGetWarehouseDashboard } from "../api/data";
 import { isNil } from "lodash";
-import { useMutation, useQuery } from "@tanstack/react-query";
-// import { api, queryClient } from "../../lib/query";
+import { useQuery } from "@tanstack/react-query";
+import TablePickingList from "../components/TablePickingList";
+import CustomButton from "../components/CustomButton";
 
 const Dashboard = () => {
-  const { data, isLoading } = useQuery(["/warehouse/A"]);
-  console.log(data);
-
-  const { data:DataOverall } = useQuery(["/warehouse/A"]);
+  const [warehouse, setWarehouse] = useState({
+    value: "A",
+    label: "Warehouse A",
+  });
+  const [zone, setZone] = useState(null);
+  const [category, setCategory] = useState(null);
+  const { data } = useQuery([
+    `/warehouse/${warehouse.value}`,
+    {
+      zone: zone?.value,
+      category: category?.value,
+    },
+  ]);
 
   return (
     <>
-      {isLoading || isNil(data) ? (
-        <Spinner />
-      ) : (
-        <HStack paddingBottom={"32px"}>
-          <VStack w="70%">
-            <Search />
-            <Heading as="h1" alignSelf={"flex-start"} paddingLeft="20px">
-              Warehouse {data.warehouse}
-            </Heading>
+      <HStack paddingBottom={"32px"}>
+        <VStack w="70%">
+          <Search
+            warehouse={warehouse}
+            zone={zone}
+            category={category}
+            setWarehouse={setWarehouse}
+            setZone={setZone}
+            setCategory={setCategory}
+          />
+          {isNil(data) ? (
+            <Center mt="100px">
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+                alignItems
+              />
+            </Center>
+          ) : isNil(zone) && isNil(category) ? (
+            <>
+              <Heading as="h1" alignSelf={"flex-start"} paddingLeft="20px">
+                Warehouse {data.warehouse}
+              </Heading>
 
-            <Box paddingLeft={15}>
-              <Grid templateColumns="repeat(3, 2fr)" gap="32px">
-                <BoxZone warehouseData={data} />
-              </Grid>
-            </Box>
-          </VStack>
+              <Box paddingLeft={15}>
+                <Grid templateColumns="repeat(3, 2fr)" gap="32px">
+                  <BoxZone warehouseData={data} />
+                </Grid>
+              </Box>
+            </>
+          ) : (
+            <>
+              <HStack
+                paddingY="16px"
+                paddingLeft="32px"
+                paddingRight="16px"
+                justify="space-between"
+                width="100%"
+              >
+                <Heading as="h1">Zone {data.zone}</Heading>
+                <Button
+                  colorScheme="twitter"
+                  variant="outline"
+                  onClick={() => {
+                    setZone(null);
+                    setCategory(null);
+                  }}
+                >
+                  Show All
+                </Button>
+              </HStack>
+              <TablePickingList itemlists={data} />
+            </>
+          )}
+        </VStack>
+        {isNil(data) ? null : (
           <Box paddingLeft={"32px"}>
             <BoxAll data={data} />
           </Box>
-        </HStack>
-      )}
+        )}
+      </HStack>
     </>
   );
 };

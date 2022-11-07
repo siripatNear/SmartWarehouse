@@ -12,13 +12,13 @@ import Dataorder from "../assets/orderdetailmock.json";
 
 function OrderDetail() {
 
-    const { data: order, isLoading } = useQuery(["/order/FE008"]);
-    const { data: item_zone_1 } = useQuery(["/order/FE008?zone=1"]);
-    const { data: item_zone_2 } = useQuery(["/order/FE008?zone=2"]);
-    const { data: item_zone_3 } = useQuery(["/order/FE008?zone=3"]);
-    const { data: item_zone_4 } = useQuery(["/order/FE008?zone=4"]);
-    const { data: item_zone_5 } = useQuery(["/order/FE008?zone=5"]);
-    const { data: item_zone_6 } = useQuery(["/order/FE008?zone=6"]);
+    const { data: order, isLoading } = useQuery(["/order/KL004"]);
+    // const { data: item_zone_1 } = useQuery(["/order/KL004?zone=1"]);
+    // const { data: item_zone_2 } = useQuery(["/order/KL004?zone=2"]);
+    const { data: item_zone_3 } = useQuery(["/order/KL004?zone=3"]);
+    const { data: item_zone_4 } = useQuery(["/order/KL004?zone=4"]);
+    const { data: item_zone_5 } = useQuery(["/order/KL004?zone=5"]);
+    // const { data: item_zone_6 } = useQuery(["/order/KL004?zone=6"]);
 
     return (
         <>
@@ -68,33 +68,33 @@ function OrderDetail() {
                             <TabPanels>
                                 <TabPanel>
                                     1
-                                    <GridOrderDetail />
-                                    <TablePickingListInOrder itemlist={item_zone_1} />
+                                    {/* <GridOrderDetail itemlist={item_zone_1} /> */}
+                                    {/* <TablePickingListInOrder itemlist={item_zone_1} /> */}
                                 </TabPanel>
                                 <TabPanel>
                                     2
-                                    <GridOrderDetail />
-                                    <TablePickingListInOrder itemlist={item_zone_2} />
+                                    {/* <GridOrderDetail itemlist={item_zone_2} /> */}
+                                    {/* <TablePickingListInOrder itemlist={item_zone_2} /> */}
                                 </TabPanel>
                                 <TabPanel>
                                     3
-                                    <GridOrderDetail />
+                                    <GridOrderDetail itemlist={item_zone_3} />
                                     <TablePickingListInOrder itemlist={item_zone_3} />
                                 </TabPanel>
                                 <TabPanel>
                                     4
-                                    <GridOrderDetail />
+                                    <GridOrderDetail itemlist={item_zone_4} />
                                     <TablePickingListInOrder itemlist={item_zone_4} />
                                 </TabPanel>
                                 <TabPanel>
                                     5
-                                    <GridOrderDetail />
+                                    <GridOrderDetail itemlist={item_zone_5} />
                                     <TablePickingListInOrder itemlist={item_zone_5} />
                                 </TabPanel>
                                 <TabPanel>
                                     6
-                                    <GridOrderDetail />
-                                    <TablePickingListInOrder itemlist={item_zone_6} />
+                                    {/* <GridOrderDetail itemlist={item_zone_6} /> */}
+                                    {/* <TablePickingListInOrder itemlist={item_zone_6} /> */}
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

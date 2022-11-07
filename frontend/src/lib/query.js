@@ -7,7 +7,7 @@ export const api = axios.create({
 });
 
 const defaultQueryFn = async ({ queryKey }) => {
-  const { data } = await api.get(`${queryKey[0]}`);
+  const { data } = await api.get(`${queryKey[0]}`, { params: queryKey[1] });
   return data;
 };
 

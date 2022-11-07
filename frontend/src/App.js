@@ -35,9 +35,10 @@ import NavbarOperator from "./components/NavbarOperator";
 import NavbarAdmin from "./components/NavbarAdmin";
 import { useUserStore } from "./store/user";
 
+// Operator
 import Dashboard from "./pages/Dashboard";
 import PickingList from "./pages/Operator/PickingList";
-import BoxZone from "./components/BoxZone";
+import ConfirmPicking from "./pages/Operator/ConfirmPicking";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
 
@@ -84,29 +85,28 @@ const App = () => {
 
           {/* //*Admin */}
           <Route path="/add-user" element={<AddUser />} />
+          <Route path="/edit-user" element={<AddUser />} />
           <Route path="/manage-users" element={<UserManage />} />
 
           {/* //* Operator */}
           <Route path="/order-list" element={<OrderList />} />
           <Route path="/order-detail" element={<OrderDetail />} />
           <Route path="/picking-list" element={<PickingList />} />
+          <Route path="/confirm-picking" element={<ConfirmPicking />} />
           <Route path="/history" element={<History />} />
 
           {/* //* Forklift Put away */}
+          <Route path="/scan-tag" element={<ScanTag />} />
           <Route path="/put-away" element={<PutAwayItem />} />
           <Route path="/update-mat" element={<UpdateMat />} />
 
           {/* //*Forklift Picking */}
           <Route path="/picking-order-list" element={<PickingOrderList />} />
-          <Route path="/picking-order-detail" element={<PickingOrderDetail />} />
-
-
+          <Route
+            path="/picking-order-detail"
+            element={<PickingOrderDetail />}
+          />
         </Route>
-
-        {/* //?test component */}
-
-        <Route path="/ScanTag" element={<ScanTag />} />
-        <Route path="/boxzone" element={<BoxZone />} />
 
         <Route element={<RestrictedRoutes />}>
           {/* //*Outlet  */}
