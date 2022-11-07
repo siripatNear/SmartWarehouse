@@ -234,7 +234,7 @@ exports.deleteUser = async (req, res) => {
         user_id: user_id,
       });
     }
-    throw new Error("Post not found");
+    throw new Error("User_id was not found");
   } catch (error) {
     return res.status(500).send(error.message);
   }

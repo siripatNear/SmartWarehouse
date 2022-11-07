@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             }),
             OrderTrans.belongsTo(models.RawMaterials, {
                 foreignKey: 'item_code',
-                // as: 'itemCode',
+                as: 'order',
                 onDelete: 'CASCADE',
             })
         }

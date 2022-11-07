@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       }),
       WarehouseTrans.hasOne(models.RawMaterials, {
         foreignKey: 'position_code',
-        // as: 'positionCode',
+        as: 'item',
         onDelete: 'CASCADE',
       })
     }

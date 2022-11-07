@@ -47,7 +47,7 @@ router.get(
   "/history-order",
   getCompletedOrder
 );
-router.delete("/order/:order_id", deleteOrder);
+router.delete("/order/:order_id", userAuth, deleteOrder);
 router.get(
   "/order/:order_id",
   userAuth,

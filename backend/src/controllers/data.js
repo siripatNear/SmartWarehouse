@@ -300,47 +300,6 @@ exports.createOrder = async (req, res) => {
     const user_id = req.user.user_id;
     let new_order_id = null;
     try {
-        /*
-        const prev_order = await db.query(`
-            SELECT order_id FROM orders 
-            ORDER BY create_dt DESC 
-            LIMIT 1
-            `)
-
-        const prev_order_id = prev_order.rows[0].order_id
-
-        console.log("prev_order: " + prev_order_id);
-
-        if (!validate_order_id(prev_order_id)) {
-            //if not find the correct format from previous order, create new
-            new_order_id = 'AA0000000000'
-        } else {
-            new_order_id = genOrderID(prev_order_id);
-        }
-
-        genOrderTrans(new_order_id, items)
-
-        //save to database
-        await db.query(`
-            INSERT INTO orders(order_id, order_remark, quantity, create_by)
-            VALUES ($1,$2,$3,$4)`, [new_order_id, remarks, items.length, user_id])
-
-        items.map(async (item) => {
-            //save order_transaction to database
-            await db.query(`
-            INSERT INTO order_transaction(order_id_trans, item_code, order_id)
-            VALUES ($1,$2,$3)`, [item.order_id_trans, item.item_code, item.order_id])
-
-            let modify_dt = moment().format('YYYY-MM-DD HH:mm:ss.sss');
-            //update item_status in raw_materials
-            await db.query(`
-            UPDATE  raw_materials SET item_status = 'in progress'
-            , modify_by = $1, modify_dt = $2
-            WHERE item_code = $3
-            `, [user_id, modify_dt, item.item_code])
-
-        })
-        */
 
         //* 1. Create Order ( run from previous order_id )
 
@@ -374,14 +333,12 @@ exports.createOrder = async (req, res) => {
         await models.Orders.create(data)
 
         //* 3. Create order transaction
-        console.log(3)
         items.forEach(async (item) => {
             //Add each item to database
             await models.OrderTrans.create(item)
         })
 
         //* 4. Update raw material status, modify_dt and modify_by
-        console.log(4)
         items.forEach(async (item) => {
             let data = {
                 item_status: 'in progress',
@@ -389,7 +346,7 @@ exports.createOrder = async (req, res) => {
                 modify_dt: new Date()
             }
             console.log(data)
-            await models.RawMaterials.update(data,{
+            await models.RawMaterials.update(data, {
                 where: {
                     item_code: item.item_code
                 }
@@ -410,31 +367,47 @@ exports.createOrder = async (req, res) => {
 
 exports.deleteOrder = async (req, res) => {
     const order_id = String(req.params.order_id);
+    const user_id = String(req.user.user_id);
     try {
-        //UPDATE item_status
-        //? item_status after delete order should be 'used'?
-        //? create new column for used/new
-
-        await db.query(`
-            UPDATE raw_materials rm SET item_status = 'stock in'
-            FROM order_transaction ot
-            WHERE rm.item_code = ot.item_code
-            AND order_id = $1
-            `, [order_id])
-        //DELETE from order_transaction before in orders
-        await db.query(`
-            DELETE FROM order_transaction WHERE order_id = $1
-            `, [order_id])
-        await db.query(`
-            DELETE FROM orders WHERE order_id = $1
-            `, [order_id])
-
-        return res.status(201).json({
-            success: true,
-            message: 'Delete order was successful',
-            order_id: order_id
+        //* item_status after delete order wil be 'used'?
+        //* 1. update item status to 'Used' and update modify_dt, modify_by
+        const update_data = {
+            item_status: 'used',
+            modify_by: user_id,
+            modify_dt: new Date()
+        }
+        await models.RawMaterials.update(update_data, {
+            where: {},
+            include: {
+                model: models.OrderTrans,
+                as: 'orders',
+                attributes: [],
+                where: { order_id: order_id }
+            },
+            raw: true
+        })
+        
+        //* 2. Delete order_transaction where order_id = req.params.order_id
+        await models.OrderTrans.destroy({
+            where: {
+                order_id: order_id
+            }
         })
 
+        //* 3. Delete orders where order_id = req.params.order_id
+        const deleted = await models.Orders.destroy({
+            where: {
+                order_id: order_id
+            }
+        })
+
+        if (deleted) {
+            return res.status(201).json({
+                success: true,
+                message: `Order was deleted by ${user_id}`,
+            });
+        }
+        throw new Error("Order was not found");
 
     } catch (error) {
         console.log(error.message);
@@ -451,8 +424,7 @@ exports.getCompletedOrder = async (req, res) => {
             create_by as ordered_by
             FROM orders WHERE order_status = 'Completed'
             `);
-
-        return res.status(500).json({
+        return res.status(200).json({
             message: 'you have permission to access',
             order_list: rows
         })
@@ -496,6 +468,7 @@ exports.getOrderDetail = async (req, res) => {
     const order_id = String(req.params.order_id);
 
     try {
+        
         const zones = await db.query(`
             SELECT wt.zone 
             FROM raw_materials rm
@@ -519,9 +492,9 @@ exports.getOrderDetail = async (req, res) => {
             WHERE ot.order_id = $1 
             AND wt.zone = $2
         ` , [order_id, zone])
+        
 
         const grid = await positionsGrid(order_id, zone)
-
         return res.status(200).json({
             warehouse_id: grid.warehouse_id,
             zones: zones.rows,
