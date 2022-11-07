@@ -10,12 +10,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       WarehouseTrans.belongsTo(models.Warehouse, {
         foreignKey: 'warehouse_id',
+        targetKey: 'warehouse_id',
         // as: 'warehouseId',
         onDelete: 'CASCADE',
       }),
-      WarehouseTrans.hasOne(models.RawMaterials, {
+      WarehouseTrans.belongsTo(models.RawMaterials, {
         foreignKey: 'position_code',
-        as: 'item',
+        targetKey: 'position_code',
         onDelete: 'CASCADE',
       })
     }

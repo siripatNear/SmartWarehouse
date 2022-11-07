@@ -8,19 +8,20 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            RawMaterials.belongsTo(models.WarehouseTrans, {
+            RawMaterials.hasOne(models.WarehouseTrans, {
                 foreignKey: 'position_code',
-                as: 'item',
+                sourceKey: 'position_code',
                 onDelete: 'CASCADE',
             }),
-            RawMaterials.belongsTo(models.Category, {
+            RawMaterials.hasOne(models.Category, {
                 foreignKey: 'item_cate_code',
+                sourceKey: 'item_cate_code',
                 as: 'category',
                 onDelete: 'CASCADE',
             }),
-            RawMaterials.hasOne(models.OrderTrans, {
+            RawMaterials.belongsTo(models.OrderTrans, {
                 foreignKey: 'item_code',
-                as: 'orders',
+                targetKey: 'item_code',
                 onDelete: 'CASCADE',
             })
         }

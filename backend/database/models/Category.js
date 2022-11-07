@@ -8,9 +8,10 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Category.hasMany(models.RawMaterials, {
+            Category.belongsTo(models.RawMaterials, {
                 foreignKey: 'item_cate_code',
                 as: 'category',
+                targetKey: 'item_cate_code',
                 onDelete: 'CASCADE',
             })
         }

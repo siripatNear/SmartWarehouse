@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             Orders.hasMany(models.OrderTrans, {
                 foreignKey: 'order_id',
                 // as: 'orderIdTrans',
+                targetKey: 'order_id',
                 onDelete: 'CASCADE',
             });
         }
