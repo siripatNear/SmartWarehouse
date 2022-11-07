@@ -290,13 +290,6 @@ exports.fetchFilterItems = async (req, res) => {
             message: "Internal Server error"
         })
     }
-} catch (error) {
-    console.log(error);
-    res.status(500).json({
-        error: true,
-        message: "Internal Server error",
-    });
-}
 };
 
 //* Order section
@@ -469,8 +462,6 @@ exports.getCurrentOrder = async (req, res) => {
 }
 
 exports.getOrderDetail = async (req, res) => {
-    const order_id = String(req.params.order_id);
-
     const order_id = String(req.params.order_id);
 
     try {
