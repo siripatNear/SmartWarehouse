@@ -128,7 +128,6 @@ const overallWarehouse = async (wh_id) => {
         );
 
         const response = {
-            success: true,
             warehouse: wh_id,
             positions: overall.rows[0].total_positions,
             usage: overall.rows[0].usage,
@@ -253,6 +252,7 @@ exports.fetchFilterItems = async (req, res) => {
             include: [
                 {
                     model: models.WarehouseTrans,
+                    as: 'item',
                     attributes: [],
                     where: {
                         warehouse_id: warehouse_id,
@@ -277,11 +277,24 @@ exports.fetchFilterItems = async (req, res) => {
             raw: true
         });
 
-        res.status(500).json({
-            success: true,
-            message: "You have permission to access this",
-            items
-        })
+        if (zone.length === 1 ){
+            const summary = await getSumByZone(warehouse_id,zone[0])
+            res.status(200).json({
+                success: true,
+                message: "You have permission to access this",
+                summary,
+                items
+            })
+        } else{
+            const summary = await overallWarehouse(warehouse_id);
+            res.status(200).json({
+                success: true,
+                message: "You have permission to access this",
+                summary,
+                items
+            })
+        }
+
 
     } catch (error) {
         console.log(error);
