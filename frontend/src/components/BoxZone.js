@@ -13,7 +13,6 @@ function BoxZone({ warehouseData }) {
     <>
       {warehouseData.summary.map((v) => {
         const percentage = (Number(v.usage) / Number(v.total_positions)) * 100;
-        console.log(percentage);
         return (
           <Box
             bg="#a3d9fb"

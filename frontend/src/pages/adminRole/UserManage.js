@@ -16,6 +16,7 @@ import {
   FormControl,
   Input,
   Button,
+  Center,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
@@ -45,6 +46,7 @@ const UserManage = () => {
   const [searchText, setSearchText] = useState("");
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  //* filter
   const [filteredData, setFilteredData] = useState(null);
 
   //* get data from api
@@ -126,45 +128,52 @@ const UserManage = () => {
         </VStack>
       />
       {isLoading || isNil(data) || isNil(filteredData) ? (
-        <Spinner />
+        <Center mt="100px">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+            alignItems
+          />
+        </Center>
       ) : (
         <Flex direction={"column"} alignItems={"center"}>
           <HStack width={"100%"} marginTop="5">
             <Heading as="h1" minWidth={"max-content"} marginX={8}>
               User Management
             </Heading>
-            <>
-              <HStack flex={1} paddingRight={4}>
-                <FormControl width={"30%"} p={2} id="rolesearch">
-                  <Select
-                    isClearable
-                    value={searchRole}
-                    onChange={setSearchRole}
-                    placeholder="Role"
-                    closeMenuOnSelect={true}
-                    options={roleData}
-                  />
-                </FormControl>
-                <FormControl width={"70%"} p={1}>
-                  <Input
-                    type="text"
-                    placeholder="Search User ID or Name..."
-                    value={searchText}
-                    onChange={(v) => setSearchText(v.target.value)}
-                  />
-                </FormControl>
-              </HStack>
-              <HStack>
-                <Button
-                  marginRight={5}
-                  colorScheme="whatsapp"
-                  as={Link}
-                  to="/add-user"
-                >
-                  ADD USER
-                </Button>
-              </HStack>
-            </>
+            <HStack flex={1} paddingRight={4}>
+              <FormControl width={"30%"} p={2} id="rolesearch">
+                <Select
+                  isClearable
+                  value={searchRole}
+                  onChange={setSearchRole}
+                  placeholder="Role"
+                  closeMenuOnSelect={true}
+                  options={roleData}
+                />
+              </FormControl>
+              <FormControl width={"70%"} p={1}>
+                <Input
+                  type="text"
+                  placeholder="Search User ID or Name..."
+                  value={searchText}
+                  onChange={(v) => setSearchText(v.target.value)}
+                />
+              </FormControl>
+            </HStack>
+            <HStack>
+              <Button
+                marginRight={5}
+                colorScheme="whatsapp"
+                as={Link}
+                to="/add-user"
+              >
+                ADD USER
+              </Button>
+            </HStack>
           </HStack>
 
           <VStack width={"100%"} marginTop="5">
@@ -202,7 +211,7 @@ const UserManage = () => {
                           borderRadius="5px"
                           fontSize="15px"
                           fontWeight="medium"
-                          onOpen={() => navigate("/add-user", { state: User })}
+                          onOpen={() => navigate("/edit-user", { state: User })}
                         />
                         <CustomButton
                           marginX={4}

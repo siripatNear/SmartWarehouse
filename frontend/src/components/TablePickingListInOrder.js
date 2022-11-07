@@ -7,9 +7,12 @@ import {
   Th,
   Td,
   TableContainer,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
 
 import * as dayjs from "dayjs";
+import { isNil } from "lodash";
 
 export const header = [
   { value: "item_code", label: "Item Code" },
@@ -40,41 +43,56 @@ export const header = [
 // };
 
 const TablePickingList = (props) => {
-  const { itemlist } = props
+  const { itemlist, isLoading } = props
 
   return (
-    <div className="ConTablePickingListInOrder">
-      <TableContainer width="70%">
-        <Table size="md">
-          <Thead>
-            <Tr backgroundColor="#A3D9FB">
-              {header.map((head) => (
-                <Th fontSize={16} key={head.value}>
-                  {head.label}
-                </Th>
-              ))}
-            </Tr>
-          </Thead>
+    <>
+      {isLoading || isNil(itemlist) ? (
+        <Center mt='100px'>
+          <Spinner
+            thickness='4px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color='blue.500'
+            size='xl'
+            alignItems
+          />
+        </Center>
+      ) : (
+        <div className="ConTablePickingListInOrder">
+          <TableContainer width="70%">
+            <Table size="md">
+              <Thead>
+                <Tr backgroundColor="#A3D9FB">
+                  {header.map((head) => (
+                    <Th fontSize={16} key={head.value}>
+                      {head.label}
+                    </Th>
+                  ))}
+                </Tr>
+              </Thead>
 
 
-          <Tbody >
-            {itemlist.items.map((item) => (
+              <Tbody >
+                {itemlist.items.map((item) => (
 
-              <Tr
-                _hover={{
-                  backgroundColor: "#ECF7FE",
-                }}
-              >
-                <Td>{item.item_code}</Td>
-                <Td>{item.category}</Td>
-                <Td>{item.length}</Td>
-                <Td>{dayjs(item.create_dt).format('DD / MM / YYYY')}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </div>
+                  <Tr
+                    _hover={{
+                      backgroundColor: "#ECF7FE",
+                    }}
+                  >
+                    <Td>{item.item_code}</Td>
+                    <Td>{item.category}</Td>
+                    <Td>{item.length}</Td>
+                    <Td>{dayjs(item.create_dt).format('DD / MM / YYYY')}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </div>
+      )}
+    </>
   );
 };
 

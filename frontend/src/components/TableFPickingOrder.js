@@ -14,7 +14,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import OrderForklift from "../assets/OrderForklift.json";
 import * as dayjs from "dayjs";
 import CustomButton from "./CustomButton";
 import { CustomAlertDialog } from "./AlertDialog";
@@ -58,7 +57,9 @@ const mapStatus = (order_status) => {
   }
 };
 
-const TableFPickingList = () => {
+const TableFPickingList = (props) => {
+
+  const { orders } = props
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -97,6 +98,7 @@ const TableFPickingList = () => {
           <Text fontSize="xl">Order by : {object.ordered_by}</Text>
         </VStack>
       />
+      
       <TableContainer width="90%">
         <Table size="md">
           <Thead>
@@ -110,36 +112,36 @@ const TableFPickingList = () => {
           </Thead>
 
           <Tbody>
-            {OrderForklift.map((d) => (
+            {orders.order_list.map((order) => (
               <Tr
                 _hover={{
                   backgroundColor: "#ECF7FE",
                 }}
-                key={d.order_id}
+                key={order.order_id}
               >
-                <Td>{d.order_id}</Td>
-                <Td>{dayjs(d.create_dt).format("DD / MM / YYYY")}</Td>
-                <Td>{dayjs(d.create_dt).format("HH : mm")}</Td>
-                <Td>{d.quantity}</Td>
-                <Td>{mapStatus(d.order_status)}</Td>
-                <Td>{d.ordered_by}</Td>
+                <Td>{order.order_id}</Td>
+                <Td>{dayjs(order.create_dt).format("DD / MM / YYYY")}</Td>
+                <Td>{dayjs(order.create_dt).format("HH : mm")}</Td>
+                <Td>{order.quantity}</Td>
+                <Td>{mapStatus(order.order_status)}</Td>
+                <Td>{order.ordered_by}</Td>
                 <Td textAlign={"center"}>
                   <CustomButton
                     marginX={4}
                     onOpen={() => {
-                      setObject(d);
+                      setObject(order);
                       onOpen();
                     }}
                     onClose={onClose}
                     buttonName={
-                      d.order_status === "Not start" ? "Start" : "Resume"
+                      order.order_status === "Not start" ? "Start" : "Resume"
                     }
                     buttonColor={
-                      d.order_status === "Not start" ? "blue" : "yellow"
+                      order.order_status === "Not start" ? "blue" : "yellow"
                     }
                     buttonSize="sm"
                     HoverColor={
-                      d.order_status === "Not start"
+                      order.order_status === "Not start"
                         ? "twitter.300"
                         : "yellow.300"
                     }
