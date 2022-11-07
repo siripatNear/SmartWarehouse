@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             Orders.hasMany(models.OrderTrans, {
-                foreignKey: 'order_id_trans',
-                as: 'order_id_trans',
+                foreignKey: 'order_id',
+                // as: 'orderIdTrans',
                 onDelete: 'CASCADE',
             });
         }
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         modelName: 'Orders',
         tableName: 'orders',
         createdAt: 'create_dt',
-        updatedAt: 'modify_by',
+        updatedAt: 'modify_dt',
         underscore: true,
     },
     );
