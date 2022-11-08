@@ -1,6 +1,5 @@
-const db = require("../db");
-const { v4: uuidv4 } = require("uuid");
-var moment = require("moment");
+const db = require('../db');
+const { v4: uuidv4 } = require('uuid');
 const models = require("../../database/models");
 const { Sequelize } = require("../../database/models");
 const { Op } = require("sequelize");
@@ -32,7 +31,6 @@ exports.getForm = async (req, res, next) => {
 //* for all dropdown data API
 exports.dropDownList = async (req, res) => {
   try {
-    /*
         const warehouse = await db.query(`
             SELECT warehouse_id,warehouse_desc FROM warehouse`)
         const zone = await db.query(`
@@ -41,38 +39,22 @@ exports.dropDownList = async (req, res) => {
         const category = await db.query(`
             SELECT item_cate_code,cate_name FROM category`)
         const role = await db.query(`SELECT role FROM users GROUP BY role`)
-        */
-    const warehouse = await models.Warehouse.findAll({
-      attributes: ["warehouse_id", "warehouse_desc"],
-    });
-    const zone = await models.WarehouseTrans.findAll({
-      attributes: ["zone"],
-      group: "zone",
-      order: [["zone"]],
-    });
-    const category = await models.Category.findAll({
-      attributes: ["item_cate_code", "cate_name"],
-    });
-    const role = await models.Users.findAll({
-      attributes: ["role"],
-      group: "role",
-      order: [["role"]],
-    });
 
-    return res.status(200).json({
-      success: true,
-      warehouse: warehouse,
-      zone: zone,
-      category: category,
-      role: role,
-    });
-  } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+        return res.status(200).json({
+            success: true,
+            warehouse: warehouse,
+            zone: zone,
+            category: category,
+            role: role
+        })
+
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
 
 //* <<<< Dashboard data
 const getSumByZone = async (wh_id, zone_id) => {
@@ -208,214 +190,207 @@ exports.fetchFilterItems = async (req, res) => {
     allZoneJson.map((z) => {
       zoneList.push(Object.values(z.dataValues)[0]);
     });
-
     // Filtering
     category === "All"
-      ? (category = categoryList)
-      : (category = [req.query.category]);
-    zone === "All" ? (zone = zoneList) : (zone = [req.query.zone]);
-
-    console.log("category: " + category);
-    console.log("zone: " + zone);
+        ? (category = categoryList)
+        : (category = [req.query.category]);
+    zone === "All"
+        ? (zone = zoneList)
+        : (zone = [req.query.zone]);
 
     const items = await models.RawMaterials.findAll({
-      attributes: [
-        "item_code",
-        "item_cate_code",
-        [Sequelize.col("category.cate_name"), "category"],
-        "sub_cate_code",
-        "length",
-        "create_dt",
-        "item_status",
-      ],
-      where: {
-        item_status: {
-          [Op.in]: ["used", "stock in"],
-        },
-        sub_cate_code: {
-          [Op.like]: "%" + search + "%",
-        },
-      },
-      include: [
-        {
-          model: models.WarehouseTrans,
-          attributes: [],
-          where: {
-            warehouse_id: warehouse_id,
-            zone: {
-              [Op.in]: zone,
+        attributes: [
+            'item_code',
+            'item_cate_code',
+            [Sequelize.col('category.cate_name'), 'category'],
+            'sub_cate_code',
+            'length',
+            'create_dt',
+            'item_status'
+        ],
+        where: {
+            item_status: {
+                [Op.in]: ['used', 'stock in']
             },
-            include: [
-                {
-                    model: models.WarehouseTrans,
-                    as: 'item',
-                    attributes: [],
-                    where: {
-                        warehouse_id: warehouse_id,
-                        zone: {
-                            [Op.in]: zone
-                        }
+            sub_cate_code: {
+                [Op.like]: '%' + search + '%'
+            }
+        },
+        include: [
+            {
+                model: models.WarehouseTrans,
+                attributes: [],
+                where: {
+                    warehouse_id: warehouse_id,
+                    zone: {
+                        [Op.in]: zone
                     }
-                },
-                {
-                    model: models.Category,
-                    as: 'category',
-                    attributes: [],
-                    where: {
-                        item_cate_code: {
-                            [Op.in]: category
-                        }
+                }
+            },
+            {
+                model: models.Category,
+                as: 'category',
+                attributes: [],
+                where: {
+                    item_cate_code: {
+                        [Op.in]: category
                     }
-                },
-            ],
-            offset: page,
-            limit: limit,
-            raw: true
-        });
+                }
+            },
+        ],
+        offset: page,
+        limit: limit,
+        raw: true
+    });
 
-        if (zone.length === 1 ){
-            const summary = await getSumByZone(warehouse_id,zone[0])
-            res.status(200).json({
-                success: true,
-                message: "You have permission to access this",
-                summary,
-                items
-            })
-        } else{
-            const summary = await overallWarehouse(warehouse_id);
-            res.status(200).json({
-                success: true,
-                message: "You have permission to access this",
-                summary,
-                items
-            })
-        }
-
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            error: true,
-            message: "Internal Server error"
+    if (zone.length === 1 ){
+        const summary = await getSumByZone(warehouse_id,zone[0])
+        res.status(200).json({
+            success: true,
+            message: "You have permission to access",
+            summary,
+            items
+        })
+    } else{
+        const summary = await overallWarehouse(warehouse_id);
+        res.status(200).json({
+            success: true,
+            message: "You have permission to access",
+            summary,
+            items
         })
     }
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          error: true,
+          message: "Internal Server error"
+      })
+  }
 };
 
 //* Order section
 exports.createOrder = async (req, res) => {
-  const { items, remarks } = req.body;
-  const user_id = req.user.user_id;
-  let new_order_id = null;
-  try {
-    //* 1. Create Order ( run from previous order_id )
+    const { items, remarks } = req.body;
+    const user_id = req.user.user_id;
+    let new_order_id = null;
+    try {
 
-    const prev_order = await models.Orders.findAll({
-      attributes: ["order_id"],
-      order: [["create_dt", "DESC"]],
-      limit: 1,
-    });
+        //* 1. Create Order ( run from previous order_id )
 
-    const prev_order_id = prev_order[0].dataValues["order_id"];
-    console.log("prev_order: " + prev_order_id);
+        const prev_order = await models.Orders.findAll({
+            attributes: ['order_id'],
+            order: [['create_dt', 'DESC'],],
+            limit: 1
+        })
 
-    if (!validate_order_id(prev_order_id)) {
-      //if not find the correct format from previous order, create the first one
-      new_order_id = "AA0000000000";
-    } else {
-      new_order_id = genOrderID(prev_order_id);
+        let prev_order_id = null;
+
+        if(prev_order.length){
+            let prev_order_id = prev_order[0].dataValues['order_id'];
+        }
+
+        console.log("prev_order: " + prev_order_id);
+
+        if (!validate_order_id(prev_order_id)) {
+            //if not find the correct format from previous order, create the first one
+            new_order_id = 'AA0000000000'
+
+        } else {
+            new_order_id = genOrderID(prev_order_id);
+        }
+
+        genOrderTrans(new_order_id, items)
+
+        //* 2. Add new order to database
+        const data = {
+            order_id: new_order_id,
+            order_status: 'Not started',
+            order_remark: remarks,
+            quantity: items.length,
+            create_by: user_id,
+        };
+        await models.Orders.create(data)
+
+        //* 3. Create order transaction
+        items.forEach(async (item) => {
+            //Add each item to database
+            await models.OrderTrans.create(item)
+        })
+
+        //* 4. Update raw material status, modify_dt and modify_by
+        items.forEach(async (item) => {
+            let data = {
+                item_status: 'In progress',
+                modify_by: user_id,
+                modify_dt: new Date()
+            }
+            console.log(data)
+            await models.RawMaterials.update(data, {
+                where: {
+                    item_code: item.item_code
+                }
+            })
+        })
+
+
+        return res.status(201).json({
+            success: true,
+            message: `Create order: ${new_order_id} was successful`,
+        })
+
+
+    } catch (error) {
+        console.log(error.message);
     }
-
-    genOrderTrans(new_order_id, items);
-
-    //* 2. Add new order to database
-    const data = {
-      order_id: new_order_id,
-      order_status: "Not started",
-      order_remark: remarks,
-      quantity: items.length,
-      create_by: user_id,
-    };
-    await models.Orders.create(data);
-
-    //* 3. Create order transaction
-    items.forEach(async (item) => {
-      //Add each item to database
-      await models.OrderTrans.create(item);
-    });
-
-    //* 4. Update raw material status, modify_dt and modify_by
-    items.forEach(async (item) => {
-      let data = {
-        item_status: "in progress",
-        modify_by: user_id,
-        modify_dt: new Date(),
-      };
-      console.log(data);
-      await models.RawMaterials.update(data, {
-        where: {
-          item_code: item.item_code,
-        },
-      });
-    });
-
-    return res.status(201).json({
-      success: true,
-      message: `Create order: ${new_order_id} was successful`,
-    });
-  } catch (error) {
-    console.log(error.message);
-  }
 };
 
 exports.deleteOrder = async (req, res) => {
   const order_id = String(req.params.order_id);
-  const user_id = String(req.user.user_id);
-  try {
-    //* item_status after delete order wil be 'used'?
-    //* 1. update item status to 'Used' and update modify_dt, modify_by
-    const update_data = {
-      item_status: "used",
-      modify_by: user_id,
-      modify_dt: new Date(),
-    };
-    await models.RawMaterials.update(update_data, {
-      where: {},
-      include: {
-        model: models.OrderTrans,
-        as: "orders",
-        attributes: [],
-        where: { order_id: order_id },
-      },
-      raw: true,
-    });
+      const user_id = String(req.user.user_id);
+      try {
+          //* item_status after delete order wil be 'used'
+          //* 1. update item status to 'Used' and update modify_dt, modify_by
 
-    //* 2. Delete order_transaction where order_id = req.params.order_id
-    await models.OrderTrans.destroy({
-      where: {
-        order_id: order_id,
-      },
-    });
+          const modify_by = user_id
+          const modify_dt = new Date()
+          await db.query(`
+          UPDATE raw_materials rm SET item_status = 'used',
+          modify_by = $1, modify_dt = $2
+          FROM order_transaction ot
+          WHERE rm.item_code = ot.item_code
+          AND order_id = $3
+          `,[modify_by,modify_dt,order_id])
 
-    //* 3. Delete orders where order_id = req.params.order_id
-    const deleted = await models.Orders.destroy({
-      where: {
-        order_id: order_id,
-      },
-    });
+          //* 2. Delete order_transaction where order_id = req.params.order_id
 
-    if (deleted) {
-      return res.status(201).json({
-        success: true,
-        message: `Order was deleted by ${user_id}`,
-      });
-    }
-    throw new Error("Order was not found");
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
+          await models.OrderTrans.destroy({
+              where: {
+                  order_id: order_id
+              }
+          })
+
+          //* 3. Delete orders where order_id = req.params.order_id
+          const deleted = await models.Orders.destroy({
+              where: {
+                  order_id: order_id
+              }
+          })
+
+          if (deleted) {
+              return res.status(201).json({
+                  success: true,
+                  message: `Order was deleted by ${user_id}`,
+              });
+          }
+          throw new Error("Order was not found");
+
+      } catch (error) {
+          console.log(error.message);
+          return res.status(500).json({
+              error: error.message,
+          })
+      }
 };
 
 exports.getCompletedOrder = async (req, res) => {
@@ -561,6 +536,30 @@ const positionsGrid = async (order_id, zone) => {
     console.log(error.message);
   }
 };
+
+// GET summary of each category for Admin
+exports.getStock = async (req, res) => {
+    try {
+        const cate = await db.query(`
+            SELECT c.cate_name, COUNT(*)
+            FROM category c
+            JOIN raw_materials r ON c.item_cate_code = r.item_cate_code
+            GROUP BY c.cate_name
+        `)
+        return res.status(200).json({ 
+            success: true,
+            message: 'You have permission to access',
+            category: cate            
+
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            message: "Internal Server error"
+        })
+    }
+}
 
 //>>>>Order ID & Order ID trans
 genOrderID = (prev_id) => {

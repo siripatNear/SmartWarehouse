@@ -54,9 +54,11 @@ const RestrictedRoutes = (role) => {
   const { isAuth } = useSelector((state) => state.auth);
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
+  // if logged in with Forklift role -> go to picking-order-list page.
 
-  // return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
-  return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
+  if (role === "Forklift")
+    return <>{!isAuth ? <Outlet /> : <Navigate to="/picking-order-list" />}</>;
+  else return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
 };
 
 const selectNavbar = (role) => {
@@ -106,7 +108,7 @@ const App = () => {
           />
         </Route>
 
-        <Route element={<RestrictedRoutes />}>
+        <Route element={RestrictedRoutes(user?.role)}>
           {/* //*Outlet  */}
           <Route path="/login" element={<LogIn />} />
         </Route>
