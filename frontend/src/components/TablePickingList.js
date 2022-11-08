@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   Thead,
@@ -15,6 +16,7 @@ import {
 import * as dayjs from "dayjs";
 import _, { isEmpty } from "lodash";
 import CustomButton from "./CustomButton";
+// import TablePickingListConfirm from "./TablePickingListConfirm";
 
 export const header = [
   { value: "checkbox", label: " " },
@@ -98,9 +100,12 @@ const mapStatus = (status) => {
 };
 
 const TablePickingList = (props) => {
-  const { itemlists } = props;
-  const [ItemState, setItemState] = useState([]);
+  const { itemlists, warehouse } = props;
+  const [itemState, setItemState] = useState([]);
   const [selectedItem, setSelectedItem] = useState([]);
+  const navigate = useNavigate();
+
+  // console.log(warehouse);
 
   useEffect(() => {
     setItemState(
@@ -119,16 +124,16 @@ const TablePickingList = (props) => {
 
   useEffect(() => {
     console.log(
-      _(ItemState)
+      _(itemState)
         .filter((v) => v.select === true)
         .value()
     );
     setSelectedItem(
-      _(ItemState)
+      _(itemState)
         .filter((v) => v.select === true)
         .value()
     );
-  }, [ItemState]);
+  }, [itemState]);
 
   const toast = useToast();
 
@@ -147,7 +152,7 @@ const TablePickingList = (props) => {
           </Thead>
 
           <Tbody>
-            {ItemState.map((item) => (
+            {itemState.map((item) => (
               <Tr
                 _hover={{
                   backgroundColor: "#ECF7FE",
@@ -159,7 +164,7 @@ const TablePickingList = (props) => {
                     onChange={(event) => {
                       let checked = event.target.checked;
                       setItemState(
-                        ItemState.map((data) => {
+                        itemState.map((data) => {
                           if (item.item_code === data.item_code) {
                             data.select = checked;
                           }
@@ -201,8 +206,10 @@ const TablePickingList = (props) => {
                 status: "error",
                 duration: 3000,
                 isClosable: true,
-              });
-            }
+              })
+            } else {
+              navigate("/confirm-picking", { state: { selectedItem: selectedItem, warehouse: warehouse } })
+            };
           }}
         />
       </Box>

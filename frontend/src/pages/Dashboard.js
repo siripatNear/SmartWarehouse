@@ -88,7 +88,7 @@ const Dashboard = () => {
                   Show All
                 </Button>
               </HStack>
-              <TablePickingList itemlists={data} />
+              <TablePickingList itemlists={data} warehouse={warehouse.value} />
             </>
           )}
         </VStack>
