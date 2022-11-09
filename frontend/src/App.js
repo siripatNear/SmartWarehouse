@@ -8,13 +8,10 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import "./App.css";
-
 import { useSelector } from "react-redux";
 import "./App.css";
 
 import LogIn from "./pages/LogIn";
-
 import AddUser from "./pages/adminRole/AddUser";
 import UserManage from "./pages/adminRole/UserManage";
 
@@ -43,10 +40,8 @@ import OrderDetail from "./pages/OrderDetail";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
-
   // if logged in -> go to outlet routes.
   // if not logged in -> go to login page.
-
   return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
 };
 

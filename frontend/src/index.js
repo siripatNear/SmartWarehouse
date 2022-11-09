@@ -16,7 +16,6 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
         <Provider store={store}>
-          {/* <Navbar/> */}
           <App />
         </Provider>
       </ChakraProvider>
