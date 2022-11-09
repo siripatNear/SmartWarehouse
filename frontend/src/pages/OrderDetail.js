@@ -9,8 +9,6 @@ import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 
-import Dataorder from "../assets/orderdetailmock.json";
-
 function OrderDetail() {
 
     const { state } = useLocation();
@@ -22,11 +20,7 @@ function OrderDetail() {
     const { data: item_zone_5 } = useQuery([`/order/${state}?zone=5`]);
     // const { data: item_zone_6 } = useQuery([`/order/${state}?zone=6`]);
 
-    // console.log(state);
-    // console.log(order);
-    // console.log(item_zone_3);
-    // console.log(item_zone_4);
-    // console.log(item_zone_5);
+    // console.log(item_zone_1);
 
     return (
         <>
@@ -45,18 +39,32 @@ function OrderDetail() {
                 <div>
                     <div className='TitleContainer'>
                         <div className='OrderTitle'>
-                            Order {Dataorder[0].order_id}
+                            Order {state}
                         </div>
-                        <div className='OrderBy'>
-                            Ordered by {Dataorder[0].create_by} {dayjs(Dataorder[0].create_dt).format('DD/MM/YYYY HH.mm.ss')}
-                        </div>
+                        {order.description.map((d) => {
+                            return (
+                                <div className='OrderBy'>
+                                    Ordered by {d.create_by} {dayjs(d.create_dt).format('DD/MM/YYYY')}
+                                </div>
+                            );
+                        })}
                     </div>
                     <div className='BodyOrderDetailPage'>
                         <Tabs variant='enclosed' width='100%'>
                             <TabList>
-                                <Tab>
-                                    Zone 1
-                                </Tab>
+                                {order.zones.map((z) => {
+                                    return (
+                                        <Tab>
+                                            Zone {z.zone}
+                                        </Tab>
+                                    );
+                                })}
+                                {/* {{ item_zone_1 } ? (
+                                    <Tab>
+                                        Zone 1
+                                    </Tab>
+                                ) : null} */}
+
                                 <Tab>
                                     Zone 2
                                 </Tab>
@@ -74,16 +82,22 @@ function OrderDetail() {
                                 </Tab>
                             </TabList>
                             <TabPanels>
-                                <TabPanel>
-                                    1
-                                    {/* <GridOrderDetail itemlist={item_zone_1} /> */}
-                                    {/* <TablePickingListInOrder itemlist={item_zone_1} /> */}
-                                </TabPanel>
-                                <TabPanel>
+                                {/* {{ item_zone_1 } ? (
+                                    <TabPanel>
+                                        <GridOrderDetail itemlist={item_zone_1} />
+                                        <TablePickingListInOrder itemlist={item_zone_1} />
+                                    </TabPanel>
+                                ) : null} */}
+                                {/* {order.zones.map((z) => {
+                                    return (
+                                        
+                                    );
+                                })} */}
+                                {/* <TabPanel>
                                     2
-                                    {/* <GridOrderDetail itemlist={item_zone_2} /> */}
-                                    {/* <TablePickingListInOrder itemlist={item_zone_2} /> */}
-                                </TabPanel>
+                                    <GridOrderDetail itemlist={item_zone_2} />
+                                    <TablePickingListInOrder itemlist={item_zone_2} />
+                                </TabPanel> */}
                                 <TabPanel>
                                     3
                                     <GridOrderDetail itemlist={item_zone_3} />
@@ -99,11 +113,11 @@ function OrderDetail() {
                                     <GridOrderDetail itemlist={item_zone_5} />
                                     <TablePickingListInOrder itemlist={item_zone_5} />
                                 </TabPanel>
-                                <TabPanel>
+                                {/* <TabPanel>
                                     6
-                                    {/* <GridOrderDetail itemlist={item_zone_6} /> */}
-                                    {/* <TablePickingListInOrder itemlist={item_zone_6} /> */}
-                                </TabPanel>
+                                    <GridOrderDetail itemlist={item_zone_6} />
+                                    <TablePickingListInOrder itemlist={item_zone_6} />
+                                </TabPanel> */}
                             </TabPanels>
                         </Tabs>
                     </div>

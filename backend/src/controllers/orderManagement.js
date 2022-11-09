@@ -39,7 +39,7 @@ exports.createOrder = async (req, res) => {
         //* 2. Add new order to database
         const data = {
             order_id: new_order_id,
-            order_status: 'Not started',
+            order_status: 'Not start',
             order_remark: remarks,
             quantity: items.length,
             create_by: user_id,
