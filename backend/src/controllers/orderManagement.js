@@ -39,7 +39,7 @@ exports.createOrder = async (req, res) => {
         //* 2. Add new order to database
         const data = {
             order_id: new_order_id,
-            order_status: 'Not started',
+            order_status: 'Not start',
             order_remark: remarks,
             quantity: items.length,
             create_by: user_id,
@@ -154,7 +154,7 @@ exports.getCurrentOrder = async (req, res) => {
             SELECT order_id, create_dt, quantity, order_status, 
             create_by as ordered_by, progress_by
             FROM orders WHERE order_status != 'Completed'
-            ORDER BY order_status
+            ORDER BY order_status ,create_dt
         `)
 
         return res.status(200).json({
