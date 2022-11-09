@@ -36,7 +36,7 @@ const mapStatus = (order_status) => {
           variant="subtle"
           textAlign={"center"}
           borderRadius="5px"
-          colorScheme="red"
+          colorScheme="gray"
         >
           not start
         </Badge>
@@ -58,8 +58,7 @@ const mapStatus = (order_status) => {
 };
 
 const TableFPickingList = (props) => {
-
-  const { orders } = props
+  const { orders } = props;
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -98,7 +97,7 @@ const TableFPickingList = (props) => {
           <Text fontSize="xl">Order by : {object.ordered_by}</Text>
         </VStack>
       />
-      
+
       <TableContainer width="90%">
         <Table size="md">
           <Thead>
