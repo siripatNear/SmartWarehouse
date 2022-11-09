@@ -50,13 +50,22 @@ exports.startOrder = async (req, res) => {
             ` , [order_id, zone])
 
             const grid = await positionGrid(order_id, zone)
-            return res.status(200).json({
-                warehouse_id: grid.warehouse_id,
-                zones: zones.rows,
-                zone: grid.zone,
-                positions_grid: grid.positions,
-                items: items.rows,
-            })
+            if(grid){
+                return res.status(200).json({
+                    warehouse_id: grid.warehouse_id,
+                    description: desc,
+                    zones: zones.rows,
+                    zone: grid.zone,
+                    positions_grid: grid.positions,
+                    items: items.rows,
+                })    
+            }
+            else{
+                return res.status(200).json({
+                    success: false,
+                    message: `Don't find zone = ${zone} in this order list`,
+                })    
+            }
         } else {
             return res.status(200).json({
                 success: true,
