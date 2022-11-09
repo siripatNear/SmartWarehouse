@@ -1,8 +1,7 @@
 import React from 'react'
 import Nametag from "../../components/Nametag";
-import { Flex, Heading, HStack, VStack, Box, Spinner, Center} from "@chakra-ui/react";
-import TablePickingList from "../../components/TablePickingList";
-import CustomButton from "../../components/CustomButton";
+import { Flex, Heading, HStack, VStack, Spinner, Center} from "@chakra-ui/react";
+import TablePickingListConfirm from "../../components/TablePickingListConfirm";
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
@@ -40,30 +39,7 @@ function ConfirmPicking() {
             >
               <Heading as="h1">Confirm Picking</Heading>
             </HStack>
-            <TablePickingList itemlists={data} />
-            <Box
-              alignSelf="flex-end"
-              display="flex"
-              paddingRight="16px"
-              paddingTop="20px"
-              paddingBottom="20px"
-              gap="20px"
-            >
-              <CustomButton
-                // onOpen={onOpenDialog}
-                buttonName="Back"
-                buttonColor="red"
-                buttonSize="lg"
-              // disabledSubmit
-              />
-              <CustomButton
-                // onOpen={onOpenDialog}
-                buttonName="Save"
-                buttonColor="twitter"
-                buttonSize="lg"
-              // disabledSubmit
-              />
-            </Box>
+            <TablePickingListConfirm itemlists={data} />
           </VStack>
         </div>
       )}
