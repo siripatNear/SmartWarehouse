@@ -12,7 +12,6 @@ const OrderList = () => {
     <>
       {isLoading || isNil(orders) ? (
         <Center mt='100px'>
-
           <Spinner
             thickness="4px"
             speed="0.65s"
@@ -34,7 +33,7 @@ const OrderList = () => {
             <Heading as="h1">Order List</Heading>
           </HStack>
 
-          <TableOrderlist Orders={orders} />
+          <TableOrderlist orders={orders} />
         </VStack>
       )}
     </>
