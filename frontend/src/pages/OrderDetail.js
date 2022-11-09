@@ -7,18 +7,26 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Center } from '@chakr
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 
 import Dataorder from "../assets/orderdetailmock.json";
 
 function OrderDetail() {
 
-    const { data: order, isLoading } = useQuery(["/order/KL004"]);
-    // const { data: item_zone_1 } = useQuery(["/order/KL004?zone=1"]);
-    // const { data: item_zone_2 } = useQuery(["/order/KL004?zone=2"]);
-    const { data: item_zone_3 } = useQuery(["/order/KL004?zone=3"]);
-    const { data: item_zone_4 } = useQuery(["/order/KL004?zone=4"]);
-    const { data: item_zone_5 } = useQuery(["/order/KL004?zone=5"]);
-    // const { data: item_zone_6 } = useQuery(["/order/KL004?zone=6"]);
+    const { state } = useLocation();
+    const { data: order, isLoading } = useQuery([`/order/${state}`]);
+    // const { data: item_zone_1 } = useQuery([`/order/${state}?zone=1`]);
+    // const { data: item_zone_2 } = useQuery([`/order/${state}?zone=2`]);
+    const { data: item_zone_3 } = useQuery([`/order/${state}?zone=3`]);
+    const { data: item_zone_4 } = useQuery([`/order/${state}?zone=4`]);
+    const { data: item_zone_5 } = useQuery([`/order/${state}?zone=5`]);
+    // const { data: item_zone_6 } = useQuery([`/order/${state}?zone=6`]);
+
+    // console.log(state);
+    // console.log(order);
+    // console.log(item_zone_3);
+    // console.log(item_zone_4);
+    // console.log(item_zone_5);
 
     return (
         <>
@@ -100,7 +108,8 @@ function OrderDetail() {
                         </Tabs>
                     </div>
                 </div>
-            )}
+            )
+            }
         </>
     )
 }
