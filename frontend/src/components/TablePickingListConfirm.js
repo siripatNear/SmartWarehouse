@@ -15,6 +15,9 @@ import {
 import * as dayjs from "dayjs";
 import _, { isEmpty } from "lodash";
 import CustomButton from "./CustomButton";
+import { useLocation, useNavigate } from "react-router-dom";
+import { api } from "../lib/query";
+import { useMutation } from "@tanstack/react-query";
 
 export const header = [
     { value: "checkbox", label: " " },
@@ -97,16 +100,31 @@ const mapStatus = (status) => {
     }
 };
 
-const TablePickingListConfirm = (props) => {
-    const { itemlists } = props;
+const TablePickingListConfirm = () => {
+    const { state } = useLocation();
     const [ItemState, setItemState] = useState([]);
     const [selectedItem, setSelectedItem] = useState([]);
+    const navigate = useNavigate();
+    const toast = useToast();
+
+    const {
+        mutate: createOrder,
+        // isLoading: isLoadingCreateOrder,
+    } = useMutation(
+        (Order) =>
+            api.post(`/warehouse/${state.warehouse}/picking-list`, { items: Order.map((v) => ({ item_code: v.item_code })), remarks: "" }),
+        {
+            onSuccess() {
+                navigate("/order-list")
+            },
+        }
+    );
 
     useEffect(() => {
         setItemState(
-            itemlists.items.map((d) => {
+            state.selectedItem.map((d) => {
                 return {
-                    select: false,
+                    select: true,
                     item_code: d.item_code,
                     category: d.category,
                     length: d.length,
@@ -115,7 +133,7 @@ const TablePickingListConfirm = (props) => {
                 };
             })
         );
-    }, [itemlists]);
+    }, [state.selectedItem]);
 
     useEffect(() => {
         console.log(
@@ -129,8 +147,6 @@ const TablePickingListConfirm = (props) => {
                 .value()
         );
     }, [ItemState]);
-
-    const toast = useToast();
 
     return (
         <>
@@ -193,6 +209,7 @@ const TablePickingListConfirm = (props) => {
                     buttonName="Back"
                     buttonColor="red"
                     buttonSize="lg"
+                    onOpen={() => navigate("/")}
                 />
                 <CustomButton
                     buttonName="Save"
@@ -202,12 +219,14 @@ const TablePickingListConfirm = (props) => {
                         if (isEmpty(selectedItem)) {
                             toast({
                                 title: "Please select item!",
-                                description: 'before click "Add" button',
+                                description: 'before click "Save" button',
                                 status: "error",
                                 duration: 3000,
                                 isClosable: true,
-                            });
-                        }
+                            })
+                        } else {
+                            createOrder(selectedItem)
+                        };
                     }}
                 />
             </Box>
