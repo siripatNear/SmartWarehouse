@@ -29,9 +29,7 @@ exports.getForm = async (req, res, next) => {
 
 //* for all dropdown data API
 exports.dropDownList = async (req, res) => {
-
     try {
-
         const warehouse = await db.query(`
             SELECT warehouse_id,warehouse_desc FROM warehouse`)
         const zone = await db.query(`
@@ -91,7 +89,8 @@ const getSumByZone = async (wh_id, zone_id) => {
 const overallWarehouse = async (wh_id) => {
     try {
         //overall in a warehouse
-        const overall = await db.query(`
+        const overall = await db.query(
+            `
         SELECT COUNT(wh_trans.position_code) as total_positions, 
         COUNT(rm.position_code) as usage,
         (COUNT(wh_trans.position_code) - COUNT(rm.position_code)) as empty
@@ -127,12 +126,12 @@ exports.fetchData = async (req, res, next) => {
 
         // req.query.category||req.query.page||req.query.length||req.query.zone
         if (Object.keys(req.query).length > 0) {
-            console.log(req.query)
+            console.log(req.query);
             next();
-
         } else {
             //summary each zone
-            const zone_summary = await db.query(`
+            const zone_summary = await db.query(
+                `
             SELECT wh_trans.zone as zone, COUNT(wh_trans.position_code) as total_positions, 
             COUNT(rm.position_code) as usage,
             (COUNT(wh_trans.position_code) - COUNT(rm.position_code)) as empty
@@ -141,7 +140,9 @@ exports.fetchData = async (req, res, next) => {
             FULL OUTER JOIN warehouse wh ON wh_trans.warehouse_id = wh.warehouse_id
             WHERE wh_trans.warehouse_id = $1
             GROUP BY wh_trans.zone ORDER BY wh_trans.zone
-            `, [warehouse_id])
+            `,
+                [warehouse_id]
+            );
 
             //overall in a warehouse
             const overall = await overallWarehouse(warehouse_id);
@@ -154,9 +155,8 @@ exports.fetchData = async (req, res, next) => {
                 empty: overall.empty,
                 zone_count: zone_summary.rowCount,
                 summary: zone_summary.rows,
-            })
+            });
         }
-
     } catch (error) {
         console.log(error.message);
     }
@@ -167,7 +167,7 @@ exports.fetchFilterItems = async (req, res) => {
     try {
 
         const limit = parseInt(req.query.limit) || 10; //limit show data
-        const page = (parseInt(req.query.page)*limit) - 1 || 0;
+        const page = (parseInt(req.query.page) * limit) - 1 || 0;
         const search = req.query.search || "";
         let category = req.query.category || "All";
         let zone = req.query.zone || "All";
@@ -249,15 +249,15 @@ exports.fetchFilterItems = async (req, res) => {
             raw: true
         });
 
-        if (zone.length === 1 ){
-            const summary = await getSumByZone(warehouse_id,zone[0])
+        if (zone.length === 1) {
+            const summary = await getSumByZone(warehouse_id, zone[0])
             res.status(200).json({
                 success: true,
                 message: "You have permission to access",
                 summary,
                 items
             })
-        } else{
+        } else {
             const summary = await overallWarehouse(warehouse_id);
             res.status(200).json({
                 success: true,
@@ -266,8 +266,6 @@ exports.fetchFilterItems = async (req, res) => {
                 items
             })
         }
-
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -286,10 +284,10 @@ exports.getStock = async (req, res) => {
             JOIN raw_materials r ON c.item_cate_code = r.item_cate_code
             GROUP BY c.cate_name
         `)
-        return res.status(200).json({ 
+        return res.status(200).json({
             success: true,
             message: 'You have permission to access',
-            category: cate            
+            category: cate
 
         })
     } catch (error) {

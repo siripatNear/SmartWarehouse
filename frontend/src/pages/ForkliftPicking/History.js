@@ -34,7 +34,7 @@ export const header = [
 
 const History = () => {
   const { data, isLoading } = useQuery(["/history-order"]);
-  const [object, setObject] = useState({});
+  // const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const mapStatus = (order_status) => {
@@ -107,21 +107,20 @@ const History = () => {
                     <Td>{dayjs(d.create_dt).format("DD / MM / YYYY")}</Td>
                     <Td>{dayjs(d.create_dt).format("HH : mm")}</Td>
                     <Td>{d.quantity}</Td>
-                    {/* <Td>{mapStatus(d.order_status)}</Td> */}
-                    <Td>{d.order_status}</Td>
+                    <Td>{mapStatus(d.order_status)}</Td>
                     <Td>{d.ordered_by}</Td>
                     <Td textAlign={"center"}>
                       <CustomButton
                         marginX={4}
                         onOpen={() => {
-                          setObject(d);
+                          // setObject(d);
                           onOpen();
                         }}
                         onClose={onClose}
                         buttonName="Detail"
                         buttonColor="twitter"
                         buttonSize="sm"
-                        HoverColor="green.300"
+                        HoverColor="twitter.300"
                       />
                     </Td>
                   </Tr>

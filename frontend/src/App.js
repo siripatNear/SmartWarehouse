@@ -37,7 +37,6 @@ import { useUserStore } from "./store/user";
 
 // Operator
 import Dashboard from "./pages/Dashboard";
-import PickingList from "./pages/Operator/PickingList";
 import ConfirmPicking from "./pages/Operator/ConfirmPicking";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
@@ -51,12 +50,12 @@ const PrivateRoutes = () => {
   return <>{isAuth ? <Outlet /> : <Navigate to="/login" />}</>;
 };
 
-const RestrictedRoutes = () => {
+const RestrictedRoutes = (role) => {
   const { isAuth } = useSelector((state) => state.auth);
-
   // if not logged in -> go to outlet routes (login).
   // if logged in -> go to home page.
 
+  // return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
   return <>{!isAuth ? <Outlet /> : <Navigate to="/" />}</>;
 };
 
@@ -91,7 +90,6 @@ const App = () => {
           {/* //* Operator */}
           <Route path="/order-list" element={<OrderList />} />
           <Route path="/order-detail" element={<OrderDetail />} />
-          <Route path="/picking-list" element={<PickingList />} />
           <Route path="/confirm-picking" element={<ConfirmPicking />} />
           <Route path="/history" element={<History />} />
 
