@@ -124,11 +124,55 @@ const positionGrid = async (order_id, zone) => {
     }
 }
 
-exports.pickingItem = async (req, res) => {
-    const item_code = String(req.params.item_code);
+exports.validateItem = async (req, res, next) => {
+    const item_code = String(req.body.item_code); //From RFID
+    const order_id = String(req.params.order_id);
+
+    try {
+
+        // 1. Find item_code in order_id
+        const validation = await models.OrderTrans.findAll({
+            attributes:[ 'item_code'],
+            where: { 
+                order_id: order_id ,
+                item_code: item_code
+            }
+        })
+
+        // 2. Check if item is in the order
+        if(validation.length){
+            console.log('Match!')
+            next(); // Go to updatedItem()
+        }else{
+            console.log('Not Match!')
+            const { rows } = await db.query(`
+                SELECT r.item_code, c.cate_name, r.sub_cate_code,
+                wt.position_code, wt.warehouse_id, wt.zone, wt.section,
+                wt.col_no, wt.floor_no
+                FROM raw_materials r
+                JOIN category c ON r.item_cate_code = c.item_cate_code
+                JOIN warehouse_trans wt ON wt.position_code = r.position_code
+                WHERE r.item_code = $1
+            `, [item_code])
+            return res.status(201).json({
+                success: true,
+                matching: false,
+                item: rows
+            });
+        }
+        
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+}
+
+exports.updateItem = async (req, res) => {
+    const item_code = String(req.body.item_code);
     const user_id = String(req.user.user_id);
 
-    //* 1. Update item:
+    //* 1. Update match item:
     // item_status = Using
     // position_code = null
     // modify_by and modify_dt
@@ -141,20 +185,27 @@ exports.pickingItem = async (req, res) => {
 
     try {
 
-        const [updated] = await models.Orders.update(
+        const { rows } = await db.query(`
+            SELECT r.item_code, c.cate_name, r.sub_cate_code,
+            wt.position_code, wt.warehouse_id, wt.zone, wt.section,
+            wt.col_no, wt.floor_no
+            FROM raw_materials r
+            JOIN category c ON r.item_cate_code = c.item_cate_code
+            JOIN warehouse_trans wt ON wt.position_code = r.position_code
+            WHERE r.item_code = $1
+        `, [item_code])
+
+        await models.RawMaterials.update(
             dataUpdate,
         {
             where: { item_code: item_code },
         });
-
-        if (updated) {
-            const updatedItem = await models.RawMaterials.findOne({
-                where: { item_code: item_code },
-                attributes: ["item_code", "item_status", "modify_by"],
-            });
-            return res.status(200).json({ item: updatedItem });
-        }
-        throw new Error("User not found");
+        
+        return res.status(200).json({
+            success: true,
+            matching: true,
+            item: rows 
+        });
 
     } catch (error) {
         return res.status(500).json({

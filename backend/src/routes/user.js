@@ -26,7 +26,7 @@ const {
 const {
   validationMiddleware,
 } = require("../middlewares/validations-middleware");
-const { startOrder, pickingItem } = require("../controllers/forklift");
+const { startOrder, updateItem, validateItem } = require("../controllers/forklift");
 
 router.get(
   "/warehouse/:wh_id",
@@ -77,10 +77,11 @@ router.get(
   authPage(["Forklift"]),
   startOrder
 );
-router.put(
-  "/picking/:item_code",
+router.post(
+  "/picking/:order_id",
   userAuth,
-  pickingItem
+  validateItem,
+  updateItem
 );
 
 module.exports = router;

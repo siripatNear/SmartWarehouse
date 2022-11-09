@@ -154,7 +154,7 @@ exports.getCurrentOrder = async (req, res) => {
             SELECT order_id, create_dt, quantity, order_status, 
             create_by as ordered_by, progress_by
             FROM orders WHERE order_status != 'Completed'
-            ORDER BY order_status
+            ORDER BY order_status ,create_dt
         `)
 
         return res.status(200).json({
@@ -190,6 +190,8 @@ exports.getOrderDetail = async (req, res) => {
             [order_id]
         );
 
+        console.log(JSON.stringify(zones.rows))
+
         if (zones.rowCount != 0){
 
             let zone = parseInt(req.query.zone || zones.rows[0].zone);
@@ -212,14 +214,24 @@ exports.getOrderDetail = async (req, res) => {
             })
 
             const grid = await positionsGrid(order_id, zone)
-            return res.status(200).json({
-                warehouse_id: grid.warehouse_id,
-                description: desc,
-                zones: zones.rows,
-                zone: grid.zone,
-                positions_grid: grid.positions,
-                items: items.rows,
-            })
+
+            if(grid){
+                return res.status(200).json({
+                    warehouse_id: grid.warehouse_id,
+                    description: desc,
+                    zones: zones.rows,
+                    zone: grid.zone,
+                    positions_grid: grid.positions,
+                    items: items.rows,
+                })    
+            }
+            else{
+                return res.status(200).json({
+                    success: false,
+                    message: `Don't find zone = ${zone} in this order list`,
+                })    
+            }
+            
         } else{
             return res.status(200).json({
                 success: true,
