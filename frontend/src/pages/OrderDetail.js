@@ -13,14 +13,13 @@ function OrderDetail() {
 
     const { state } = useLocation();
     const { data: order, isLoading } = useQuery([`/order/${state}`]);
-    // const { data: item_zone_1 } = useQuery([`/order/${state}?zone=1`]);
-    // const { data: item_zone_2 } = useQuery([`/order/${state}?zone=2`]);
+    const { data: item_zone_1 } = useQuery([`/order/${state}?zone=1`]);
+    const { data: item_zone_2 } = useQuery([`/order/${state}?zone=2`]);
     const { data: item_zone_3 } = useQuery([`/order/${state}?zone=3`]);
     const { data: item_zone_4 } = useQuery([`/order/${state}?zone=4`]);
     const { data: item_zone_5 } = useQuery([`/order/${state}?zone=5`]);
-    // const { data: item_zone_6 } = useQuery([`/order/${state}?zone=6`]);
+    const { data: item_zone_6 } = useQuery([`/order/${state}?zone=6`]);
 
-    // console.log(item_zone_1);
 
     return (
         <>
@@ -52,34 +51,36 @@ function OrderDetail() {
                     <div className='BodyOrderDetailPage'>
                         <Tabs variant='enclosed' width='100%'>
                             <TabList>
-                                {order.zones.map((z) => {
-                                    return (
-                                        <Tab>
-                                            Zone {z.zone}
-                                        </Tab>
-                                    );
-                                })}
-                                {/* {{ item_zone_1 } ? (
+                                {item_zone_1.warehouse_id ? (
                                     <Tab>
                                         Zone 1
                                     </Tab>
-                                ) : null} */}
-
-                                <Tab>
-                                    Zone 2
-                                </Tab>
-                                <Tab>
-                                    Zone 3
-                                </Tab>
-                                <Tab>
-                                    Zone 4
-                                </Tab>
-                                <Tab>
-                                    Zone 5
-                                </Tab>
-                                <Tab>
-                                    Zone 6
-                                </Tab>
+                                ) : null}
+                                {item_zone_2.warehouse_id ? (
+                                    <Tab>
+                                        Zone 2
+                                    </Tab>
+                                ) : null}
+                                {item_zone_3.warehouse_id ? (
+                                    <Tab>
+                                        Zone 3
+                                    </Tab>
+                                ) : null}
+                                {item_zone_4.warehouse_id ? (
+                                    <Tab>
+                                        Zone 4
+                                    </Tab>
+                                ) : null}
+                                {item_zone_5.warehouse_id ? (
+                                    <Tab>
+                                        Zone 5
+                                    </Tab>
+                                ) : null}
+                                {item_zone_6.warehouse_id ? (
+                                    <Tab>
+                                        Zone 6
+                                    </Tab>
+                                ) : null}
                             </TabList>
                             <TabPanels>
                                 {/* {{ item_zone_1 } ? (
@@ -89,35 +90,57 @@ function OrderDetail() {
                                     </TabPanel>
                                 ) : null} */}
                                 {/* {order.zones.map((z) => {
+                                    let { data: item_zone_1 } = useQuery([`/order/${state}?zone=1`]);
                                     return (
-                                        
+                                        <TabPanel>
+                                            1
+                                            <GridOrderDetail itemlist={item_zone_1} />
+                                            <TablePickingListInOrder itemlist={item_zone_1} />
+                                        </TabPanel>
                                     );
                                 })} */}
-                                {/* <TabPanel>
+                                {item_zone_1.warehouse_id ? (
+                                    <TabPanel>
+                                        1
+                                        <GridOrderDetail itemlist={item_zone_1} />
+                                        <TablePickingListInOrder itemlist={item_zone_1} />
+                                    </TabPanel>
+                                ) : null}
+                                {item_zone_2.warehouse_id ? (
+                                <TabPanel>
                                     2
                                     <GridOrderDetail itemlist={item_zone_2} />
                                     <TablePickingListInOrder itemlist={item_zone_2} />
-                                </TabPanel> */}
+                                </TabPanel>
+                                ) : null}
+                                {item_zone_3.warehouse_id ? (
                                 <TabPanel>
                                     3
                                     <GridOrderDetail itemlist={item_zone_3} />
                                     <TablePickingListInOrder itemlist={item_zone_3} />
                                 </TabPanel>
+                                ) : null}
+                                {item_zone_4.warehouse_id ? (
                                 <TabPanel>
                                     4
                                     <GridOrderDetail itemlist={item_zone_4} />
                                     <TablePickingListInOrder itemlist={item_zone_4} />
                                 </TabPanel>
+                                ) : null}
+                                {item_zone_5.warehouse_id ? (
                                 <TabPanel>
                                     5
                                     <GridOrderDetail itemlist={item_zone_5} />
                                     <TablePickingListInOrder itemlist={item_zone_5} />
                                 </TabPanel>
-                                {/* <TabPanel>
+                                ) : null}
+                                {item_zone_6.warehouse_id ? (
+                                <TabPanel>
                                     6
                                     <GridOrderDetail itemlist={item_zone_6} />
                                     <TablePickingListInOrder itemlist={item_zone_6} />
-                                </TabPanel> */}
+                                </TabPanel>
+                                ) : null}
                             </TabPanels>
                         </Tabs>
                     </div>
