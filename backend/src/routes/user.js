@@ -14,6 +14,7 @@ const {
   getForm,
   fetchData,
   fetchFilterItems,
+  getStock,
 } = require("../controllers/data");
 const {
   createOrder,
@@ -66,6 +67,8 @@ router.get(
   authPage(["Admin", "Operator"]),
   getOrderDetail
 );
+router.get("/stock", userAuth, authPage(["Admin"]), getStock);
+
 
 //========Forklift routes=============
 router.get(

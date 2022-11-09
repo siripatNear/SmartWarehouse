@@ -278,16 +278,19 @@ exports.fetchFilterItems = async (req, res) => {
 // GET summary of each category for Admin
 exports.getStock = async (req, res) => {
     try {
-        const cate = await db.query(`
-            SELECT c.cate_name, COUNT(*)
+        const data = await db.query(`
+            SELECT c.item_cate_code, c.cate_name as category, cs.max_quantity, 
+            cs.min_quantity, (cs.max_quantity-COUNT(*)) as empty, COUNT(*) as usage
             FROM category c
             JOIN raw_materials r ON c.item_cate_code = r.item_cate_code
-            GROUP BY c.cate_name
+            JOIN category_stock cs ON c.item_cate_code = cs.item_cate_code
+            GROUP BY c.item_cate_code, cs.max_quantity,cs.min_quantity
+            ORDER BY c.item_cate_code
         `)
         return res.status(200).json({
             success: true,
             message: 'You have permission to access',
-            category: cate
+            data: data.rows
 
         })
     } catch (error) {
