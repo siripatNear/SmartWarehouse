@@ -76,7 +76,7 @@ const Dashboard = () => {
                 justify="space-between"
                 width="100%"
               >
-                <Heading as="h1">Zone {data.zone}</Heading>
+                <Heading as="h1">Zone {data.summary.zone}</Heading>
                 <Button
                   colorScheme="twitter"
                   variant="outline"
@@ -88,7 +88,7 @@ const Dashboard = () => {
                   Show All
                 </Button>
               </HStack>
-              <TablePickingList itemlists={data} />
+              <TablePickingList itemlists={data} warehouse={warehouse.value} />
             </>
           )}
         </VStack>
