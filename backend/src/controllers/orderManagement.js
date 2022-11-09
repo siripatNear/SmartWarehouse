@@ -217,6 +217,7 @@ exports.getOrderDetail = async (req, res) => {
 
             if(grid){
                 return res.status(200).json({
+                    success: true,
                     warehouse_id: grid.warehouse_id,
                     description: desc,
                     zones: zones.rows,

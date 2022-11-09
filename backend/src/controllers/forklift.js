@@ -52,6 +52,7 @@ exports.startOrder = async (req, res) => {
             const grid = await positionGrid(order_id, zone)
             if(grid){
                 return res.status(200).json({
+                    success: true,
                     warehouse_id: grid.warehouse_id,
                     description: desc,
                     zones: zones.rows,
