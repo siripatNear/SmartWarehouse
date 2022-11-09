@@ -13,16 +13,19 @@ const { userAuth, authPage } = require("../middlewares/auth-middleware");
 const {
   getForm,
   fetchData,
+  fetchFilterItems,
+} = require("../controllers/data");
+const {
   createOrder,
   getCurrentOrder,
   getCompletedOrder,
-  fetchFilterItems,
   deleteOrder,
   getOrderDetail,
-} = require("../controllers/data");
+} = require("../controllers/orderManagement");
 const {
   validationMiddleware,
 } = require("../middlewares/validations-middleware");
+const { startOrder, pickingItem } = require("../controllers/forklift");
 
 router.get(
   "/warehouse/:wh_id",
@@ -32,7 +35,7 @@ router.get(
   fetchFilterItems
 );
 
-//Admin routes
+//========Admin routes=============
 router.get("/add-user", userAuth, authPage(["Admin"]), getForm); //complete
 router.post(
   "/add-user",
@@ -52,7 +55,7 @@ router.get(
 router.put("/edit-user/:user_id", validationMiddleware, userAuth, updateUser); //complete
 router.delete("/manage-users/:user_id", deleteUser); //complete
 
-//operator routes
+//========Operator routes=============
 router.post("/warehouse/:wh_id/picking-list", userAuth, createOrder);
 router.get("/order-list", getCurrentOrder);
 router.get("/history-order", getCompletedOrder);
@@ -62,6 +65,19 @@ router.get(
   userAuth,
   authPage(["Admin", "Operator"]),
   getOrderDetail
+);
+
+//========Forklift routes=============
+router.get(
+  "/picking/:order_id",
+  userAuth,
+  authPage(["Forklift"]),
+  startOrder
+);
+router.put(
+  "/picking/:item_code",
+  userAuth,
+  pickingItem
 );
 
 module.exports = router;
