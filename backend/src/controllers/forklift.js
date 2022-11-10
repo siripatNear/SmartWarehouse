@@ -36,6 +36,7 @@ exports.startOrder = async (req, res) => {
         if (zones.rowCount != 0) {
 
             let zone = parseInt(req.query.zone || zones.rows[0].zone);
+            
             const items = await db.query(
                 `
                 SELECT rm.item_code, c.cate_name as category, rm.length, 
@@ -48,6 +49,11 @@ exports.startOrder = async (req, res) => {
                 WHERE ot.order_id = $1 
                 AND wt.zone = $2
             ` , [order_id, zone])
+                // Order by and Create_dt
+            const desc = await models.Orders.findOne({ 
+                attributes: [ 'create_by', 'create_dt' ],
+                where: { order_id }
+            })
 
             const grid = await positionGrid(order_id, zone)
             if(grid){
