@@ -1,6 +1,6 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Category extends Model {
+    class CategoryStock extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -8,40 +8,33 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Category.belongsTo(models.RawMaterials, {
+            CategoryStock.belongsTo(models.Category, {
                 foreignKey: 'item_cate_code',
-                as: 'category',
                 targetKey: 'item_cate_code',
-                onDelete: 'CASCADE',
-            })
-            Category.hasMany(models.CategoryStock, {
-                foreignKey: 'item_cate_code',
-                sourceKey: 'item_cate_code',
                 onDelete: 'CASCADE',
             })
         }
     }
-    Category.init(
+    CategoryStock.init(
         {
             item_cate_code: {
                 type: DataTypes.STRING,
                 primaryKey: true,
             },
             cate_name: DataTypes.STRING,
-            create_by: DataTypes.STRING,
-            create_by: DataTypes.STRING,
-            create_dt: DataTypes.DATE,
+            max_quantity: DataTypes.INTEGER,
+            min_quantity: DataTypes.INTEGER,
             modify_by: DataTypes.STRING,
             modify_dt: DataTypes.DATE,
-        },{
-            // options
-            sequelize,
-            modelName: 'Category',
-            tableName: 'category',
-            createdAt: 'create_dt',
-            updatedAt: 'modify_dt',
-            underscore: true,
-        },
+        }, {
+        // options
+        sequelize,
+        modelName: 'CategoryStock',
+        tableName: 'category_stock',
+        createdAt: false,
+        updatedAt: 'modify_dt',
+        underscore: true,
+    },
     );
-    return Category;
+    return CategoryStock;
 }
