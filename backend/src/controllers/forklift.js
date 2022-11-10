@@ -33,6 +33,16 @@ exports.startOrder = async (req, res) => {
             [order_id]
         );
 
+        // 3. Count items which is 'In progress' (If count is 0 >> Finish)
+        // const count = await db.query(`
+        //     SELECT o.order_id, count(*) FILTER (WHERE rm.item_status = 'In progress')
+        //     FROM raw_materials rm
+        //     JOIN order_transaction ot ON rm.item_code = ot.item_code
+        //     JOIN orders o ON o.order_id = ot.order_id
+        //     WHERE ot.order_id = $1
+        //     GROUP BY o.order_id
+        // `, [order_id])
+
         if (zones.rowCount != 0) {
 
             let zone = parseInt(req.query.zone || zones.rows[0].zone);
@@ -47,9 +57,11 @@ exports.startOrder = async (req, res) => {
                 JOIN category c ON rm.item_cate_code = c.item_cate_code
                 JOIN orders o ON o.order_id = ot.order_id
                 WHERE ot.order_id = $1 
+                AND rm.item_status = 'In progress'
                 AND wt.zone = $2
             ` , [order_id, zone])
-                // Order by and Create_dt
+
+            // Order by and Create_dt
             const desc = await models.Orders.findOne({ 
                 attributes: [ 'create_by', 'create_dt' ],
                 where: { order_id }
@@ -59,6 +71,7 @@ exports.startOrder = async (req, res) => {
             if(grid){
                 return res.status(200).json({
                     success: true,
+                    finish: false,
                     warehouse_id: grid.warehouse_id,
                     description: desc,
                     zones: zones.rows,
@@ -73,7 +86,9 @@ exports.startOrder = async (req, res) => {
                     message: `Don't find zone = ${zone} in this order list`,
                 })    
             }
-        } else {
+        }
+
+        else {
             return res.status(200).json({
                 success: true,
                 message: `Don't find the order id ${order_id} in order list`,
@@ -186,9 +201,10 @@ exports.validateItem = async (req, res, next) => {
 
 exports.updateItem = async (req, res) => {
     const item_code = String(req.body.item_code);
+    const order_id = String(req.params.order_id);
     const user_id = String(req.user.user_id);
 
-    //* 1. Update match item:
+    // 1. Update match item:
     // item_status = Using
     // position_code = null
     // modify_by and modify_dt
@@ -216,12 +232,48 @@ exports.updateItem = async (req, res) => {
         {
             where: { item_code: item_code },
         });
-        
-        return res.status(200).json({
-            success: true,
-            matching: true,
-            item: rows 
-        });
+
+        // 2. Check if there is any item in this order is 'In progress'? 
+        // (If count is 0 >> Finish)
+
+        const count = await db.query(`
+            SELECT o.order_id, count(*) FILTER (WHERE rm.item_status = 'In progress')
+            FROM raw_materials rm
+            JOIN order_transaction ot ON rm.item_code = ot.item_code
+            JOIN orders o ON o.order_id = ot.order_id
+            WHERE ot.order_id = $1
+            GROUP BY o.order_id
+        `, [order_id])
+
+        if(count.rowCount != 0 && count.rows[0].count == 0) {
+
+            //Update order_status = 'Completed'
+            // modify_by: user_id
+            // modify_dt (Default by Sequelize)
+
+            const updateData = {
+                order_status: 'Completed',
+                modify_by: user_id,
+            }
+
+            await models.Orders.update(updateData,
+            {   
+                where: { order_id: order_id } 
+            })
+
+            return res.status(201).json({
+                success: true,
+                matching: true,
+                finish: true,
+                message: `Order id ${order_id} is already finish!`,
+            })
+        }else{
+            return res.status(201).json({
+                success: true,
+                matching: true,
+                item: rows 
+            });
+        }
 
     } catch (error) {
         return res.status(500).json({
