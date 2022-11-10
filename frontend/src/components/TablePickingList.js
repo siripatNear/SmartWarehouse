@@ -16,7 +16,6 @@ import {
 import * as dayjs from "dayjs";
 import _, { isEmpty } from "lodash";
 import CustomButton from "./CustomButton";
-// import TablePickingListConfirm from "./TablePickingListConfirm";
 
 export const header = [
   { value: "checkbox", label: " " },
@@ -104,8 +103,6 @@ const TablePickingList = (props) => {
   const [itemState, setItemState] = useState([]);
   const [selectedItem, setSelectedItem] = useState([]);
   const navigate = useNavigate();
-
-  // console.log(warehouse);
 
   useEffect(() => {
     setItemState(
