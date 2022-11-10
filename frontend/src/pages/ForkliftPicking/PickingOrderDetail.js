@@ -103,13 +103,9 @@ function PickingOrderDetail() {
                         <div className='OrderTitle'>
                             Order {state}
                         </div>
-                        {order.description.map((d) => {
-                            return (
-                                <div className='OrderBy'>
-                                    Ordered by {d.create_by} {dayjs(d.create_dt).format('DD/MM/YYYY')}
-                                </div>
-                            );
-                        })}
+                        <div className='OrderBy'>
+                            Ordered by {order.description.create_by} {dayjs(order.description.create_dt).format('DD/MM/YYYY')}
+                        </div>
                     </div>
                     <div className='BodyOrderDetailPage'>
                         <Tabs variant='enclosed' width='100%'>
