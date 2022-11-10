@@ -80,7 +80,7 @@ const Search = ({
         </FormControl>
 
         <FormControl p={2} id="length">
-          <Input type="text" placeholder="Search Length" />
+          <Input type="text" placeholder="Search Sub Category" />
         </FormControl>
         <IconButton
           colorScheme="blue"

@@ -16,6 +16,7 @@ import BoxAll from "../components/BoxAll";
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import TablePickingList from "../components/TablePickingList";
+import BoxZoneAll from "../components/BoxZoneAll";
 
 const Dashboard = () => {
   const [warehouse, setWarehouse] = useState({
@@ -94,7 +95,11 @@ const Dashboard = () => {
         </VStack>
         {isNil(data) ? null : (
           <Box paddingLeft={"32px"}>
-            <BoxAll data={data} />
+            {!isNil(zone) || !isNil(category) ? (
+              <BoxZoneAll data={data} />
+            ) : (
+              <BoxAll data={data} />
+            )}
           </Box>
         )}
       </HStack>
