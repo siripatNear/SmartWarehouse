@@ -167,7 +167,7 @@ exports.fetchFilterItems = async (req, res) => {
     try {
 
         const limit = parseInt(req.query.limit) || 10; //limit show data
-        const page = (parseInt(req.query.page) * limit) - 1 || 0;
+        const page = (parseInt(req.query.page)-1) * limit || 0;
         const search = req.query.search || "";
         let category = req.query.category || "All";
         let zone = req.query.zone || "All";
