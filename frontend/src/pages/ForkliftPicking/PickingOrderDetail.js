@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../OrderDetail.css";
 import * as dayjs from 'dayjs';
-import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Center, VStack, HStack, useDisclosure, Text, } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Spinner, Center, VStack, HStack, useDisclosure, Text, Input, Box } from '@chakra-ui/react'
 
 import CustomButton from "../../components/CustomButton";
 import GridOrderDetail from '../../components/GridOrderDetail';
@@ -10,7 +10,10 @@ import { CustomAlertOneButton } from "../../components/AlertOneButton";
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { api, queryClient } from "../../lib/query";
+import { useMutation } from "@tanstack/react-query";
 
 function PickingOrderDetail() {
 
@@ -25,6 +28,27 @@ function PickingOrderDetail() {
     const { data: item_zone_4 } = useQuery([`/picking/${state}?zone=4`]);
     const { data: item_zone_5 } = useQuery([`/picking/${state}?zone=5`]);
     const { data: item_zone_6 } = useQuery([`/picking/${state}?zone=6`]);
+
+    // Test input Item
+    const [inputItem, setInputItem] = useState("");
+    const handleChange = (event) => setInputItem(event.target.value)
+    const navigate = useNavigate();
+    // console.log(inputItem);
+
+    const {
+        mutate: sendItemCode,
+    } = useMutation(
+        (send) =>
+            api.post(`/picking/${state}`, { item_code: send.item_code }),
+        {
+            onSuccess() {
+                queryClient.invalidateQueries([`/picking/${state}`]); //update ui
+                // navigate("/picking-order-detail");
+                console.log(inputItem);
+                console.log("succees");
+            },
+        }
+    );
 
     const mapCateName = (category) => {
         switch (category) {
@@ -189,6 +213,12 @@ function PickingOrderDetail() {
                     </div>
 
                     {/* Test Pop-Up Button */}
+                    <Box display='flex' alignItems='center' justifyContent='center' mb='10px'>
+                        <Input placeholder='Item_code' width='200px' border='2px'
+                            inputItem={inputItem}
+                            onChange={handleChange}
+                        />
+                    </Box>
                     <div className='ContainerBtn'>
                         <CustomButton
                             marginX={4}
@@ -197,6 +227,19 @@ function PickingOrderDetail() {
                                 onOpen();
                             }}
                             buttonName="Test Pop-Up"
+                            buttonColor="twitter"
+                            HoverColor="twitter.300"
+                            buttonSize="lg"
+                            borderRadius="10px"
+                            fontSize="22px"
+                            fontWeight="medium"
+                        />
+                        <CustomButton
+                            onOpen={() =>
+                                sendItemCode(inputItem)
+                            }
+                            marginX={4}
+                            buttonName="Test Input-Item"
                             buttonColor="twitter"
                             HoverColor="twitter.300"
                             buttonSize="lg"
