@@ -17,6 +17,7 @@ import {
 import * as dayjs from "dayjs";
 import CustomButton from "./CustomButton";
 import { CustomAlertDialog } from "./AlertDialog";
+import { useNavigate } from "react-router-dom";
 
 export const header = [
   { value: "order_id", label: "Order ID" },
@@ -61,6 +62,7 @@ const TableFPickingList = (props) => {
   const { orders } = props;
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -69,6 +71,7 @@ const TableFPickingList = (props) => {
         onClose={onClose}
         LbuttonPopup="No"
         RbuttonPopup="Yes"
+        onConfirm={()=>navigate("/picking-order-detail", { state: object.order_id })}
         ColorRbuttonPopup={
           object.order_status === "Not start" ? "twitter" : "yellow"
         }

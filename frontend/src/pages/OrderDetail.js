@@ -20,7 +20,6 @@ function OrderDetail() {
     const { data: item_zone_5 } = useQuery([`/order/${state}?zone=5`]);
     const { data: item_zone_6 } = useQuery([`/order/${state}?zone=6`]);
 
-
     return (
         <>
             {isLoading || isNil(order) ? (
@@ -83,22 +82,6 @@ function OrderDetail() {
                                 ) : null}
                             </TabList>
                             <TabPanels>
-                                {/* {{ item_zone_1 } ? (
-                                    <TabPanel>
-                                        <GridOrderDetail itemlist={item_zone_1} />
-                                        <TablePickingListInOrder itemlist={item_zone_1} />
-                                    </TabPanel>
-                                ) : null} */}
-                                {/* {order.zones.map((z) => {
-                                    let { data: item_zone_1 } = useQuery([`/order/${state}?zone=1`]);
-                                    return (
-                                        <TabPanel>
-                                            1
-                                            <GridOrderDetail itemlist={item_zone_1} />
-                                            <TablePickingListInOrder itemlist={item_zone_1} />
-                                        </TabPanel>
-                                    );
-                                })} */}
                                 {item_zone_1.warehouse_id ? (
                                     <TabPanel>
                                         1
