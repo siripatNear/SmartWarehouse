@@ -194,7 +194,7 @@ const TablePickingList = (props) => {
         <CustomButton
           buttonName="Add"
           buttonColor="twitter"
-          buttonSize="lg"
+          buttonSize="md"
           onOpen={() => {
             if (isEmpty(selectedItem)) {
               toast({
@@ -203,10 +203,12 @@ const TablePickingList = (props) => {
                 status: "error",
                 duration: 3000,
                 isClosable: true,
-              })
+              });
             } else {
-              navigate("/confirm-picking", { state: { selectedItem: selectedItem, warehouse: warehouse } })
-            };
+              navigate("/confirm-picking", {
+                state: { selectedItem: selectedItem, warehouse: warehouse },
+              });
+            }
           }}
         />
       </Box>
