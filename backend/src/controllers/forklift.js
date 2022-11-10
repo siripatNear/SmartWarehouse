@@ -266,6 +266,7 @@ exports.updateItem = async (req, res) => {
                 matching: true,
                 finish: true,
                 message: `Order id ${order_id} is already finish!`,
+                item: rows
             })
         }else{
             return res.status(201).json({
