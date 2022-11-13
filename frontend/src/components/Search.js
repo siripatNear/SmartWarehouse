@@ -82,13 +82,13 @@ const Search = ({
         <FormControl p={2} id="length">
           <Input type="text" placeholder="Search Sub Category" />
         </FormControl>
-        <IconButton
+        {/* <IconButton
           colorScheme="blue"
           aria-label="Search database"
           icon={<SearchIcon />}
           type="submit"
           form="search"
-        />
+        /> */}
       </HStack>
     </form>
   );

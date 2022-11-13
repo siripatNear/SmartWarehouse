@@ -31,13 +31,13 @@ const SearchUser = () => {
           <FormControl width={"70%"} p={1}>
             <Input type="text" placeholder="Search User ID or Name..." />
           </FormControl>
-          <IconButton
+          {/* <IconButton
             colorScheme="blue"
             aria-label="Search database"
             icon={<SearchIcon />}
             type="submit"
             form="search"
-          />
+          /> */}
         </HStack>
       </form>
       <HStack>
