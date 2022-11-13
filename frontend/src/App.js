@@ -37,6 +37,7 @@ import Dashboard from "./pages/Dashboard";
 import ConfirmPicking from "./pages/Operator/ConfirmPicking";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
+import Stock from "./pages/adminRole/Stock";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -83,6 +84,7 @@ const App = () => {
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/edit-user" element={<AddUser />} />
           <Route path="/manage-users" element={<UserManage />} />
+          <Route path="/stock" element={<Stock />} />
 
           {/* //* Operator */}
           <Route path="/order-list" element={<OrderList />} />
