@@ -71,7 +71,9 @@ const TableFPickingList = (props) => {
         onClose={onClose}
         LbuttonPopup="No"
         RbuttonPopup="Yes"
-        onConfirm={()=>navigate("/picking-order-detail", { state: object.order_id })}
+        onConfirm={() =>
+          navigate("/picking-order-detail", { state: object.order_id })
+        }
         ColorRbuttonPopup={
           object.order_status === "Not start" ? "twitter" : "yellow"
         }
