@@ -86,39 +86,39 @@ function OrderDetail() {
                                     </TabPanel>
                                 ) : null}
                                 {item_zone_2.warehouse_id ? (
-                                <TabPanel>
-                                    2
-                                    <GridOrderDetail itemlist={item_zone_2} />
-                                    <TablePickingListInOrder itemlist={item_zone_2} />
-                                </TabPanel>
+                                    <TabPanel>
+                                        2
+                                        <GridOrderDetail itemlist={item_zone_2} />
+                                        <TablePickingListInOrder itemlist={item_zone_2} />
+                                    </TabPanel>
                                 ) : null}
                                 {item_zone_3.warehouse_id ? (
-                                <TabPanel>
-                                    3
-                                    <GridOrderDetail itemlist={item_zone_3} />
-                                    <TablePickingListInOrder itemlist={item_zone_3} />
-                                </TabPanel>
+                                    <TabPanel>
+                                        3
+                                        <GridOrderDetail itemlist={item_zone_3} />
+                                        <TablePickingListInOrder itemlist={item_zone_3} />
+                                    </TabPanel>
                                 ) : null}
                                 {item_zone_4.warehouse_id ? (
-                                <TabPanel>
-                                    4
-                                    <GridOrderDetail itemlist={item_zone_4} />
-                                    <TablePickingListInOrder itemlist={item_zone_4} />
-                                </TabPanel>
+                                    <TabPanel>
+                                        4
+                                        <GridOrderDetail itemlist={item_zone_4} />
+                                        <TablePickingListInOrder itemlist={item_zone_4} />
+                                    </TabPanel>
                                 ) : null}
                                 {item_zone_5.warehouse_id ? (
-                                <TabPanel>
-                                    5
-                                    <GridOrderDetail itemlist={item_zone_5} />
-                                    <TablePickingListInOrder itemlist={item_zone_5} />
-                                </TabPanel>
+                                    <TabPanel>
+                                        5
+                                        <GridOrderDetail itemlist={item_zone_5} />
+                                        <TablePickingListInOrder itemlist={item_zone_5} />
+                                    </TabPanel>
                                 ) : null}
                                 {item_zone_6.warehouse_id ? (
-                                <TabPanel>
-                                    6
-                                    <GridOrderDetail itemlist={item_zone_6} />
-                                    <TablePickingListInOrder itemlist={item_zone_6} />
-                                </TabPanel>
+                                    <TabPanel>
+                                        6
+                                        <GridOrderDetail itemlist={item_zone_6} />
+                                        <TablePickingListInOrder itemlist={item_zone_6} />
+                                    </TabPanel>
                                 ) : null}
                             </TabPanels>
                         </Tabs>

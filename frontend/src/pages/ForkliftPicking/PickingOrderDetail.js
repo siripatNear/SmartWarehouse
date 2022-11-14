@@ -30,8 +30,8 @@ function PickingOrderDetail() {
     const { data: item_zone_6 } = useQuery([`/picking/${state}?zone=6`]);
 
     // Test input Item
-    const [inputItem, setInputItem] = useState("");
-    const handleChange = (event) => setInputItem(event.target.value)
+    const [inputitem, setInputitem] = useState("");
+    const handleChange = (event) => setInputitem(event.target.value)
     const navigate = useNavigate();
     // console.log(inputItem);
 
@@ -44,7 +44,7 @@ function PickingOrderDetail() {
             onSuccess() {
                 queryClient.invalidateQueries([`/picking/${state}`]); //update ui
                 // navigate("/picking-order-detail");
-                console.log(inputItem);
+                console.log(inputitem);
                 console.log("succees");
             },
         }
@@ -215,7 +215,7 @@ function PickingOrderDetail() {
                     {/* Test Pop-Up Button */}
                     <Box display='flex' alignItems='center' justifyContent='center' mb='10px'>
                         <Input placeholder='Item_code' width='200px' border='2px'
-                            inputItem={inputItem}
+                            inputitem={inputitem}
                             onChange={handleChange}
                         />
                     </Box>
@@ -236,7 +236,7 @@ function PickingOrderDetail() {
                         />
                         <CustomButton
                             onOpen={() =>
-                                sendItemCode(inputItem)
+                                sendItemCode(inputitem)
                             }
                             marginX={4}
                             buttonName="Test Input-Item"
