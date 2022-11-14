@@ -10,7 +10,6 @@ function GridOrderDetail(props) {
     const sec2 = itemlist.positions_grid.filter((positions) => { return positions.section === 2 })
     const sec3 = itemlist.positions_grid.filter((positions) => { return positions.section === 3 })
     const sec4 = itemlist.positions_grid.filter((positions) => { return positions.section === 4 })
-    console.log(sec1);
 
     return (
         <>
