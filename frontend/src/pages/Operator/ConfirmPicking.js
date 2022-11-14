@@ -5,7 +5,6 @@ import TablePickingListConfirm from "../../components/TablePickingListConfirm";
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 
 function ConfirmPicking() {
 
