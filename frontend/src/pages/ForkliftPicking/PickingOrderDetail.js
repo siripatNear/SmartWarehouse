@@ -33,8 +33,8 @@ function PickingOrderDetail() {
     const [inputitem, setInputitem] = useState("");
     const handleChange = (event) => setInputitem(event.target.value)
     const navigate = useNavigate();
-    // console.log(inputItem);
-
+    console.log(inputitem);
+    
     const {
         mutate: sendItemCode,
     } = useMutation(
