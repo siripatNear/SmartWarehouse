@@ -43,87 +43,74 @@ function PickingOrderDetail() {
   const { data: item_zone_6 } = useQuery([`/picking/${state}`, { zone: 6 }]);
   const isFetching = useIsFetching([`/picking/${state}`]);
 
-    // Test input Item
-    const [inputitem, setInputitem] = useState("");
-    const handleChange = (event) => setInputitem(event.target.value)
-    const navigate = useNavigate();
-    console.log(inputitem);
-    
-    const {
-        mutate: sendItemCode,
-    } = useMutation(
-        (send) =>
-            api.post(`/picking/${state}`, { item_code: send.item_code }),
-        {
-            onSuccess() {
-                queryClient.invalidateQueries([`/picking/${state}`]); //update ui
-                // navigate("/picking-order-detail");
-                console.log(inputitem);
-                console.log("succees");
-            },
+  // Test input Item
+  const [inputitem, setInputitem] = useState("");
+  const handleChange = (event) => setInputitem(event.target.value)
+  const navigate = useNavigate();
+  console.log(inputitem);
+
+  const {
+    mutate: sendItemCode,
+    data
+  } = useMutation(
+    (send) =>
+      api.post(`/picking/${state}`, { item_code: send }),
+    {
+      onSuccess: (result) => {
+        console.log(result);
+        if (result.data.matching) {
+          console.log('match');
+          onOpen();
+        } else {
+          console.log('not match');
+          onOpen();
         }
-    );
+        queryClient.invalidateQueries([`/picking/${state}`]); //update ui
+      }
+    }
+  );
 
-    const mapCateName = (category) => {
-        switch (category) {
-            case 1:
-                return "Kraft";
-            case 2:
-                return "Bleached";
-            case 3:
-                return "Glassine";
-            case 4:
-                return "Wax";
-            case 5:
-                return "PVC";
-            case 6:
-                return "Inkjet";
-            case 7:
-                return "Corrugated";
-            default:
-                return "";
-        }
-    };
+  const mapCateName = (category) => {
+    switch (category) {
+      case 1:
+        return "Kraft";
+      case 2:
+        return "Bleached";
+      case 3:
+        return "Glassine";
+      case 4:
+        return "Wax";
+      case 5:
+        return "PVC";
+      case 6:
+        return "Inkjet";
+      case 7:
+        return "Corrugated";
+      default:
+        return "";
+    }
+  };
 
-    return (
-        <>
-            {/* Pop-up Match */}
-            < CustomAlertOneButton
-                isOpen={isOpen}
-                onClose={onClose}
-                buttonPopup="OK"
-                ColorbuttonPopup="twitter"
-                HearderFsize="5xl"
-                textHeader=<HStack >
-                    <font color="green" > Match! </font>
-                </HStack>
-                textBody=<VStack alignItems="left">
-                    <Text fontSize="xl">Zone : {object.zone} </Text>
-                    <Text fontSize="xl">Item code : {object.item_code} </Text>
-                    <Text fontSize="xl">Category : {mapCateName(object.category)} </Text>
-                    <Text fontSize="xl">Length : {object.length} </Text>
-                    <Text fontSize="xl">Date create : {dayjs(object.create_dt).format('DD/MM/YYYY')} </Text>
-                </VStack>
-            />
-
-            {/* Pop-up Not Match */}
-            {/* <CustomAlertOneButton
-                isOpen={isOpen}
-                onClose={onClose}
-                buttonPopup="Try again"
-                ColorbuttonPopup="twitter"
-                HearderFsize="5xl"
-                textHeader=<HStack >
-                    <font color="red" > Not Match! </font>
-                </HStack>
-                textBody=<VStack alignItems="left">
-                    <Text fontSize="xl">Zone : {object.zone} </Text>
-                    <Text fontSize="xl">Item code : {object.item_code} </Text>
-                    <Text fontSize="xl">Category : {mapCateName(object.category)} </Text>
-                    <Text fontSize="xl">Length : {object.length} </Text>
-                    <Text fontSize="xl">Date create : {dayjs(object.create_dt).format('DD/MM/YYYY')} </Text>
-                </VStack>
-            /> */}
+  return (
+    <>
+      {/* Pop-up*/}
+      < CustomAlertOneButton
+        isOpen={isOpen}
+        onClose={onClose}
+        buttonPopup="OK"
+        ColorbuttonPopup="twitter"
+        HearderFsize="5xl"
+        textHeader=<HStack >
+          <font color={data?.data?.matching ? "green " : "red"} > {data?.data?.matching ? "Match!" : "Not Match!"} </font>
+        </HStack>
+        textBody=<VStack alignItems="left">
+          <Text fontSize="xl">Zone : {object.zone} </Text>
+          <Text fontSize="xl">Item code : {object.item_code} </Text>
+          <Text fontSize="xl">Category : {mapCateName(object.category)} </Text>
+          <Text fontSize="xl">Length : {object.length} </Text>
+          <Text fontSize="xl">Date create : {dayjs(object.create_dt).format('DD/MM/YYYY')} </Text>
+        </VStack>
+      />
       {isLoading || isNil(order) || isFetching > 0 ? (
         <Center mt="100px">
           <Spinner
@@ -200,47 +187,47 @@ function PickingOrderDetail() {
               </TabPanels>
             </Tabs>
           </div>
-          
-                    {/* Test Pop-Up Button */}
-                    <Box display='flex' alignItems='center' justifyContent='center' mb='10px'>
-                        <Input placeholder='Item_code' width='200px' border='2px'
-                            inputitem={inputitem}
-                            onChange={handleChange}
-                        />
-                    </Box>
-                    <div className='ContainerBtn'>
-                        <CustomButton
-                            marginX={4}
-                            onOpen={() => {
-                                setObject(order);
-                                onOpen();
-                            }}
-                            buttonName="Test Pop-Up"
-                            buttonColor="twitter"
-                            HoverColor="twitter.300"
-                            buttonSize="lg"
-                            borderRadius="10px"
-                            fontSize="22px"
-                            fontWeight="medium"
-                        />
-                        <CustomButton
-                            onOpen={() =>
-                                sendItemCode(inputitem)
-                            }
-                            marginX={4}
-                            buttonName="Test Input-Item"
-                            buttonColor="twitter"
-                            HoverColor="twitter.300"
-                            buttonSize="lg"
-                            borderRadius="10px"
-                            fontSize="22px"
-                            fontWeight="medium"
-                        />
-                    </div>
-                </div>
-            )}
-        </>
-    )
+
+          {/* Test Pop-Up Button */}
+          <Box display='flex' alignItems='center' justifyContent='center' mb='10px'>
+            <Input placeholder='Item_code' width='200px' border='2px'
+              inputitem={inputitem}
+              onChange={handleChange}
+            />
+          </Box>
+          <div className='ContainerBtn'>
+            <CustomButton
+              marginX={4}
+              onOpen={() => {
+                setObject(order);
+                onOpen();
+              }}
+              buttonName="Test Pop-Up"
+              buttonColor="twitter"
+              HoverColor="twitter.300"
+              buttonSize="lg"
+              borderRadius="10px"
+              fontSize="22px"
+              fontWeight="medium"
+            />
+            <CustomButton
+              onOpen={() =>
+                sendItemCode(inputitem)
+              }
+              marginX={4}
+              buttonName="Test Input-Item"
+              buttonColor="twitter"
+              HoverColor="twitter.300"
+              buttonSize="lg"
+              borderRadius="10px"
+              fontSize="22px"
+              fontWeight="medium"
+            />
+          </div>
+        </div>
+      )}
+    </>
+  )
 
 }
 
