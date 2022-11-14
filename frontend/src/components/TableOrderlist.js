@@ -37,7 +37,6 @@ const mapStatus = (status) => {
       return (
         <Badge
           variant="subtle"
-          width="85%"
           textAlign={"center"}
           borderRadius="5px"
           colorScheme="gray"
@@ -49,7 +48,6 @@ const mapStatus = (status) => {
       return (
         <Badge
           variant="subtle"
-          width="85%"
           textAlign={"center"}
           borderRadius="5px"
           colorScheme="yellow"
@@ -136,7 +134,9 @@ const TableOrderlist = (props) => {
                       buttonName="Detail"
                       buttonColor="twitter"
                       buttonSize="sm"
-                      onOpen={()=>navigate("/order-detail", { state: order.order_id })}
+                      onOpen={() =>
+                        navigate("/order-detail", { state: order.order_id })
+                      }
                     />
                   }
                   {user.role === "Operator" && (
