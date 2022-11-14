@@ -13,6 +13,8 @@ import {
   HStack,
   useDisclosure,
   Text,
+  Box,
+  Input,
 } from "@chakra-ui/react";
 
 import CustomButton from "../../components/CustomButton";
@@ -22,7 +24,10 @@ import { CustomAlertOneButton } from "../../components/AlertOneButton";
 
 import { isNil } from "lodash";
 import { useIsFetching, useQuery } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { api, queryClient } from "../../lib/query";
+
 
 function PickingOrderDetail() {
   const [object, setObject] = useState({});
@@ -38,26 +43,6 @@ function PickingOrderDetail() {
   const { data: item_zone_6 } = useQuery([`/picking/${state}`, { zone: 6 }]);
   const isFetching = useIsFetching([`/picking/${state}`]);
 
-  const mapCateName = (category) => {
-    switch (category) {
-      case 1:
-        return "Kraft";
-      case 2:
-        return "Bleached";
-      case 3:
-        return "Glassine";
-      case 4:
-        return "Wax";
-      case 5:
-        return "PVC";
-      case 6:
-        return "Inkjet";
-      case 7:
-        return "Corrugated";
-      default:
-        return "";
-    }
-  };
     // Test input Item
     const [inputitem, setInputitem] = useState("");
     const handleChange = (event) => setInputitem(event.target.value)
