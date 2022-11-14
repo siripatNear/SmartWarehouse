@@ -17,6 +17,7 @@ import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import TablePickingList from "../components/TablePickingList";
 import BoxZoneAll from "../components/BoxZoneAll";
+import ReactPaginate from "react-paginate";
 
 const Dashboard = () => {
   const [warehouse, setWarehouse] = useState({
@@ -64,7 +65,7 @@ const Dashboard = () => {
 
               <Box paddingLeft={15}>
                 <Grid templateColumns="repeat(3, 2fr)" gap="32px">
-                  <BoxZone warehouseData={data} />
+                  <BoxZone warehouseData={data} zone={zone} setZone={setZone} />
                 </Grid>
               </Box>
             </>
@@ -90,6 +91,15 @@ const Dashboard = () => {
                 </Button>
               </HStack>
               <TablePickingList itemlists={data} warehouse={warehouse.value} />
+              {/* <ReactPaginate
+                breakLabel="..."
+                nextLabel="next >"
+                onPageChange={() => null}
+                pageRangeDisplayed={5}
+                pageCount={3}
+                previousLabel="< previous"
+                renderOnZeroPageCount={null}
+              /> */}
             </>
           )}
         </VStack>

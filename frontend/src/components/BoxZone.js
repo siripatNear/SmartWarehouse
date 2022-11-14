@@ -8,13 +8,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-function BoxZone({ warehouseData }) {
+function BoxZone({ warehouseData, zone = null, setZone = () => null }) {
   return (
     <>
       {warehouseData.summary.map((v) => {
         const percentage = (Number(v.usage) / Number(v.total_positions)) * 100;
         return (
           <Box
+            onClick={() => setZone({ value: v.zone, label: `Zone ${v.zone}` })}
             bg="#a3d9fb"
             borderRadius={"12px"}
             w="250px"

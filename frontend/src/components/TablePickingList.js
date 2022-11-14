@@ -16,6 +16,7 @@ import {
 import * as dayjs from "dayjs";
 import _, { isEmpty } from "lodash";
 import CustomButton from "./CustomButton";
+import { useUserStore } from "../store/user";
 
 export const header = [
   { value: "checkbox", label: " " },
@@ -102,6 +103,7 @@ const TablePickingList = (props) => {
   const { itemlists, warehouse } = props;
   const [itemState, setItemState] = useState([]);
   const [selectedItem, setSelectedItem] = useState([]);
+  const user = useUserStore((state) => state.user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -157,21 +159,23 @@ const TablePickingList = (props) => {
                 key={item.item_code}
               >
                 <Td textAlign={"center"}>
-                  <input
-                    onChange={(event) => {
-                      let checked = event.target.checked;
-                      setItemState(
-                        itemState.map((data) => {
-                          if (item.item_code === data.item_code) {
-                            data.select = checked;
-                          }
-                          return data;
-                        })
-                      );
-                    }}
-                    type="checkbox"
-                    checked={item.select}
-                  ></input>
+                  {user.role === "Operator" && (
+                    <input
+                      onChange={(event) => {
+                        let checked = event.target.checked;
+                        setItemState(
+                          itemState.map((data) => {
+                            if (item.item_code === data.item_code) {
+                              data.select = checked;
+                            }
+                            return data;
+                          })
+                        );
+                      }}
+                      type="checkbox"
+                      checked={item.select}
+                    />
+                  )}
                 </Td>
                 <Td>{item.item_code}</Td>
                 <Td>{mapCateName(item.category)}</Td>
@@ -191,26 +195,28 @@ const TablePickingList = (props) => {
         paddingBottom="20px"
         gap="10px"
       >
-        <CustomButton
-          buttonName="Add"
-          buttonColor="twitter"
-          buttonSize="md"
-          onOpen={() => {
-            if (isEmpty(selectedItem)) {
-              toast({
-                title: "Please select item!",
-                description: 'before click "Add" button',
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-              });
-            } else {
-              navigate("/confirm-picking", {
-                state: { selectedItem: selectedItem, warehouse: warehouse },
-              });
-            }
-          }}
-        />
+        {user.role === "Operator" && (
+          <CustomButton
+            buttonName="Add"
+            buttonColor="twitter"
+            buttonSize="md"
+            onOpen={() => {
+              if (isEmpty(selectedItem)) {
+                toast({
+                  title: "Please select item!",
+                  description: 'before click "Add" button',
+                  status: "error",
+                  duration: 3000,
+                  isClosable: true,
+                });
+              } else {
+                navigate("/confirm-picking", {
+                  state: { selectedItem: selectedItem, warehouse: warehouse },
+                });
+              }
+            }}
+          />
+        )}
       </Box>
     </>
   );
