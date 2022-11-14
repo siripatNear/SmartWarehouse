@@ -109,7 +109,6 @@ const TablePickingListConfirm = () => {
 
     const {
         mutate: createOrder,
-        // isLoading: isLoadingCreateOrder,
     } = useMutation(
         (Order) =>
             api.post(`/warehouse/${state.warehouse}/picking-list`, { items: Order.map((v) => ({ item_code: v.item_code })), remarks: "" }),
