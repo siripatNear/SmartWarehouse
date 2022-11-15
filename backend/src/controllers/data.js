@@ -210,7 +210,7 @@ exports.fetchFilterItems = async (req, res) => {
           [Op.in]: ["used", "stock in"],
         },
         sub_cate_code: {
-          [Op.like]: "%" + search + "%",
+          [Op.iLike]: "%" + search + "%",
         },
       },
       include: [
