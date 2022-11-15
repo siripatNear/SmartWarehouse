@@ -37,6 +37,7 @@ function GridOrderDetail(props) {
                                     alignItems='center'
                                     justifyContent='center'
                                     borderRadius='12px'
+                                    key={data.col_no}
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}
@@ -56,6 +57,7 @@ function GridOrderDetail(props) {
                                     alignItems='center'
                                     justifyContent='center'
                                     borderRadius='12px'
+                                    key={data.col_no}
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}
@@ -75,6 +77,7 @@ function GridOrderDetail(props) {
                                     alignItems='center'
                                     justifyContent='center'
                                     borderRadius='12px'
+                                    key={data.col_no}
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}
@@ -94,6 +97,7 @@ function GridOrderDetail(props) {
                                     alignItems='center'
                                     justifyContent='center'
                                     borderRadius='12px'
+                                    key={data.col_no}
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}
