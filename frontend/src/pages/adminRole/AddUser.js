@@ -74,9 +74,6 @@ export default function AddUser() {
     }
   };
 
-  useEffect(() => {
-    protectedRoute();
-  }, []);
 
   //* popup
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -128,6 +125,7 @@ export default function AddUser() {
       onSuccess() {
         onClose();
         reset();
+        console.log('Adding user was successful');
       },
     }
   );

@@ -37,7 +37,6 @@ exports.addUser = async (req, res) => {
     const user = await models.Users.create(data);
 
     return res.status(201).json({
-
       success: true,
       message: "Adding user was successful",
       user,
