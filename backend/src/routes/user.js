@@ -64,7 +64,6 @@ router.delete("/order/:order_id", userAuth, deleteOrder);
 router.get(
   "/order/:order_id",
   userAuth,
-  authPage(["Admin", "Operator"]),
   getOrderDetail
 );
 router.get("/stock", userAuth, authPage(["Admin"]), getStock);
