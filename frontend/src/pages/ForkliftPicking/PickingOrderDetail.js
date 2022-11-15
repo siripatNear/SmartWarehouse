@@ -15,6 +15,7 @@ import {
   Text,
   Box,
   Input,
+  useToast
 } from "@chakra-ui/react";
 
 import CustomButton from "../../components/CustomButton";
@@ -32,6 +33,7 @@ import { api, queryClient } from "../../lib/query";
 function PickingOrderDetail() {
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast()
 
   const { state } = useLocation();
   const { data: order, isLoading } = useQuery([`/picking/${state}`]);
@@ -61,6 +63,13 @@ function PickingOrderDetail() {
         if (result.data.matching) {
           console.log('match');
           onOpen();
+          // if (result.data.matching) {
+          //   console.log('match');
+          //   onOpen();
+          // } else {
+          //   console.log('not finish');
+          //   onOpen();
+          // }
         } else {
           console.log('not match');
           onOpen();
@@ -68,6 +77,32 @@ function PickingOrderDetail() {
       }
     }
   );
+
+  // const {
+  //   mutate: sendItemCode,
+  //   data
+  // } = useMutation(
+  //   (send) =>
+  //     api.post(`/picking/${state}`, { item_code: send }),
+  //   {
+  //     onSuccess: (result) => {
+  //       console.log(result);
+  //       if (result.data.finish) {
+  //         console.log('finish');
+  //         onOpen();
+  //       } else {
+  //         console.log('not finish');
+  //         if (result.data.matching) {
+  //           console.log('match');
+  //           onOpen();
+  //         } else {
+  //           console.log('not match');
+  //           onOpen();
+  //         }
+  //       }
+  //     }
+  //   }
+  // );
 
   return (
     <>
@@ -78,7 +113,14 @@ function PickingOrderDetail() {
         onConfirm={() => {
           onClose();
           if (data?.data?.finish) {
-            navigate("/picking-order-list")
+            toast({
+              title: 'Order Finish',
+              description: 'Order ID : ' + state  + ' is already finished.',
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+            })
+            navigate("/history")
           } else {
             queryClient.invalidateQueries([`/picking/${state}`])
           }
@@ -97,6 +139,29 @@ function PickingOrderDetail() {
           <Text fontSize="xl">Date create : {dayjs(data?.data?.item[0].create_dt).format('DD/MM/YYYY')} </Text>
         </VStack>
       />
+
+      {/* < CustomAlertOneButton
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          onClose();
+          navigate("/picking-order-list")
+        }}
+        buttonPopup="OK"
+        ColorbuttonPopup="twitter"
+        HearderFsize="5xl"
+        textHeader=<HStack >
+          <font> Are you sure to </font>
+          <font color="twitter" > FINISH </font>
+          <font> this order? </font>
+        </HStack>
+        textBody=<VStack alignItems="left">
+          <Text fontSize="xl">Order : {state} </Text>
+          <Text fontSize="xl">Date create :  </Text>
+          <Text fontSize="xl">Quantity :  </Text>
+          <Text fontSize="xl">Ordered By :  </Text>
+        </VStack>
+      /> */}
 
       {isLoading || isNil(order) || isFetching > 0 ? (
         <Center mt="100px">
