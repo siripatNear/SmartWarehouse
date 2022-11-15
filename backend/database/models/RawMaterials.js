@@ -36,8 +36,14 @@ module.exports = (sequelize, DataTypes) => {
             sub_cate_code: DataTypes.STRING,
             internal_id: DataTypes.STRING,
             length: DataTypes.INTEGER,
-            unit: DataTypes.STRING,
-            item_status: DataTypes.STRING,
+            unit: {
+                type: DataTypes.STRING,
+                defaultValue: "meters",
+            },
+            item_status: {
+                type: DataTypes.STRING,
+                defaultValue: "New coming",
+            },
             position_code: DataTypes.STRING,
             qc_by: DataTypes.STRING,
             qc_dt: DataTypes.DATE,

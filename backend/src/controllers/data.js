@@ -301,3 +301,35 @@ exports.getStock = async (req, res) => {
         })
     }
 }
+
+// ========== This section is NOT in our Web App ==============
+// Only use for test adding new item
+exports.addItem = async (req, res) => {
+
+    try {
+        const { item_code, 
+                item_cate_code, 
+                sub_cate_code, 
+                length,
+            } = req.body;
+        const data = {
+            item_code: item_code,
+            item_cate_code: item_cate_code,
+            sub_cate_code: sub_cate_code,
+            length: length,
+            create_by: req.user.user_id,
+        };
+        const item = await models.RawMaterials.create(data);
+
+        return res.status(201).json({
+
+            success: true,
+            message: "Adding item was successful",
+            item,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+}
