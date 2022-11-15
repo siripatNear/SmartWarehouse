@@ -178,6 +178,7 @@ exports.validateItem = async (req, res, next) => {
             console.log('Not Match!')
             const { rows } = await db.query(`
                 SELECT r.item_code, c.cate_name, r.sub_cate_code,
+                r.create_dt, r.length,
                 wt.position_code, wt.warehouse_id, wt.zone, wt.section,
                 wt.col_no, wt.floor_no
                 FROM raw_materials r
@@ -219,6 +220,7 @@ exports.updateItem = async (req, res) => {
 
         const { rows } = await db.query(`
             SELECT r.item_code, c.cate_name, r.sub_cate_code,
+            r.create_dt, r.length,
             wt.position_code, wt.warehouse_id, wt.zone, wt.section,
             wt.col_no, wt.floor_no
             FROM raw_materials r
