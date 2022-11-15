@@ -6,7 +6,7 @@ const { Op } = require("sequelize");
 //* response to get any form page
 exports.getForm = async (req, res, next) => {
   try {
-    if (String(req.params)) {
+    if (Object.keys(req.query).length > 0) {
       console.log({
         message: "you have permission to access",
         params: req.params,
@@ -234,6 +234,10 @@ exports.fetchFilterItems = async (req, res) => {
             },
           },
         },
+      ],
+      order: [
+        ['item_status', 'DESC'],
+        ['length'],
       ],
       offset: page,
       limit: limit,

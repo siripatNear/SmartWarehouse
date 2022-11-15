@@ -319,7 +319,7 @@ exports.findPosition = async (req, res) => {
         console.log(`section ${rows[i].section} is Full, Next.`);
         i = i+1;
     }
-    console.log(`zone is ${rows[i].zone} and section is ${rows[i].section}.`);
+    console.log(`Zone is ${rows[i].zone} and Section is ${rows[i].section}.`);
 
     // 5. Find column that contain this {category} the most
     let column = await db.query(`
