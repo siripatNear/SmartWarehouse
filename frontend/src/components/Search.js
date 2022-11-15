@@ -40,6 +40,8 @@ const Search = ({
   setZone = () => null,
   category = null,
   setCategory = () => null,
+  search = "",
+  setSearch = () => null,
 }) => {
   return (
     <form style={{ width: "100%" }}>
@@ -80,15 +82,20 @@ const Search = ({
         </FormControl>
 
         <FormControl p={2} id="length">
-          <Input type="text" placeholder="Search Length" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.currentTarget.value)}
+            type="text"
+            placeholder="Search Sub Category"
+          />
         </FormControl>
-        <IconButton
+        {/* <IconButton
           colorScheme="blue"
           aria-label="Search database"
           icon={<SearchIcon />}
           type="submit"
           form="search"
-        />
+        /> */}
       </HStack>
     </form>
   );

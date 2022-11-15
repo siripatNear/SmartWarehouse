@@ -10,10 +10,6 @@ function GridOrderDetail(props) {
     const sec2 = itemlist.positions_grid.filter((positions) => { return positions.section === 2 })
     const sec3 = itemlist.positions_grid.filter((positions) => { return positions.section === 3 })
     const sec4 = itemlist.positions_grid.filter((positions) => { return positions.section === 4 })
-    console.log(sec1);
-    console.log(sec2);
-    console.log(sec3);
-    console.log(sec4);
 
     return (
         <>
@@ -29,7 +25,6 @@ function GridOrderDetail(props) {
                     />
                 </Center>
             ) : (
-
                 <div className='GridContainer'>
                     <div className='SecContainer'>
                         {sec1.map((data) => {
@@ -42,6 +37,7 @@ function GridOrderDetail(props) {
                                     alignItems='center'
                                     justifyContent='center'
                                     borderRadius='12px'
+                                    key={data.col_no}
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}
@@ -61,6 +57,7 @@ function GridOrderDetail(props) {
                                     alignItems='center'
                                     justifyContent='center'
                                     borderRadius='12px'
+                                    key={data.col_no}
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}
@@ -80,6 +77,7 @@ function GridOrderDetail(props) {
                                     alignItems='center'
                                     justifyContent='center'
                                     borderRadius='12px'
+                                    key={data.col_no}
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}
@@ -99,6 +97,7 @@ function GridOrderDetail(props) {
                                     alignItems='center'
                                     justifyContent='center'
                                     borderRadius='12px'
+                                    key={data.col_no}
                                 >
                                     <div className="TextBoxPosition">
                                         {data.count}

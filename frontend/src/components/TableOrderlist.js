@@ -18,6 +18,7 @@ import CustomButton from "./CustomButton";
 import { CustomAlertDialog } from "./AlertDialog";
 import { api, queryClient } from "../lib/query";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export const header = [
   { value: "order_id", label: "Order ID" },
@@ -36,7 +37,6 @@ const mapStatus = (status) => {
       return (
         <Badge
           variant="subtle"
-          width="85%"
           textAlign={"center"}
           borderRadius="5px"
           colorScheme="gray"
@@ -48,7 +48,6 @@ const mapStatus = (status) => {
       return (
         <Badge
           variant="subtle"
-          width="85%"
           textAlign={"center"}
           borderRadius="5px"
           colorScheme="yellow"
@@ -62,10 +61,11 @@ const mapStatus = (status) => {
 };
 
 const TableOrderlist = (props) => {
-  const { Orders } = props;
+  const { orders } = props;
   const user = useUserStore((state) => state.user);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [object, setObject] = useState({});
+  const navigate = useNavigate();
 
   //* delete data from api
   const { mutate: DeleteOrder, isLoading: isDeleting } = useMutation(
@@ -94,7 +94,7 @@ const TableOrderlist = (props) => {
         textHeader=<HStack>
           <font color="red"> Delete </font>
           <font> order </font>
-          <font> '{object.order_id}'' </font>
+          <font> '{object.order_id}' </font>
         </HStack>
         textBody=<Text fontSize="xl">
           Are you sure? You can't undo this action afterwards.
@@ -114,12 +114,12 @@ const TableOrderlist = (props) => {
           </Thead>
 
           <Tbody>
-            {Orders.order_list.map((order) => (
+            {orders.order_list.map((order) => (
               <Tr
                 _hover={{
                   backgroundColor: "#ECF7FE",
                 }}
-                key={order.value}
+                key={order.order_id}
               >
                 <Td>{order.order_id}</Td>
                 <Td>{dayjs(order.create_dt).format("DD / MMM / YYYY")}</Td>
@@ -134,6 +134,9 @@ const TableOrderlist = (props) => {
                       buttonName="Detail"
                       buttonColor="twitter"
                       buttonSize="sm"
+                      onOpen={() =>
+                        navigate("/order-detail", { state: order.order_id })
+                      }
                     />
                   }
                   {user.role === "Operator" && (

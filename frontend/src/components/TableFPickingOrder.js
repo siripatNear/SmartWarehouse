@@ -17,6 +17,7 @@ import {
 import * as dayjs from "dayjs";
 import CustomButton from "./CustomButton";
 import { CustomAlertDialog } from "./AlertDialog";
+import { useNavigate } from "react-router-dom";
 
 export const header = [
   { value: "order_id", label: "Order ID" },
@@ -61,6 +62,7 @@ const TableFPickingList = (props) => {
   const { orders } = props;
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -69,25 +71,22 @@ const TableFPickingList = (props) => {
         onClose={onClose}
         LbuttonPopup="No"
         RbuttonPopup="Yes"
+        onConfirm={() =>
+          navigate("/picking-order-detail", { state: object.order_id })
+        }
         ColorRbuttonPopup={
           object.order_status === "Not start" ? "twitter" : "yellow"
         }
         HearderFsize={object.order_status === "Not start" ? "2xl" : "xl"}
-        textHeader={
-          object.order_status === "Not start" ? (
-            <HStack>
-              <font> Are you sure to </font>
-              <font color="#1DA1F2"> Start </font>
-              <font> this order ? </font>
-            </HStack>
-          ) : (
-            <HStack>
-              <font> Are you sure to </font>
-              <font color="#FFBF00"> Resume </font>
-              <font> this order ? </font>
-            </HStack>
-          )
-        }
+        textHeader=<HStack>
+          <font> Are you sure to </font>
+          <font
+            color={object.order_status === "Not start" ? "#1DA1F2" : "#FFBF00"}
+          >
+            {object.order_status === "Not start" ? "Start" : "Resume"}{" "}
+          </font>
+          <font> this order ? </font>
+        </HStack>
         textBody=<VStack alignItems="left">
           <Text fontSize="xl">Order : {object.order_id}</Text>
           <Text fontSize="xl">

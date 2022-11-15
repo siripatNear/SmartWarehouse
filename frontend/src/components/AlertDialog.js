@@ -30,7 +30,6 @@ export const CustomAlertDialog = ({
         isCentered
       >
         <AlertDialogOverlay />
-
         <AlertDialogContent borderRadius="15px">
           <AlertDialogHeader fontSize={HearderFsize} marginTop="18px">
             {textHeader}
@@ -38,7 +37,10 @@ export const CustomAlertDialog = ({
           <AlertDialogCloseButton />
           <AlertDialogBody>{textBody}</AlertDialogBody>
           <AlertDialogFooter>
-            {!isLoading && <Button onClick={onClose}>{LbuttonPopup}</Button>}
+            {!isLoading &&
+              <Button
+                onClick={onClose}>{LbuttonPopup}
+              </Button>}
             <Button
               isLoading={isLoading}
               colorScheme={ColorRbuttonPopup}
