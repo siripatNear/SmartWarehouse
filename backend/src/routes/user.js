@@ -15,6 +15,7 @@ const {
   fetchData,
   fetchFilterItems,
   getStock,
+  addItem,
 } = require("../controllers/data");
 const {
   createOrder,
@@ -26,7 +27,7 @@ const {
 const {
   validationMiddleware,
 } = require("../middlewares/validations-middleware");
-const { startOrder, updateItem, validateItem } = require("../controllers/forklift");
+const { startOrder, updateItem, validateItem, findPosition } = require("../controllers/forklift");
 
 router.get(
   "/warehouse/:wh_id",
@@ -82,6 +83,15 @@ router.post(
   userAuth,
   validateItem,
   updateItem
+);
+
+router.post("/put-away/:wh_id", userAuth,authPage(["Forklift"]), findPosition)
+
+//========= NO UI (just test)================
+router.post(
+  "/add-item",
+  userAuth,
+  addItem
 );
 
 module.exports = router;
