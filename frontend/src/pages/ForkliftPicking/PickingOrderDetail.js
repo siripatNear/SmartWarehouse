@@ -86,7 +86,7 @@ function PickingOrderDetail() {
           <font color={data?.data?.matching ? "green " : "red"} > {data?.data?.matching ? "Match!" : "Not Match!"} </font>
         </HStack>
         textBody=<VStack alignItems="left">
-          <Text fontSize="xl">Zone : {data?.data?.item[0].zone} </Text>
+          {(data?.data?.matching) ? <Text fontSize="xl">Zone : {data?.data?.item[0].zone} </Text> : null}
           <Text fontSize="xl">Item code : {data?.data?.item[0].item_code} </Text>
           <Text fontSize="xl">Category : {data?.data?.item[0].cate_name} </Text>
           <Text fontSize="xl">Length : {data?.data?.item[0].length} </Text>
