@@ -6,7 +6,7 @@ const { Op } = require("sequelize");
 //* response to get any form page
 exports.getForm = async (req, res, next) => {
   try {
-    if (String(req.params)) {
+    if (Object.keys(req.query).length > 0) {
       console.log({
         message: "you have permission to access",
         params: req.params,
@@ -235,6 +235,10 @@ exports.fetchFilterItems = async (req, res) => {
           },
         },
       ],
+      order: [
+        ['item_status', 'DESC'],
+        ['length'],
+      ],
       offset: page,
       limit: limit,
       raw: true,
@@ -283,17 +287,51 @@ exports.getStock = async (req, res) => {
             JOIN category_stock cs ON c.item_cate_code = cs.item_cate_code
             GROUP BY c.item_cate_code, cs.max_quantity,cs.min_quantity
             ORDER BY c.item_cate_code
-        `);
-    return res.status(200).json({
-      success: true,
-      message: "You have permission to access",
-      data: data.rows,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      error: true,
-      message: "Internal Server error",
-    });
-  }
-};
+        `)
+        return res.status(200).json({
+            success: true,
+            message: 'You have permission to access',
+            data: data.rows
+
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: true,
+            message: "Internal Server error"
+        })
+    }
+}
+
+// ========== This section is NOT in our Web App ==============
+// Only use for test adding new item
+exports.addItem = async (req, res) => {
+
+    try {
+        const { item_code, 
+                item_cate_code, 
+                sub_cate_code, 
+                length,
+            } = req.body;
+        const data = {
+            item_code: item_code,
+            item_cate_code: item_cate_code,
+            sub_cate_code: sub_cate_code,
+            length: length,
+            create_by: req.user.user_id,
+        };
+        const item = await models.RawMaterials.create(data);
+
+        return res.status(201).json({
+
+            success: true,
+            message: "Adding item was successful",
+            item,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+}
+

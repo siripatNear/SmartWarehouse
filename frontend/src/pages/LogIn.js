@@ -49,11 +49,7 @@ export default function Login() {
       setError(error.response.data.errors[0].msg);
     }
   };
-
-  // useEffect(()=>{
-  //     console.log(user);
-  //     },[user]);
-
+  
   //-------------------------------------------------------------
 
   const [showPassword, setShowPassword] = useState(false);
