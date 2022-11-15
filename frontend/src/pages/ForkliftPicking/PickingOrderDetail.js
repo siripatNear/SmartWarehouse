@@ -65,31 +65,9 @@ function PickingOrderDetail() {
           console.log('not match');
           onOpen();
         }
-        queryClient.invalidateQueries([`/picking/${state}`]); //update ui
       }
     }
   );
-
-  const mapCateName = (category) => {
-    switch (category) {
-      case 1:
-        return "Kraft";
-      case 2:
-        return "Bleached";
-      case 3:
-        return "Glassine";
-      case 4:
-        return "Wax";
-      case 5:
-        return "PVC";
-      case 6:
-        return "Inkjet";
-      case 7:
-        return "Corrugated";
-      default:
-        return "";
-    }
-  };
 
   return (
     <>
@@ -97,6 +75,10 @@ function PickingOrderDetail() {
       < CustomAlertOneButton
         isOpen={isOpen}
         onClose={onClose}
+        onConfirm={() => {
+          onClose();
+          queryClient.invalidateQueries([`/picking/${state}`])
+        }}
         buttonPopup="OK"
         ColorbuttonPopup="twitter"
         HearderFsize="5xl"
@@ -104,11 +86,11 @@ function PickingOrderDetail() {
           <font color={data?.data?.matching ? "green " : "red"} > {data?.data?.matching ? "Match!" : "Not Match!"} </font>
         </HStack>
         textBody=<VStack alignItems="left">
-          <Text fontSize="xl">Zone : {object.zone} </Text>
-          <Text fontSize="xl">Item code : {object.item_code} </Text>
-          <Text fontSize="xl">Category : {mapCateName(object.category)} </Text>
-          <Text fontSize="xl">Length : {object.length} </Text>
-          <Text fontSize="xl">Date create : {dayjs(object.create_dt).format('DD/MM/YYYY')} </Text>
+          <Text fontSize="xl">Zone : {data?.data?.item[0].zone} </Text>
+          <Text fontSize="xl">Item code : {data?.data?.item[0].item_code} </Text>
+          <Text fontSize="xl">Category : {data?.data?.item[0].cate_name} </Text>
+          <Text fontSize="xl">Length : {data?.data?.item[0].length} </Text>
+          <Text fontSize="xl">Date create : {dayjs(data?.data?.item[0].create_dt).format('DD/MM/YYYY')} </Text>
         </VStack>
       />
       {isLoading || isNil(order) || isFetching > 0 ? (
