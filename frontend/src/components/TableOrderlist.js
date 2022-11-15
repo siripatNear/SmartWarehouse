@@ -94,7 +94,7 @@ const TableOrderlist = (props) => {
         textHeader=<HStack>
           <font color="red"> Delete </font>
           <font> order </font>
-          <font> '{object.order_id}'' </font>
+          <font> '{object.order_id}' </font>
         </HStack>
         textBody=<Text fontSize="xl">
           Are you sure? You can't undo this action afterwards.
