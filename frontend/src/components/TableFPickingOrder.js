@@ -78,21 +78,15 @@ const TableFPickingList = (props) => {
           object.order_status === "Not start" ? "twitter" : "yellow"
         }
         HearderFsize={object.order_status === "Not start" ? "2xl" : "xl"}
-        textHeader={
-          object.order_status === "Not start" ? (
-            <HStack>
-              <font> Are you sure to </font>
-              <font color="#1DA1F2"> Start </font>
-              <font> this order ? </font>
-            </HStack>
-          ) : (
-            <HStack>
-              <font> Are you sure to </font>
-              <font color="#FFBF00"> Resume </font>
-              <font> this order ? </font>
-            </HStack>
-          )
-        }
+        textHeader=<HStack>
+          <font> Are you sure to </font>
+          <font
+            color={object.order_status === "Not start" ? "#1DA1F2" : "#FFBF00"}
+          >
+            {object.order_status === "Not start" ? "Start" : "Resume"}{" "}
+          </font>
+          <font> this order ? </font>
+        </HStack>
         textBody=<VStack alignItems="left">
           <Text fontSize="xl">Order : {object.order_id}</Text>
           <Text fontSize="xl">

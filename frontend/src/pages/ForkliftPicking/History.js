@@ -113,7 +113,6 @@ const History = () => {
                       <CustomButton
                         marginX={4}
                         onOpen={() => {
-                          // setObject(d);
                           onOpen();
                         }}
                         onClose={onClose}
