@@ -77,7 +77,11 @@ function PickingOrderDetail() {
         onClose={onClose}
         onConfirm={() => {
           onClose();
-          queryClient.invalidateQueries([`/picking/${state}`])
+          if (data?.data?.finish) {
+            navigate("/picking-order-list")
+          } else {
+            queryClient.invalidateQueries([`/picking/${state}`])
+          }
         }}
         buttonPopup="OK"
         ColorbuttonPopup="twitter"
@@ -93,6 +97,7 @@ function PickingOrderDetail() {
           <Text fontSize="xl">Date create : {dayjs(data?.data?.item[0].create_dt).format('DD/MM/YYYY')} </Text>
         </VStack>
       />
+
       {isLoading || isNil(order) || isFetching > 0 ? (
         <Center mt="100px">
           <Spinner
