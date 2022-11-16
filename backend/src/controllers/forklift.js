@@ -361,10 +361,12 @@ exports.findPosition = async (req, res) => {
         LIMIT 1
     `, [warehouse_id,rows[i].zone,rows[i].section,column.rows[j].col_no])
 
+    const grid = await positionGrid(position.rows[0].position_code);
+
     return res.status(201).json({
         success: true,
-        data: position.rows[0]
-
+        target: position.rows[0],
+        positions: grid.positions,
     })
     } catch (error) {
         console.log(error);
@@ -392,21 +394,17 @@ const itemDetail = async (item_code) => {
 // Get grid position
 const positionGrid = async (position_code) => {
     try {
-        // LIMIT 1 because we want to show only  1 position.
-        const targets = await db.query(`
-            SELECT w.warehouse_id, r.position_code, r.item_status ,
+
+        const target = await db.query(`
+            SELECT wt.warehouse_id, wt.zone,
             wt.section, wt.col_no, wt.floor_no
             FROM warehouse_trans wt
-            JOIN warehouse w ON w.warehouse_id = wt.warehouse_id
-            JOIN raw_materials r ON r.position_code = wt.position_code
-            JOIN order_transaction ot ON r.item_code = ot.item_code
-            WHERE ot.order_id = $1 AND wt.zone = $2
-            AND r.item_status = 'In progress'
+            WHERE wt.position_code = $1
             ORDER BY wt.zone, wt.section, wt.col_no
-            LIMIT 1
-        `, [order_id, zone])
+        `, [position_code])
 
-        let wh_id = targets.rows[0].warehouse_id;
+        const wh_id = target.rows[0].warehouse_id;
+        const zone = target.rows[0].zone;
 
         const positions = await db.query(`
             SELECT wt.section, wt.col_no, COUNT(r.position_code)
@@ -420,19 +418,15 @@ const positionGrid = async (position_code) => {
         `, [zone, wh_id])
 
         positions.rows.map((pos) => {
-            targets.rows.map((target) => {
-                if (pos.section === target.section
-                    && pos.col_no === target.col_no) {
+            target.rows.map((t) => {
+                if (pos.section === t.section
+                    && pos.col_no === t.col_no) {
                     pos.target_in = true
                 }
             })
         })
-
         return {
-            warehouse_id: wh_id,
-            zone: zone,
             positions: positions.rows,
-            target: targets.rows
         }
 
     } catch (error) {
