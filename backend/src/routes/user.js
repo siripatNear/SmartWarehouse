@@ -65,7 +65,6 @@ router.delete("/order/:order_id", userAuth, deleteOrder);
 router.get("/order/:order_id", getOrderDetail);
 router.get("/stock", userAuth, authPage(["Admin"]), getStock);
 
-
 //========Forklift routes=============
 router.get(
   "/picking/:order_id",
