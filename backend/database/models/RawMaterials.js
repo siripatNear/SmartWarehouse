@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             item_status: {
                 type: DataTypes.STRING,
-                defaultValue: "New coming",
+                defaultValue: "new coming",
             },
             position_code: DataTypes.STRING,
             qc_by: DataTypes.STRING,

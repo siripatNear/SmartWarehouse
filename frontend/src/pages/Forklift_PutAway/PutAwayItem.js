@@ -32,11 +32,11 @@ function PutAway() {
     mutate: finishputaway,
   } = useMutation(
     (send) =>
-      api.post(`/put-away-finish`, {
-        item_code: send.item.item_code,
-        item_status: send.item.item_status,
-        position_code: send.target.position_code
-      })
+    api.put(`/put-away-finish`, {
+      item_code: send.item.item_code,
+      item_status: send.item.item_status,
+      position_code: send.target.position_code
+    })
   );
 
   return (
