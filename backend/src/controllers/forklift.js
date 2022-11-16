@@ -429,8 +429,7 @@ exports.updateUsedItem = async (req, res) => {
 exports.finishPutAway = async (req, res) => {
     try {
         const user_id = String(req.user.user_id)
-        const { item_code, item_status } = req.body
-
+        const { item_code, length } = req.body
         const data = {
             item_code: item_code,
             length: length,
