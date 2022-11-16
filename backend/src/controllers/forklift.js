@@ -429,16 +429,18 @@ exports.updateUsedItem = async (req, res) => {
 exports.finishPutAway = async (req, res) => {
     try {
         const user_id = String(req.user.user_id)
-        const { item_code, length } = req.body
-        const data = {
+        const { item_code, item_status } = req.body
+        let data = {
             item_code: item_code,
-            length: length,
-            item_status: 'used',
+            item_status: 'stock in',
             modify_by: user_id,
         };
-        // const [updated] = await models.RawMaterials.update(data, {
-        //     where: { item_code: item_code }
-        // });
+        if(item_status === 'used'){
+            data.item_status = 'used';
+        }
+        const [updated] = await models.RawMaterials.update(data, {
+            where: { item_code: item_code }
+        });
         if (updated) {
             const updatedItem = await models.RawMaterials.findOne({
                 where: { item_code: item_code },
@@ -446,7 +448,7 @@ exports.finishPutAway = async (req, res) => {
             });
             return res.status(200).json({ item: updatedItem });
         }
-        throw new Error("Item not found");
+        throw new Error("Cannot finish this item");
 
     } catch (error) {
         return res.status(500).json({

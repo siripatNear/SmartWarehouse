@@ -92,7 +92,7 @@ router.put(
   updateUsedItem
 );
 
-router.put("/put-away-finish", finishPutAway);
+router.put("/put-away-finish", userAuth,finishPutAway);
 
 //========= NO UI (just test)================
 router.post(
