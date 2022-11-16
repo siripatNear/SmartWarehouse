@@ -27,7 +27,7 @@ const {
 const {
   validationMiddleware,
 } = require("../middlewares/validations-middleware");
-const { startOrder, updateItem, validateItem, findPosition, getUpdateItemForm, updateUsedItem } = require("../controllers/forklift");
+const { startOrder, updateItem, validateItem, findPosition, getUpdateItemForm, updateUsedItem, finishPutAway } = require("../controllers/forklift");
 
 router.get(
   "/warehouse/:wh_id",
@@ -90,7 +90,9 @@ router.put(
   "/update-item",
   userAuth,
   updateUsedItem
-)
+);
+
+router.put("/put-away-finish", finishPutAway);
 
 //========= NO UI (just test)================
 router.post(

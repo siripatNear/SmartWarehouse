@@ -282,7 +282,7 @@ exports.updateItem = async (req, res) => {
 
 }
 
-//=========== Suggest position =================
+//*=========== Suggest position =================
 exports.findPosition = async (req, res) => {
 
     // 1. Receive item_code from frontend
@@ -382,6 +382,7 @@ exports.findPosition = async (req, res) => {
 
             return res.status(201).json({
                 success: true,
+                item,
                 target: position.rows[0],
                 positions: grid.positions,
             })
@@ -409,6 +410,36 @@ exports.updateUsedItem = async (req, res) => {
         const [updated] = await models.RawMaterials.update(data, {
             where: { item_code: item_code }
         });
+        if (updated) {
+            const updatedItem = await models.RawMaterials.findOne({
+                where: { item_code: item_code },
+                attributes: ["item_code", "length", "item_status", "modify_by", "modify_dt"],
+            });
+            return res.status(200).json({ item: updatedItem });
+        }
+        throw new Error("Item not found");
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+}
+
+exports.finishPutAway = async (req, res) => {
+    try {
+        const user_id = String(req.user.user_id)
+        const { item_code, item_status } = req.body
+
+        const data = {
+            item_code: item_code,
+            length: length,
+            item_status: 'used',
+            modify_by: user_id,
+        };
+        // const [updated] = await models.RawMaterials.update(data, {
+        //     where: { item_code: item_code }
+        // });
         if (updated) {
             const updatedItem = await models.RawMaterials.findOne({
                 where: { item_code: item_code },
