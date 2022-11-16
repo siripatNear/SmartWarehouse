@@ -40,11 +40,18 @@ function ScanTag() {
     {
       onSuccess(result) {
         console.log(result);
-        navigate("/put-away", {
-          state: result.data
-        });
+        if (result.data.target) {
+          console.log('new coming');
+          navigate("/put-away", {
+            state: result.data
+          });
+        } else {
+          console.log('update');
+          navigate("/update-mat", {
+            state: result.data
+          });
+        }
       }
-
     }
   );
 
