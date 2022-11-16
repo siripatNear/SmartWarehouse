@@ -31,8 +31,12 @@ function PutAway() {
   const {
     mutate: finishputaway,
   } = useMutation(
-    (item) =>
-      api.post(`/put-away-finish`, item )
+    (send) =>
+      api.post(`/put-away-finish`, {
+        item_code: send.item.item_code,
+        item_status: send.item.item_status,
+        position_code: send.target.position_code
+      })
   );
 
   return (
@@ -41,7 +45,7 @@ function PutAway() {
         isOpen={isOpen}
         onClose={onClose}
         onConfirm={() => {
-          finishputaway(state.item)
+          finishputaway(state)
           onClose();
           toast({
             title: 'Put Away Finish',
