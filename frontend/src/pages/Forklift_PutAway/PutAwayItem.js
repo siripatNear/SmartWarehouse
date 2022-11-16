@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PutAwayItem.css";
 import GridPutAwayItem from "../../components/GridPutAwayItem.js";
 import CustomButton from "../../components/CustomButton";
@@ -9,31 +9,42 @@ import {
   useDisclosure,
   Text,
   Spinner,
-  Center
+  Center,
 } from "@chakra-ui/react";
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/user";
 
 const MockDataPutAway = [
   {
-    "zone": "1",
-    "item": "AA-12345",
-    "create": "15/07/2022 11:50",
-    "quantity": "5 pcs",
-    "ordered_by": "Mr.petch",
+    zone: "1",
+    item: "AA-12345",
+    create: "15/07/2022 11:50",
+    quantity: "5 pcs",
+    ordered_by: "Mr.petch",
   },
-]
+];
 
 function PutAway() {
-
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data, isLoading } = useQuery(["/warehouse/A?zone=1"]);
-  
+
+  const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
   return (
     <>
-      
       <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
@@ -64,49 +75,41 @@ function PutAway() {
           />
         </Center>
       ) : (
-      <div className='ContentPutAwayItemPage'>
-        <div className='ZoneTitle'>
-          Zone {MockDataPutAway[0].zone}
-        </div>
-        <div>
-          <GridPutAwayItem itemlist={data}/>
-        </div>
-        <div className='ContainerContent'>
-          <div className='ContainerNoteBox'>
-            <div className='NoteBoxInprogress'>
-              No.
-            </div>
-            Inprogress
-            <div className='NoteBoxTarget'>
-              No.
-            </div>
-            Target
-            <div className='NoteBoxFull'>
+        <div className="ContentPutAwayItemPage">
+          <div className="ZoneTitle">Zone {MockDataPutAway[0].zone}</div>
+          <div>
+            <GridPutAwayItem itemlist={data} />
+          </div>
+          <div className="ContainerContent">
+            <div className="ContainerNoteBox">
+              <div className="NoteBoxInprogress">No.</div>
+              Inprogress
+              <div className="NoteBoxTarget">No.</div>
+              Target
+              <div className="NoteBoxFull">Full</div>
               Full
             </div>
-            Full
-          </div>
-          <div className='ContainerBtnFinish'>
-            <CustomButton
-              marginX={4}
-              onOpen={() => {
-                setObject(MockDataPutAway[0]);
-                onOpen();
-              }}
-              buttonName="Finish"
-              buttonColor="twitter"
-              HoverColor="twitter.300"
-              buttonSize="lg"
-              borderRadius="10px"
-              fontSize="20px"
-              fontWeight="medium"
-            />
+            <div className="ContainerBtnFinish">
+              <CustomButton
+                marginX={4}
+                onOpen={() => {
+                  setObject(MockDataPutAway[0]);
+                  onOpen();
+                }}
+                buttonName="Finish"
+                buttonColor="twitter"
+                HoverColor="twitter.300"
+                buttonSize="lg"
+                borderRadius="10px"
+                fontSize="20px"
+                fontWeight="medium"
+              />
+            </div>
           </div>
         </div>
-      </div>
       )}
     </>
-  )
+  );
 }
 
-export default PutAway
+export default PutAway;

@@ -9,7 +9,10 @@ import {
 } from "@chakra-ui/react";
 
 function BoxAll({ data }) {
-  const percentage = (Number(data.usage) / Number(data.positions)) * 100;
+  const percentage =
+    (Number(data.usage || data.summary.usage) /
+      Number(data.positions || data.summary.positions)) *
+    100;
 
   return (
     <>
@@ -18,13 +21,13 @@ function BoxAll({ data }) {
         borderRadius={"12px"}
         w="300px"
         h="300px"
-        key={data.warehouse}
+        key={data.warehouse || data?.summary?.warehouse}
         boxShadow="lg"
       >
         <VStack marginTop="8px">
           <HStack>
             <Text fontSize="3xl" fontWeight={"bold"} marginTop="7px">
-              Warehouse {data.warehouse}
+              Warehouse {data.warehouse || data?.summary?.warehouse}
             </Text>
             <Text fontSize="2xl" marginTop="10px">
               usage
@@ -43,14 +46,15 @@ function BoxAll({ data }) {
           >
             <CircularProgressLabel>
               <Text fontSize="2xl">
-                {data.usage}/{data.positions}
+                {data.usage || data.summary.usage}/
+                {data.positions || data.summary.positions}
               </Text>
               <Text>units</Text>
             </CircularProgressLabel>
           </CircularProgress>
         </VStack>
         <VStack marginTop="10px" fontSize="2xl">
-          <Text>Empty {data.empty} units</Text>
+          <Text>Empty {data.empty || data.summary.empty} units</Text>
         </VStack>
       </Box>
     </>

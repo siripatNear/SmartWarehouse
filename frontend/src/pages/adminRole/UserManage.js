@@ -26,6 +26,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { api, queryClient } from "../../lib/query";
 import { Link, useNavigate } from "react-router-dom";
 import { Select } from "chakra-react-select";
+import { useUserStore } from "../../store/user";
 
 export const header = [
   { value: "userid", label: "User ID" },
@@ -64,6 +65,16 @@ const UserManage = () => {
   );
 
   const navigate = useNavigate();
+
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Forklift") {
+      navigate("/picking-order-list");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   useEffect(() => {
     if (!isEmpty(searchRole) && !isEmpty(searchText)) {

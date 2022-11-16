@@ -1,25 +1,45 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import Nametag from "../../components/Nametag";
-import { Flex, Heading, HStack, VStack, Spinner, Center} from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  HStack,
+  VStack,
+  Spinner,
+  Center,
+} from "@chakra-ui/react";
 import TablePickingListConfirm from "../../components/TablePickingListConfirm";
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/user";
 
 function ConfirmPicking() {
+  const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+
+  useEffect(() => {
+    if (user.role === "Forklift") {
+      navigate("/picking-order-list");
+    }
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   const { data, isLoading } = useQuery(["/warehouse/A?zone=1"]);
 
   return (
     <>
       {isLoading || isNil(data) ? (
-        <Center mt='100px'>
+        <Center mt="100px">
           <Spinner
-            thickness='4px'
-            speed='0.65s'
-            emptyColor='gray.200'
-            color='blue.500'
-            size='xl'
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
             alignItems
           />
         </Center>
@@ -46,4 +66,4 @@ function ConfirmPicking() {
   );
 }
 
-export default ConfirmPicking
+export default ConfirmPicking;

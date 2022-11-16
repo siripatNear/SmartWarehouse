@@ -22,7 +22,8 @@ import { CustomAlertOneButton } from "../../components/AlertOneButton";
 
 import { isNil } from "lodash";
 import { useIsFetching, useQuery } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/user";
 
 function PickingOrderDetail() {
   const [object, setObject] = useState({});
@@ -58,6 +59,17 @@ function PickingOrderDetail() {
         return "";
     }
   };
+
+  const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   return (
     <>

@@ -29,6 +29,7 @@ import { onGetAddUserPage } from "../../api/data";
 import { api, queryClient } from "../../lib/query";
 import { useMutation } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/user";
 
 export const roles = [
   { value: "Operator", label: "Operator" },
@@ -93,7 +94,6 @@ export default function AddUser() {
     handleSubmit,
     register,
     control,
-    reset,
     getValues,
     trigger,
     formState: { errors },
@@ -127,7 +127,8 @@ export default function AddUser() {
     {
       onSuccess() {
         onClose();
-        reset();
+        queryClient.invalidateQueries(["/manage-users"]); //update ui
+        navigate("/manage-users");
       },
     }
   );
@@ -143,6 +144,16 @@ export default function AddUser() {
       },
     }
   );
+
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Forklift") {
+      navigate("/picking-order-list");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   return (
     <>
