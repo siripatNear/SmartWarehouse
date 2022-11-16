@@ -37,7 +37,7 @@ function PutAway() {
       item_status: send.item.item_status,
       position_code: send.target.position_code
     })
-);
+  );
 
   return (
     <>
