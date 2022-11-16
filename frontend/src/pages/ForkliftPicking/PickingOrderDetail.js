@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../OrderDetail.css";
 import * as dayjs from "dayjs";
 import {
@@ -31,7 +31,6 @@ import { api, queryClient } from "../../lib/query";
 
 
 function PickingOrderDetail() {
-  const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast()
 
@@ -239,8 +238,6 @@ function PickingOrderDetail() {
               </TabPanels>
             </Tabs>
           </div>
-
-          {/* Test Pop-Up Button */}
           <Box display='flex' alignItems='center' justifyContent='center' mb='10px'>
             <Input placeholder='Item_code' width='200px' border='2px'
               inputitem={inputitem}
@@ -248,20 +245,6 @@ function PickingOrderDetail() {
             />
           </Box>
           <div className='ContainerBtn'>
-            <CustomButton
-              marginX={4}
-              onOpen={() => {
-                setObject(order);
-                onOpen();
-              }}
-              buttonName="Test Pop-Up"
-              buttonColor="twitter"
-              HoverColor="twitter.300"
-              buttonSize="lg"
-              borderRadius="10px"
-              fontSize="22px"
-              fontWeight="medium"
-            />
             <CustomButton
               onOpen={() =>
                 sendItemCode(inputitem)

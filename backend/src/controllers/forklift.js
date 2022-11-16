@@ -194,18 +194,19 @@ exports.validateItem = async (req, res, next) => {
     }
 }
 
+// for Picking State
 exports.updateItem = async (req, res) => {
     const item_code = String(req.body.item_code);
     const order_id = String(req.params.order_id);
     const user_id = String(req.user.user_id);
 
     // 1. Update match item:
-    // item_status = Using
+    // item_status = using
     // position_code = null
     // modify_by and modify_dt
 
     const dataUpdate = {
-        item_status: 'Using',
+        item_status: 'using',
         position_code: null,
         modify_by: user_id
     }
@@ -281,91 +282,141 @@ exports.updateItem = async (req, res) => {
 
 }
 
-//=========== Suggest position =================
+//*=========== Suggest position =================
 exports.findPosition = async (req, res) => {
 
-    // 1. Receive item_code from frontend
+    //* 1. Receive item_code from frontend
     const warehouse_id = String(req.params.wh_id); //From Forklift selection
     const item_code = String(req.body.item_code); //From RFID reading
 
     try {
 
-    // 2. get detail of this item_code
-    const item = await itemDetail(item_code);
+        //* 2. get detail of this item_code
+        const item = await itemDetail(item_code);
 
-    // 3. Find zone and section that contain this {category} the most
-    let { rows } = await db.query(`
-        SELECT r.item_cate_code, wt.zone,
-        wt.section, COUNT(*)
-        FROM raw_materials r
-        JOIN warehouse_trans wt ON wt.position_code = r.position_code
-        WHERE wt.warehouse_id = $1 AND r.item_cate_code = $2
-        GROUP BY r.item_cate_code, wt.zone, wt.warehouse_id, wt.section
-        ORDER BY COUNT(*) DESC
-    `, [warehouse_id,item.item_cate_code])
-    console.log('Items in section: ' + rows[0].count)
+        // 2.1 Check if this item is already exist before
+        const existing = await models.RawMaterials.findOne({
+            attributes: ['item_code', 'item_status'],
+            where: {
+                item_code: item.item_code,
+            }
+        })
 
-    // 4. if this section is full ?
-    // max position of the section
-    const sec_position = await db.query(`
-        SELECT (cols_per_sect*positions_per_col) as count
-        FROM warehouse WHERE warehouse_id = $1
-    `, [warehouse_id])
+        // If existing go to Update form
+        if(existing.dataValues.item_status === 'using') {
+            return res.status(201).json({
+                success: true,
+                item
+            })
+        } else if(existing.dataValues.item_status != 'new coming') {
+            //In case picking the wrong item in warehouse
+            return res.status(201).json({
+                success: false,
+                message: 'You may pick wrong item, please try again',
+                item
+            })
+        }else {
+            // This is an new coming item
+            //* 3. Find zone and section that contain this {category} the most
+            let { rows } = await db.query(`
+                SELECT r.item_cate_code, wt.zone,
+                wt.section, COUNT(*)
+                FROM raw_materials r
+                JOIN warehouse_trans wt ON wt.position_code = r.position_code
+                WHERE wt.warehouse_id = $1 AND r.item_cate_code = $2
+                GROUP BY r.item_cate_code, wt.zone, wt.warehouse_id, wt.section
+                ORDER BY COUNT(*) DESC
+            `, [warehouse_id, item.item_cate_code])
 
-    let i = 0;
-    while(parseInt(rows[i].count) >= parseInt(sec_position.rows[i].count)){
-        // the section is full
-        // find next section
-        console.log(`section ${rows[i].section} is Full, Next.`);
-        i = i+1;
-    }
-    console.log(`Zone is ${rows[i].zone} and Section is ${rows[i].section}.`);
+            //* 4. if this section is empty ?
+            let empty_positions = await db.query(`
+                SELECT wt.position_code ,wt.zone, wt.section
+                FROM raw_materials r
+                RIGHT JOIN warehouse_trans wt ON wt.position_code = r.position_code
+                WHERE wt.warehouse_id = $1 AND wt.zone = $2 AND wt.section = $3
+                AND r.position_code IS NULL
+                ORDER BY wt.position_code DESC
+            `, [warehouse_id, rows[0].zone, rows[0].section])
 
-    // 5. Find column that contain this {category} the most
-    let column = await db.query(`
-        SELECT r.item_cate_code, wt.zone,
-        wt.section, wt.col_no , COUNT(*)
-        FROM raw_materials r
-        JOIN warehouse_trans wt ON wt.position_code = r.position_code
-        WHERE wt.warehouse_id = $1 AND r.item_cate_code = $2
-        AND wt.zone = $3 AND wt.section = $4
-        GROUP BY r.item_cate_code, wt.zone, wt.warehouse_id, wt.section, wt.col_no
-        ORDER BY COUNT(*) DESC LIMIT 1
-    `, [warehouse_id,item.item_cate_code,rows[0].zone,rows[0].section])
-    console.log('Items in column: ' + column.rows[0].count)
+            console.log('Empty positions: '+ empty_positions.rowCount);
 
-    // 6. if this column is full ?
-    // max position of the column
-    const col_position = await db.query(`
-        SELECT positions_per_col as count
-        FROM warehouse WHERE warehouse_id = $1
-    `, [warehouse_id])
+            let i = 0;
+            while (empty_positions.rowCount === 0) {
+                // the section is full
+                // find next section
+                i = i + 1;
+                empty_positions = await db.query(`
+                    SELECT wt.position_code
+                    FROM raw_materials r
+                    RIGHT JOIN warehouse_trans wt ON wt.position_code = r.position_code
+                    WHERE wt.warehouse_id = $1 AND wt.zone = $2 AND wt.section = $3
+                    AND r.position_code IS NULL
+                    ORDER BY wt.position_code DESC
+            `, [warehouse_id, rows[0].zone, rows[i].section])
+            }
+            console.log(`Zone is ${rows[0].zone} and Section is ${rows[i].section}.`);
 
-    let j = 0;
-    while(parseInt(column.rows[j].count) >= parseInt(col_position.rows[j].count)){
-        // the section is full
-        // find next section
-        console.log(`Column ${column.rows[j].col_no} is Full, Next.`);
-        j = j+1;
-    }
-    console.log(`Column is ${column.rows[j].col_no}.`);
+            //* 5. Find column that contain this {category} from most to min
+            const column = await db.query(`
+                SELECT r.item_cate_code, wt.zone,
+                wt.section, wt.col_no , COUNT(*)
+                FROM raw_materials r
+                JOIN warehouse_trans wt ON wt.position_code = r.position_code
+                WHERE wt.warehouse_id = $1 AND r.item_cate_code = $2
+                AND wt.zone = $3 AND wt.section = $4
+                GROUP BY r.item_cate_code, wt.zone, wt.warehouse_id, wt.section, wt.col_no
+                ORDER BY COUNT(*) DESC
+            `, [warehouse_id, item.item_cate_code, rows[0].zone, rows[0].section])
+            
+            // 6. if this column is empty ?
+            empty_positions = await db.query(`
+                SELECT wt.position_code ,wt.zone, wt.section
+                FROM raw_materials r
+                RIGHT JOIN warehouse_trans wt ON wt.position_code = r.position_code
+                WHERE wt.warehouse_id = $1 AND wt.zone = $2 
+                AND wt.section = $3 AND wt.col_no = 
+                $4
+                AND r.position_code IS NULL
+                ORDER BY wt.position_code DESC
+            `, [warehouse_id, rows[0].zone, rows[0].section, column.rows[0].col_no])
 
-    // 7. Select the position
-    const position = await db.query(`
-        SELECT wt.warehouse_id, wt.zone, wt.section, wt.col_no, 
-        wt.floor_no ,wt.position_code
-        FROM warehouse_trans wt
-        LEFT JOIN raw_materials r ON wt.position_code = r.position_code
-        WHERE r.item_code IS NULL AND wt.warehouse_id = $1
-        AND wt.zone = $2 AND wt.section = $3 AND wt.col_no = $4
-        LIMIT 1
-    `, [warehouse_id,rows[i].zone,rows[i].section,column.rows[j].col_no])
+            let j = 0;
+            while (empty_positions.rowCount === 0) {
+                // the section is full
+                // find next section
+                j = j + 1;
+                empty_positions = await db.query(`
+                    SELECT wt.position_code ,wt.zone, wt.section
+                    FROM raw_materials r
+                    RIGHT JOIN warehouse_trans wt ON wt.position_code = r.position_code
+                    WHERE wt.warehouse_id = $1 AND wt.zone = $2 
+                    AND wt.section = $3 AND wt.col_no = $4
+                    AND r.position_code IS NULL
+                    ORDER BY wt.position_code DESC
+            `, [warehouse_id, rows[0].zone, rows[i].section, column.rows[j].col_no])
+            }
+            console.log(`Column is ${column.rows[j].col_no}.`);
 
-    return res.status(201).json({
-        success: true,
-        data: position.rows[0]
+            // 7. Select the position
+            const position = await db.query(`
+                SELECT wt.warehouse_id, wt.zone, wt.section, wt.col_no, 
+                wt.floor_no ,wt.position_code
+                FROM warehouse_trans wt
+                LEFT JOIN raw_materials r ON wt.position_code = r.position_code
+                WHERE r.item_code IS NULL AND wt.warehouse_id = $1
+                AND wt.zone = $2 AND wt.section = $3 AND wt.col_no = $4
+                LIMIT 1
+            `, [warehouse_id, rows[0].zone, rows[i].section, column.rows[j].col_no])
 
-    })
+            const grid = await positionGrid(position.rows[0].position_code);
+
+            return res.status(201).json({
+                success: true,
+                item,
+                target: position.rows[0],
+                positions: grid.positions,
+            })
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -375,11 +426,73 @@ exports.findPosition = async (req, res) => {
     }
 }
 
+//* PUT update 'used' item
+exports.updateUsedItem = async (req, res) => {
+    try {
+        const user_id = String(req.user.user_id)
+        const { item_code, length } = req.body
+        const data = {
+            item_code: item_code,
+            length: length,
+            item_status: 'used',
+            modify_by: user_id,
+        };
+        const [updated] = await models.RawMaterials.update(data, {
+            where: { item_code: item_code }
+        });
+        if (updated) {
+            const updatedItem = await models.RawMaterials.findOne({
+                where: { item_code: item_code },
+                attributes: ["item_code", "length", "item_status", "modify_by", "modify_dt"],
+            });
+            return res.status(200).json({ item: updatedItem });
+        }
+        throw new Error("Item not found");
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+}
+
+exports.finishPutAway = async (req, res) => {
+    try {
+        const user_id = String(req.user.user_id)
+        const { item_code, item_status, position_code } = req.body
+        let data = {
+            item_code: item_code,
+            position_code: position_code,
+            item_status: 'stock in',
+            modify_by: user_id,
+        };
+        if(item_status === 'used'){
+            data.item_status = 'used';
+        }
+        const [updated] = await models.RawMaterials.update(data, {
+            where: { item_code: item_code }
+        });
+        if (updated) {
+            const updatedItem = await models.RawMaterials.findOne({
+                where: { item_code: item_code },
+                attributes: ["item_code", "length", "item_status", "modify_by", "modify_dt"],
+            });
+            return res.status(200).json({ item: updatedItem });
+        }
+        throw new Error("Cannot finish this item");
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+}
+
 // Get detail of this item 
 const itemDetail = async (item_code) => {
     try {
         const { dataValues } = await models.RawMaterials.findOne({
-            where: { 
+            where: {
                 item_code: item_code
             }
         })
@@ -392,21 +505,17 @@ const itemDetail = async (item_code) => {
 // Get grid position
 const positionGrid = async (position_code) => {
     try {
-        // LIMIT 1 because we want to show only  1 position.
-        const targets = await db.query(`
-            SELECT w.warehouse_id, r.position_code, r.item_status ,
+
+        const target = await db.query(`
+            SELECT wt.warehouse_id, wt.zone,
             wt.section, wt.col_no, wt.floor_no
             FROM warehouse_trans wt
-            JOIN warehouse w ON w.warehouse_id = wt.warehouse_id
-            JOIN raw_materials r ON r.position_code = wt.position_code
-            JOIN order_transaction ot ON r.item_code = ot.item_code
-            WHERE ot.order_id = $1 AND wt.zone = $2
-            AND r.item_status = 'In progress'
+            WHERE wt.position_code = $1
             ORDER BY wt.zone, wt.section, wt.col_no
-            LIMIT 1
-        `, [order_id, zone])
+        `, [position_code])
 
-        let wh_id = targets.rows[0].warehouse_id;
+        const wh_id = target.rows[0].warehouse_id;
+        const zone = target.rows[0].zone;
 
         const positions = await db.query(`
             SELECT wt.section, wt.col_no, COUNT(r.position_code)
@@ -420,19 +529,15 @@ const positionGrid = async (position_code) => {
         `, [zone, wh_id])
 
         positions.rows.map((pos) => {
-            targets.rows.map((target) => {
-                if (pos.section === target.section
-                    && pos.col_no === target.col_no) {
+            target.rows.map((t) => {
+                if (pos.section === t.section
+                    && pos.col_no === t.col_no) {
                     pos.target_in = true
                 }
             })
         })
-
         return {
-            warehouse_id: wh_id,
-            zone: zone,
             positions: positions.rows,
-            target: targets.rows
         }
 
     } catch (error) {

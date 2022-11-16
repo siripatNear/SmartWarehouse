@@ -8,7 +8,12 @@ import {
   HStack,
   useDisclosure,
   Text,
+  useToast
 } from "@chakra-ui/react";
+
+import { useLocation, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "../../lib/query";
 
 const MockItem = [
   {
@@ -25,6 +30,9 @@ export default function UpdateMat() {
   const [UseLength, setUseLength] = useState("");
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { state, isLoading } = useLocation();
+  const navigate = useNavigate();
+  const toast = useToast()
 
   return (
     <>
@@ -55,21 +63,21 @@ export default function UpdateMat() {
           {MockItem[0].size} {MockItem[0].type}
         </div>
         <div className='Original'>
-          <p>Item code : {MockItem[0].item_code}</p>
-          <p>Original length : {MockItem[0].og_length} meters</p>
+          <p>Item code : {state.item.item_code}</p>
+          <p>Original length : {state.item.lengh} meters</p>
         </div>
         <div className='Update'>
           <p>How many length do you use? : <Input placeholder='0' isInvalid errorBorderColor='crimson' width='100px'
             onChange={(event) =>
               setUseLength(event.currentTarget.value)
             } /> meters </p>
-          <p>This item's length would be : {MockItem[0].og_length - UseLength} meters</p>
+          <p>This item's length would be : {state.item.lengh - UseLength} meters</p>
         </div>
         <div className='ContainerBtn'>
           <CustomButton
             marginX={4}
             onOpen={() => {
-              setObject(MockItem[0]);
+              setObject(state.item);
               onOpen();
             }}
             buttonName="Update"
