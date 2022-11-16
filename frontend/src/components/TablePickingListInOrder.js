@@ -80,6 +80,7 @@ const TablePickingList = (props) => {
                     _hover={{
                       backgroundColor: "#ECF7FE",
                     }}
+                    key={item.item_code}
                   >
                     <Td>{item.item_code}</Td>
                     <Td>{item.category}</Td>

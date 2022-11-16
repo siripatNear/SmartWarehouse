@@ -119,7 +119,7 @@ const TableOrderlist = (props) => {
                 _hover={{
                   backgroundColor: "#ECF7FE",
                 }}
-                key={order.value}
+                key={order.order_id}
               >
                 <Td>{order.order_id}</Td>
                 <Td>{dayjs(order.create_dt).format("DD / MMM / YYYY")}</Td>
