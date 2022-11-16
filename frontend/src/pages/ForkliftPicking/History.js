@@ -21,6 +21,7 @@ import { isNil } from "lodash";
 import Nametag from "../../components/Nametag";
 import dayjs from "dayjs";
 import CustomButton from "../../components/CustomButton";
+import { useNavigate } from "react-router-dom";
 
 export const header = [
   { value: "order_id", label: "Order ID" },
@@ -34,7 +35,7 @@ export const header = [
 
 const History = () => {
   const { data, isLoading } = useQuery(["/history-order"]);
-  // const [object, setObject] = useState({});
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const mapStatus = (order_status) => {
@@ -113,7 +114,7 @@ const History = () => {
                       <CustomButton
                         marginX={4}
                         onOpen={() => {
-                          onOpen();
+                          // navigate("/order-detail", { state: d.order_id })
                         }}
                         onClose={onClose}
                         buttonName="Detail"
