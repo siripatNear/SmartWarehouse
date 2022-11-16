@@ -4,23 +4,7 @@ const { sign } = require("jsonwebtoken");
 const { SECRET } = require("../constants");
 const models = require("../../database/models");
 
-//* get users
-/*
-exports.getUsers = async (req, res) => {
-  try {
-    const { rows } = await db.query(
-      "SELECT user_id, first_name, last_name, role FROM users"
-    );
-
-    return res.status(200).json({
-      success: true,
-      users: rows,
-    });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-*/
+//* Get users
 // Using sequelize
 exports.getUsers = async (req, res) => {
   try {
@@ -37,30 +21,6 @@ exports.getUsers = async (req, res) => {
 };
 
 // *Add new user to database
-/*
-exports.addUser = async (req, res) => {
-  const { user_id, first_name, last_name, password, role } = req.body;
-  try {
-    const hashedPassword = await hash(password, 10);
-
-    await db.query(
-      `
-            INSERT INTO users(user_id, first_name, last_name, password_hash, role)
-            VALUES ($1,$2,$3,$4,$5)`,[user_id, first_name, last_name, hashedPassword, role ])
-
-        return res.status(201).json({
-            success: true,
-            message: 'Adding user was successful'
-        })
-
-    }catch(error) {
-        console.log(error.message);
-        return res.status(500).json({
-            error: error.message,
-        })
-    }
-}
-*/
 // Using sequelize
 exports.addUser = async (req, res) => {
   try {
@@ -77,7 +37,6 @@ exports.addUser = async (req, res) => {
     const user = await models.Users.create(data);
 
     return res.status(201).json({
-
       success: true,
       message: "Adding user was successful",
       user,
@@ -90,27 +49,6 @@ exports.addUser = async (req, res) => {
 };
 
 //* GET /edit-user Form by user_id
-/*
-exports.getUserByID = async (req, res) => {
-  let user_id = req.params.user_id;
-
-  try {
-    const data = await db.query(
-      `
-            SELECT first_name, last_name, user_id, role
-            FROM users
-            WHERE user_id = $1
-        `,
-      [user_id]
-    );
-
-    } catch (error) {
-        return res.status(500).json({
-            error: error.message,
-        })
-    }
-}
-*/
 // Using sequelize
 exports.getUserByID = async (req, res) => {
   try {
@@ -135,34 +73,6 @@ exports.getUserByID = async (req, res) => {
 };
 
 //* PUT (update) user
-/*
-
-exports.updateUser = async (req, res) => {
-  const { first_name, last_name, role, password } = req.body;
-  const user_id = String(req.params.user_id);
-  try {
-
-    const hashedPassword = await hash(password, 10);
-
-    await db.query(`
-            UPDATE users SET first_name = $1
-            , last_name = $2, role = $3, password_hash = $4
-            WHERE user_id = $5
-            `, [first_name, last_name, role, hashedPassword, user_id])
-
-    return res.status(201).json({
-      success: true,
-      message: 'Update user was successful',
-    })
-
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({
-      error: error.message,
-    })
-  }
-}
-*/
 // Using sequelize
 exports.updateUser = async (req, res) => {
   try {
@@ -197,30 +107,6 @@ exports.updateUser = async (req, res) => {
 };
 
 //* DELETE user by user_id
-/*
-exports.deleteUser = async (req, res) => {
-  const user_id = String(req.params.user_id);
-  try {
-    await db.query(
-      `
-            DELETE FROM users WHERE user_id = $1
-            `,
-      [user_id]
-    );
-
-    return res.status(201).json({
-      success: true,
-      message: "Delete user was successful",
-      user_id: user_id,
-    });
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-};
-*/
 exports.deleteUser = async (req, res) => {
   try {
     const { user_id } = req.params;

@@ -75,9 +75,6 @@ export default function AddUser() {
     }
   };
 
-  useEffect(() => {
-    protectedRoute();
-  }, []);
 
   //* popup
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -129,6 +126,7 @@ export default function AddUser() {
         onClose();
         queryClient.invalidateQueries(["/manage-users"]); //update ui
         navigate("/manage-users");
+
       },
     }
   );

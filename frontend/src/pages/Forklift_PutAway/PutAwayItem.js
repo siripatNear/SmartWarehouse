@@ -10,27 +10,36 @@ import {
   Text,
   Spinner,
   Center,
+  useToast,
+  Grid,
 } from "@chakra-ui/react";
 
 import { isNil } from "lodash";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "../../lib/query";
 import { useUserStore } from "../../store/user";
 
-const MockDataPutAway = [
-  {
-    zone: "1",
-    item: "AA-12345",
-    create: "15/07/2022 11:50",
-    quantity: "5 pcs",
-    ordered_by: "Mr.petch",
-  },
-];
 
 function PutAway() {
+
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data, isLoading } = useQuery(["/warehouse/A?zone=1"]);
+  const { state, isLoading } = useLocation();
+  const navigate = useNavigate();
+  const toast = useToast()
+
+  const {
+    mutate: finishputaway,
+  } = useMutation(
+    (send) =>
+    api.put(`/put-away-finish`, {
+      item_code: send.item.item_code,
+      item_status: send.item.item_status,
+      position_code: send.target.position_code
+    })
+  );
+  
 
   const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
@@ -43,11 +52,24 @@ function PutAway() {
     }
   }, [navigate, user]);
 
-  return (
+
+ return (
     <>
       <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
+        onConfirm={() => {
+          finishputaway(state)
+          onClose();
+          toast({
+            title: 'Put Away Finish',
+            description: 'Position Code : ' + state.target.position_code + '',
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          })
+          navigate("/scan-tag")
+        }}
         LbuttonPopup="Cancle"
         RbuttonPopup="Confirm"
         ColorRbuttonPopup="twitter"
@@ -56,14 +78,17 @@ function PutAway() {
           <font>Are you sure to Finish put away?</font>
         </HStack>
         textBody=<VStack alignItems="center">
-          <Text fontSize="xl">Item : {object.item} </Text>
-          <Text fontSize="xl">Create : {object.create} </Text>
-          <Text fontSize="xl">Quantity : {object.quantity} </Text>
-          <Text fontSize="xl">Ordered by : {object.ordered_by} </Text>
+          <Text fontSize="xl">Item Code : {state.item.item_code} </Text>
+          <Text fontSize="xl">Position Code : {state.target.position_code} </Text>
+          <Grid templateColumns='repeat(2, 2fr)' gap={2}>
+            <Text fontSize="xl">Zone : {state.target.zone} </Text>
+            <Text fontSize="xl">Section : {state.target.section} </Text>
+            <Text fontSize="xl">Colum : {state.target.col_no} </Text>
+            <Text fontSize="xl">Floor : {state.target.floor_no} </Text>
+          </Grid>
         </VStack>
       />
-
-      {isLoading || isNil(data) ? (
+      {isLoading || isNil(state) ? (
         <Center mt="100px">
           <Spinner
             thickness="4px"
@@ -75,25 +100,33 @@ function PutAway() {
           />
         </Center>
       ) : (
-        <div className="ContentPutAwayItemPage">
-          <div className="ZoneTitle">Zone {MockDataPutAway[0].zone}</div>
-          <div>
-            <GridPutAwayItem itemlist={data} />
+        <div className='ContentPutAwayItemPage'>
+          <div className='ZoneTitle'>
+            Zone {state.target.zone}
           </div>
-          <div className="ContainerContent">
-            <div className="ContainerNoteBox">
-              <div className="NoteBoxInprogress">No.</div>
+          <div>
+            <GridPutAwayItem itemlist={state} />
+          </div>
+          <div className='ContainerContent'>
+            <div className='ContainerNoteBox'>
+              <div className='NoteBoxInprogress'>
+                No.
+              </div>
               Inprogress
-              <div className="NoteBoxTarget">No.</div>
+              <div className='NoteBoxTarget'>
+                No.
+              </div>
               Target
-              <div className="NoteBoxFull">Full</div>
+              <div className='NoteBoxFull'>
+                Full
+              </div>
               Full
             </div>
-            <div className="ContainerBtnFinish">
+            <div className='ContainerBtnFinish'>
               <CustomButton
                 marginX={4}
                 onOpen={() => {
-                  setObject(MockDataPutAway[0]);
+                  setObject(state);
                   onOpen();
                 }}
                 buttonName="Finish"
@@ -109,7 +142,7 @@ function PutAway() {
         </div>
       )}
     </>
-  );
+  )
 }
 
 export default PutAway;

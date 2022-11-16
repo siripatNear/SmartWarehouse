@@ -1,42 +1,15 @@
 import React from 'react'
 import "../pages/OrderDetail.css";
 import { isNil } from "lodash";
-import { Spinner, Center } from "@chakra-ui/react";
-
-const DataPositions = [
-    {
-      "Position": "1",
-    },
-    {
-      "Position": "2",
-    },
-    {
-      "Position": "3"
-    },
-    {
-      "Position": "full"
-    },
-    {
-      "Position": "full"
-    },
-    {
-      "Position": "3"
-    },
-    {
-      "Position": "2"
-    },
-    {
-      "Position": "1"
-    }
-  ];
+import { Spinner, Center, Box } from "@chakra-ui/react";
 
 function GridPutAwayItem(props) {
 
     const { itemlist, isLoading } = props
-    // const sec1 = itemlist.positions_grid.filter((positions) => { return positions.section === 1 })
-    // const sec2 = itemlist.positions_grid.filter((positions) => { return positions.section === 2 })
-    // const sec3 = itemlist.positions_grid.filter((positions) => { return positions.section === 3 })
-    // const sec4 = itemlist.positions_grid.filter((positions) => { return positions.section === 4 })
+    const sec1 = itemlist.positions.filter((positions) => { return positions.section === 1 })
+    const sec2 = itemlist.positions.filter((positions) => { return positions.section === 2 })
+    const sec3 = itemlist.positions.filter((positions) => { return positions.section === 3 })
+    const sec4 = itemlist.positions.filter((positions) => { return positions.section === 4 })
 
     return (
         <>
@@ -54,46 +27,82 @@ function GridPutAwayItem(props) {
             ) : (
                 <div className='GridPutAwayContainer'>
                     <div className='SecPutAwayContainer'>
-                        {DataPositions.map((data) => {
+                        {sec1.map((data) => {
                             return (
-                                <div className="BoxPutAwayPositions">
+                                <Box
+                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    width='70px'
+                                    height='70px'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    borderRadius='12px'
+                                    key={data.col_no}
+                                >
                                     <div className="TextBoxPutAwayPosition">
-                                        {data.Position}
+                                        {data.count}
                                     </div>
-                                </div>
+                                </Box>
                             );
                         })}
                     </div>
                     <div className='SecPutAwayContainer'>
-                        {DataPositions.map((data) => {
+                        {sec2.map((data) => {
                             return (
-                                <div className="BoxPutAwayPositions">
+                                <Box
+                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    width='70px'
+                                    height='70px'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    borderRadius='12px'
+                                    key={data.col_no}
+                                >
                                     <div className="TextBoxPutAwayPosition">
-                                        {data.Position}
+                                        {data.count}
                                     </div>
-                                </div>
+                                </Box>
                             );
                         })}
                     </div>
                     <div className='SecPutAwayContainer'>
-                        {DataPositions.map((data) => {
+                        {sec3.map((data) => {
                             return (
-                                <div className="BoxPutAwayPositions">
+                                <Box
+                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    width='70px'
+                                    height='70px'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    borderRadius='12px'
+                                    key={data.col_no}
+                                >
                                     <div className="TextBoxPutAwayPosition">
-                                        {data.Position}
+                                        {data.count}
                                     </div>
-                                </div>
+                                </Box>
                             );
                         })}
                     </div>
                     <div className='SecPutAwayContainer'>
-                        {DataPositions.map((data) => {
+                        {sec4.map((data) => {
                             return (
-                                <div className="BoxPutAwayPositions">
+                                <Box
+                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    width='70px'
+                                    height='70px'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    borderRadius='12px'
+                                    key={data.col_no}
+                                >
                                     <div className="TextBoxPutAwayPosition">
-                                        {data.Position}
+                                        {data.count}
                                     </div>
-                                </div>
+                                </Box>
                             );
                         })}
                     </div>

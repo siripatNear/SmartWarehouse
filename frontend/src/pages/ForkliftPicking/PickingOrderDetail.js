@@ -15,6 +15,7 @@ import {
   Text,
   Box,
   Input,
+  useToast
 } from "@chakra-ui/react";
 
 import CustomButton from "../../components/CustomButton";
@@ -30,8 +31,20 @@ import { useMutation } from "@tanstack/react-query";
 import { api, queryClient } from "../../lib/query";
 
 function PickingOrderDetail() {
-  const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast()
+  
+  const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
 
   const { state } = useLocation();
   const { data: order, isLoading } = useQuery([`/picking/${state}`]);
@@ -43,96 +56,123 @@ function PickingOrderDetail() {
   const { data: item_zone_6 } = useQuery([`/picking/${state}`, { zone: 6 }]);
   const isFetching = useIsFetching([`/picking/${state}`]);
 
-  // Test input Item
+ // Test input Item
   const [inputitem, setInputitem] = useState("");
-  const handleChange = (event) => setInputitem(event.target.value);
-  const navigate = useNavigate();
+  const handleChange = (event) => setInputitem(event.target.value)
   console.log(inputitem);
 
-  const { mutate: sendItemCode } = useMutation(
-    (send) => api.post(`/picking/${state}`, { item_code: send.item_code }),
+  const {
+    mutate: sendItemCode,
+    data
+  } = useMutation(
+    (send) =>
+      api.post(`/picking/${state}`, { item_code: send }),
     {
-      onSuccess() {
-        queryClient.invalidateQueries([`/picking/${state}`]); //update ui
-        // navigate("/picking-order-detail");
-        console.log(inputitem);
-        console.log("succees");
-      },
+      onSuccess: (result) => {
+        console.log(result);
+        if (result.data.matching) {
+          console.log('match');
+          onOpen();
+          // if (result.data.matching) {
+          //   console.log('match');
+          //   onOpen();
+          // } else {
+          //   console.log('not finish');
+          //   onOpen();
+          // }
+        } else {
+          console.log('not match');
+          onOpen();
+        }
+      }
     }
   );
 
-  const mapCateName = (category) => {
-    switch (category) {
-      case 1:
-        return "Kraft";
-      case 2:
-        return "Bleached";
-      case 3:
-        return "Glassine";
-      case 4:
-        return "Wax";
-      case 5:
-        return "PVC";
-      case 6:
-        return "Inkjet";
-      case 7:
-        return "Corrugated";
-      default:
-        return "";
-    }
-  };
-
-  const user = useUserStore((state) => state.user);
-  useEffect(() => {
-    if (user.role === "Admin") {
-      navigate("/");
-    }
-    if (user.role === "Operator") {
-      navigate("/");
-    }
-  }, [navigate, user]);
+  // const {
+  //   mutate: sendItemCode,
+  //   data
+  // } = useMutation(
+  //   (send) =>
+  //     api.post(`/picking/${state}`, { item_code: send }),
+  //   {
+  //     onSuccess: (result) => {
+  //       console.log(result);
+  //       if (result.data.finish) {
+  //         console.log('finish');
+  //         onOpen();
+  //       } else {
+  //         console.log('not finish');
+  //         if (result.data.matching) {
+  //           console.log('match');
+  //           onOpen();
+  //         } else {
+  //           console.log('not match');
+  //           onOpen();
+  //         }
+  //       }
+  //     }
+  //   }
+  // );
 
   return (
     <>
-      {/* Pop-up Match */}
-      <CustomAlertOneButton
+      {/* Pop-up*/}
+      < CustomAlertOneButton
         isOpen={isOpen}
         onClose={onClose}
+        onConfirm={() => {
+          onClose();
+          if (data?.data?.finish) {
+            toast({
+              title: 'Order Finish',
+              description: 'Order ID : ' + state  + ' is already finished.',
+              status: 'success',
+              duration: 5000,
+              isClosable: true,
+            })
+            navigate("/history")
+          } else {
+            queryClient.invalidateQueries([`/picking/${state}`])
+          }
+        }}
         buttonPopup="OK"
         ColorbuttonPopup="twitter"
         HearderFsize="5xl"
-        textHeader=<HStack>
-          <font color="green"> Match! </font>
+        textHeader=<HStack >
+          <font color={data?.data?.matching ? "green " : "red"} > {data?.data?.matching ? "Match!" : "Not Match!"} </font>
         </HStack>
         textBody=<VStack alignItems="left">
-          <Text fontSize="xl">Zone : {object.zone} </Text>
-          <Text fontSize="xl">Item code : {object.item_code} </Text>
-          <Text fontSize="xl">Category : {mapCateName(object.category)} </Text>
-          <Text fontSize="xl">Length : {object.length} </Text>
-          <Text fontSize="xl">
-            Date create : {dayjs(object.create_dt).format("DD/MM/YYYY")}{" "}
-          </Text>
+          {(data?.data?.matching) ? <Text fontSize="xl">Zone : {data?.data?.item[0].zone} </Text> : null}
+          <Text fontSize="xl">Item code : {data?.data?.item[0].item_code} </Text>
+          <Text fontSize="xl">Category : {data?.data?.item[0].cate_name} </Text>
+          <Text fontSize="xl">Length : {data?.data?.item[0].length} </Text>
+          <Text fontSize="xl">Date create : {dayjs(data?.data?.item[0].create_dt).format('DD/MM/YYYY')} </Text>
         </VStack>
       />
 
-      {/* Pop-up Not Match */}
-      {/* <CustomAlertOneButton
-                isOpen={isOpen}
-                onClose={onClose}
-                buttonPopup="Try again"
-                ColorbuttonPopup="twitter"
-                HearderFsize="5xl"
-                textHeader=<HStack >
-                    <font color="red" > Not Match! </font>
-                </HStack>
-                textBody=<VStack alignItems="left">
-                    <Text fontSize="xl">Zone : {object.zone} </Text>
-                    <Text fontSize="xl">Item code : {object.item_code} </Text>
-                    <Text fontSize="xl">Category : {mapCateName(object.category)} </Text>
-                    <Text fontSize="xl">Length : {object.length} </Text>
-                    <Text fontSize="xl">Date create : {dayjs(object.create_dt).format('DD/MM/YYYY')} </Text>
-                </VStack>
-            /> */}
+      {/* < CustomAlertOneButton
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          onClose();
+          navigate("/picking-order-list")
+        }}
+        buttonPopup="OK"
+        ColorbuttonPopup="twitter"
+        HearderFsize="5xl"
+        textHeader=<HStack >
+          <font> Are you sure to </font>
+          <font color="twitter" > FINISH </font>
+          <font> this order? </font>
+        </HStack>
+        textBody=<VStack alignItems="left">
+          <Text fontSize="xl">Order : {state} </Text>
+          <Text fontSize="xl">Date create :  </Text>
+          <Text fontSize="xl">Quantity :  </Text>
+          <Text fontSize="xl">Ordered By :  </Text>
+        </VStack>
+      /> */}
+
       {isLoading || isNil(order) || isFetching > 0 ? (
         <Center mt="100px">
           <Spinner
@@ -209,39 +249,17 @@ function PickingOrderDetail() {
               </TabPanels>
             </Tabs>
           </div>
-
-          {/* Test Pop-Up Button */}
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            mb="10px"
-          >
-            <Input
-              placeholder="Item_code"
-              width="200px"
-              border="2px"
+          <Box display='flex' alignItems='center' justifyContent='center' mb='10px'>
+            <Input placeholder='Item_code' width='200px' border='2px'
               inputitem={inputitem}
               onChange={handleChange}
             />
           </Box>
-          <div className="ContainerBtn">
+          <div className='ContainerBtn'>
             <CustomButton
-              marginX={4}
-              onOpen={() => {
-                setObject(order);
-                onOpen();
-              }}
-              buttonName="Test Pop-Up"
-              buttonColor="twitter"
-              HoverColor="twitter.300"
-              buttonSize="lg"
-              borderRadius="10px"
-              fontSize="22px"
-              fontWeight="medium"
-            />
-            <CustomButton
-              onOpen={() => sendItemCode(inputitem)}
+              onOpen={() =>
+                sendItemCode(inputitem)
+              }
               marginX={4}
               buttonName="Test Input-Item"
               buttonColor="twitter"
@@ -255,7 +273,8 @@ function PickingOrderDetail() {
         </div>
       )}
     </>
-  );
+  )
+
 }
 
 export default PickingOrderDetail;

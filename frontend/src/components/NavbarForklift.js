@@ -34,7 +34,7 @@ const Links = [
   },
   {
     name: "Put away",
-    link: "/put-away",
+    link: "/scan-tag",
   },
   {
     name: "History",

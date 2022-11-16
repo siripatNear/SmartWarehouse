@@ -15,6 +15,7 @@ const {
   fetchData,
   fetchFilterItems,
   getStock,
+  addItem,
 } = require("../controllers/data");
 const {
   createOrder,
@@ -26,7 +27,7 @@ const {
 const {
   validationMiddleware,
 } = require("../middlewares/validations-middleware");
-const { startOrder, updateItem, validateItem } = require("../controllers/forklift");
+const { startOrder, updateItem, validateItem, findPosition, getUpdateItemForm, updateUsedItem, finishPutAway } = require("../controllers/forklift");
 
 router.get(
   "/warehouse/:wh_id",
@@ -61,14 +62,8 @@ router.post("/warehouse/:wh_id/picking-list", userAuth, createOrder);
 router.get("/order-list", getCurrentOrder);
 router.get("/history-order", getCompletedOrder);
 router.delete("/order/:order_id", userAuth, deleteOrder);
-router.get(
-  "/order/:order_id",
-  userAuth,
-  authPage(["Admin", "Operator"]),
-  getOrderDetail
-);
+router.get("/order/:order_id", getOrderDetail);
 router.get("/stock", userAuth, authPage(["Admin"]), getStock);
-
 
 //========Forklift routes=============
 router.get(
@@ -82,6 +77,28 @@ router.post(
   userAuth,
   validateItem,
   updateItem
+);
+
+router.post(
+  "/put-away/:wh_id", 
+  userAuth,
+  authPage(["Forklift"]), 
+  findPosition
+);
+
+router.put(
+  "/update-item",
+  userAuth,
+  updateUsedItem
+);
+
+router.put("/put-away-finish", userAuth,finishPutAway);
+
+//========= NO UI (just test)================
+router.post(
+  "/add-item",
+  userAuth,
+  addItem
 );
 
 module.exports = router;

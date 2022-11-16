@@ -173,6 +173,7 @@ exports.getCurrentOrder = async (req, res) => {
     }
 }
 
+// Only Order which not completed
 exports.getOrderDetail = async (req, res) => {
     const order_id = String(req.params.order_id);
 
