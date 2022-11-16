@@ -27,7 +27,7 @@ const {
 const {
   validationMiddleware,
 } = require("../middlewares/validations-middleware");
-const { startOrder, updateItem, validateItem, findPosition } = require("../controllers/forklift");
+const { startOrder, updateItem, validateItem, findPosition, getUpdateItemForm, updateUsedItem } = require("../controllers/forklift");
 
 router.get(
   "/warehouse/:wh_id",
@@ -80,7 +80,18 @@ router.post(
   updateItem
 );
 
-router.post("/put-away/:wh_id", userAuth,authPage(["Forklift"]), findPosition)
+router.post(
+  "/put-away/:wh_id", 
+  userAuth,
+  authPage(["Forklift"]), 
+  findPosition
+);
+
+router.put(
+  "/update-item",
+  userAuth,
+  updateUsedItem
+)
 
 //========= NO UI (just test)================
 router.post(
