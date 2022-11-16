@@ -429,9 +429,10 @@ exports.updateUsedItem = async (req, res) => {
 exports.finishPutAway = async (req, res) => {
     try {
         const user_id = String(req.user.user_id)
-        const { item_code, item_status } = req.body
+        const { item_code, item_status, position_code } = req.body
         let data = {
             item_code: item_code,
+            position_code: position_code,
             item_status: 'stock in',
             modify_by: user_id,
         };
