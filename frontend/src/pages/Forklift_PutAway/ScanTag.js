@@ -11,7 +11,7 @@ import {
   Box,
   Input,
   FormControl,
-  Select
+
 } from "@chakra-ui/react";
 
 export const warehouseSelect = [
@@ -38,11 +38,13 @@ function ScanTag() {
     (send) =>
       api.post(`/put-away/${warehouse}`, { item_code: send }),
     {
-      onSuccess() {
+      onSuccess(result) {
+        console.log(result);
         navigate("/put-away", {
-          state: { warehouse },
+          state: result.data
         });
       }
+
     }
   );
 
@@ -56,15 +58,7 @@ function ScanTag() {
         </div>
         <Box display='flex' alignItems='center' justifyContent='center' mb='10px' mt='20px'>
           <FormControl p={2} id="warehouse">
-            {/* <Select
-              name="Warehouse"
-              options={warehouseSelect}
-              placeholder="Warehouse"
-              // value={warehouse}
-              closeMenuOnSelect={true}
-              // onChange={setWarehouse}
-            /> */}
-            <select  onChange={event=>setWarehouse(event.target.value)}>
+            <select value={warehouse} onChange={event => setWarehouse(event.target.value)}>
               <option>A</option>
               <option>B</option>
               <option>C</option>

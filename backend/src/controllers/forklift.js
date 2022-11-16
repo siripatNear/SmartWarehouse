@@ -382,6 +382,7 @@ exports.findPosition = async (req, res) => {
 
             return res.status(201).json({
                 success: true,
+                item,
                 target: position.rows[0],
                 positions: grid.positions,
             })

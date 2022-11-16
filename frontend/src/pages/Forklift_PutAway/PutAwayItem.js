@@ -9,31 +9,49 @@ import {
   useDisclosure,
   Text,
   Spinner,
-  Center
+  Center,
+  useToast,
+  Grid,
 } from "@chakra-ui/react";
 
 import { isNil } from "lodash";
-import { useIsFetching, useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { api, queryClient } from "../../lib/query";
+import { api } from "../../lib/query";
 
 
 function PutAway() {
 
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { state, isLoading } = useLocation();
+  const navigate = useNavigate();
+  const toast = useToast()
 
-  const { state } = useLocation();
-  const { data, isLoading } = useQuery([`/put-away/${state}`]);
-  const isFetching = useIsFetching([`/put-away/${state}`]);
+  const {
+    mutate: finishputaway,
+  } = useMutation(
+    (item) =>
+      api.post(`/put-away-finish`, item )
+  );
 
   return (
     <>
-
       <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
+        onConfirm={() => {
+          finishputaway(state.item)
+          onClose();
+          toast({
+            title: 'Put Away Finish',
+            description: 'Position Code : ' + state.target.position_code + '',
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          })
+          navigate("/scan-tag")
+        }}
         LbuttonPopup="Cancle"
         RbuttonPopup="Confirm"
         ColorRbuttonPopup="twitter"
@@ -42,14 +60,17 @@ function PutAway() {
           <font>Are you sure to Finish put away?</font>
         </HStack>
         textBody=<VStack alignItems="center">
-          <Text fontSize="xl">Item : {object.item} </Text>
-          <Text fontSize="xl">Create : {object.create} </Text>
-          <Text fontSize="xl">Quantity : {object.quantity} </Text>
-          <Text fontSize="xl">Ordered by : {object.ordered_by} </Text>
+          <Text fontSize="xl">Item Code : {state.item.item_code} </Text>
+          <Text fontSize="xl">Position Code : {state.target.position_code} </Text>
+          <Grid templateColumns='repeat(2, 2fr)' gap={2}>
+            <Text fontSize="xl">Zone : {state.target.zone} </Text>
+            <Text fontSize="xl">Section : {state.target.section} </Text>
+            <Text fontSize="xl">Colum : {state.target.col_no} </Text>
+            <Text fontSize="xl">Floor : {state.target.floor_no} </Text>
+          </Grid>
         </VStack>
       />
-
-      {isLoading || isNil(data) || isFetching > 0 ? (
+      {isLoading || isNil(state) ? (
         <Center mt="100px">
           <Spinner
             thickness="4px"
@@ -63,10 +84,10 @@ function PutAway() {
       ) : (
         <div className='ContentPutAwayItemPage'>
           <div className='ZoneTitle'>
-            Zone {data.target.zone}
+            Zone {state.target.zone}
           </div>
           <div>
-            <GridPutAwayItem itemlist={data} />
+            <GridPutAwayItem itemlist={state} />
           </div>
           <div className='ContainerContent'>
             <div className='ContainerNoteBox'>
@@ -86,10 +107,10 @@ function PutAway() {
             <div className='ContainerBtnFinish'>
               <CustomButton
                 marginX={4}
-                // onOpen={() => {
-                //   setObject(MockDataPutAway[0]);
-                //   onOpen();
-                // }}
+                onOpen={() => {
+                  setObject(state);
+                  onOpen();
+                }}
                 buttonName="Finish"
                 buttonColor="twitter"
                 HoverColor="twitter.300"
