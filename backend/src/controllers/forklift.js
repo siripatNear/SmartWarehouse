@@ -304,7 +304,7 @@ exports.findPosition = async (req, res) => {
         })
         // If existing go to Update form
         if (existing) {
-            return res.status(200).json({
+            return res.status(201).json({
                 success: true,
                 item
             })
