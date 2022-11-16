@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UpdateMat.css";
-import { Input } from '@chakra-ui/react'
+import { Input } from "@chakra-ui/react";
 import CustomButton from "../../components/CustomButton";
 import { CustomAlertDialog } from "../../components/AlertDialog";
 import {
@@ -14,16 +14,18 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../../lib/query";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/user";
 
 const MockItem = [
   {
-    "name": "Kraft Paper",
-    "size": "100gsm. 420mm",
-    "type": "smooth, brown",
-    "item_code": "AA-125464",
-    "og_length": 200,
+    name: "Kraft Paper",
+    size: "100gsm. 420mm",
+    type: "smooth, brown",
+    item_code: "AA-125464",
+    og_length: 200,
   },
-]
+];
 
 export default function UpdateMat() {
 
@@ -34,7 +36,17 @@ export default function UpdateMat() {
   const navigate = useNavigate();
   const toast = useToast()
 
-  return (
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
+ return (
     <>
       <CustomAlertDialog
         isOpen={isOpen}

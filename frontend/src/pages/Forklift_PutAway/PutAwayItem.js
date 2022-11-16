@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PutAwayItem.css";
 import GridPutAwayItem from "../../components/GridPutAwayItem.js";
 import CustomButton from "../../components/CustomButton";
@@ -18,6 +18,7 @@ import { isNil } from "lodash";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../../lib/query";
+import { useUserStore } from "../../store/user";
 
 
 function PutAway() {
@@ -38,8 +39,21 @@ function PutAway() {
       position_code: send.target.position_code
     })
   );
+  
 
-  return (
+  const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
+
+ return (
     <>
       <CustomAlertDialog
         isOpen={isOpen}
@@ -131,4 +145,4 @@ function PutAway() {
   )
 }
 
-export default PutAway
+export default PutAway;
