@@ -32,7 +32,6 @@ function ScanTag() {
 
   const {
     mutate: sendItemCode,
-    data
   } = useMutation(
     (send) =>
       api.post(`/put-away/${warehouse}`, { item_code: send }),
