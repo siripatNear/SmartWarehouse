@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UpdateMat.css";
-import { Input } from '@chakra-ui/react'
+import { Input } from "@chakra-ui/react";
 import CustomButton from "../../components/CustomButton";
 import { CustomAlertDialog } from "../../components/AlertDialog";
 import {
@@ -15,6 +15,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../../lib/query";
+import { useUserStore } from "../../store/user";
 
 const mapCateName = (category) => {
   switch (category) {
@@ -38,7 +39,6 @@ const mapCateName = (category) => {
 };
 
 export default function UpdateMat() {
-
   const [useLength, setUseLength] = useState("");
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,6 +57,16 @@ export default function UpdateMat() {
         length: leftValue
       })
   );
+
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   return (
     <>
@@ -79,7 +89,7 @@ export default function UpdateMat() {
         RbuttonPopup="Confirm"
         ColorRbuttonPopup="twitter"
         HearderFsize="2xl"
-        textHeader=<HStack >
+        textHeader=<HStack>
           <font> Update raw material </font>
         </HStack>
         textBody=<VStack alignItems="left">
@@ -92,8 +102,8 @@ export default function UpdateMat() {
         </VStack>
       />
 
-      <div className='ContentUpdateMatPage'>
-        <div className='AlertTitle'>
+      <div className="ContentUpdateMatPage">
+        <div className="AlertTitle">
           Please update this raw material before put it away
         </div>
         <div className='ItemName'>
@@ -113,7 +123,7 @@ export default function UpdateMat() {
             } /> meters </p>
           <p>This item's length would be : {leftValue} {state.item.unit}</p>
         </div>
-        <div className='ContainerBtn'>
+        <div className="ContainerBtn">
           <CustomButton
             marginX={4}
             onOpen={() => {
@@ -131,5 +141,5 @@ export default function UpdateMat() {
         </div>
       </div>
     </>
-  )
+  );
 }

@@ -19,6 +19,8 @@ import TablePickingList from "../components/TablePickingList";
 import BoxZoneAll from "../components/BoxZoneAll";
 import ReactPaginate from "react-paginate";
 import styled from "@emotion/styled";
+import { useUserStore } from "../store/user";
+import { useNavigate } from "react-router-dom";
 
 const Pagination = styled(ReactPaginate)`
   margin-bottom: 2rem;
@@ -57,6 +59,8 @@ Pagination.defaultProps = {
 };
 
 const Dashboard = () => {
+  const user = useUserStore((state) => state.user);
+  const navigate = useNavigate();
   const [warehouse, setWarehouse] = useState({
     value: "A",
     label: "Warehouse A",
@@ -74,6 +78,12 @@ const Dashboard = () => {
       page: !isNil(zone) || !isNil(category) ? page : null,
     },
   ]);
+
+  useEffect(() => {
+    if (user.role === "Forklift") {
+      navigate("picking-order-list");
+    }
+  }, [navigate, user]);
 
   useEffect(() => {
     setPage(1);
@@ -125,7 +135,11 @@ const Dashboard = () => {
                 justify="space-between"
                 width="100%"
               >
-                <Heading as="h1">Zone {data.summary.zone}</Heading>
+                <Heading as="h1">
+                  {isNil(zone)
+                    ? `Warehouse ${data.summary.warehouse}`
+                    : `Zone ${data.summary.zone}`}
+                </Heading>
                 <Button
                   colorScheme="twitter"
                   variant="outline"
@@ -164,11 +178,7 @@ const Dashboard = () => {
         </VStack>
         {isNil(data) ? null : (
           <Box paddingLeft={"32px"}>
-            {!isNil(zone) || !isNil(category) ? (
-              <BoxZoneAll data={data} />
-            ) : (
-              <BoxAll data={data} />
-            )}
+            {!isNil(zone) ? <BoxZoneAll data={data} /> : <BoxAll data={data} />}
           </Box>
         )}
       </HStack>

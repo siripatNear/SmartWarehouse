@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PutAwayItem.css";
 import GridPutAwayItem from "../../components/GridPutAwayItem.js";
 import CustomButton from "../../components/CustomButton";
@@ -18,25 +18,32 @@ import { isNil } from "lodash";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../../lib/query";
+import { useUserStore } from "../../store/user";
 
 function PutAway() {
-
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { state, isLoading } = useLocation();
   const navigate = useNavigate();
-  const toast = useToast()
+  const toast = useToast();
 
-  const {
-    mutate: finishputaway,
-  } = useMutation(
-    (send) =>
+  const { mutate: finishputaway } = useMutation((send) =>
     api.put(`/put-away-finish`, {
       item_code: send.item.item_code,
       item_status: send.item.item_status,
-      position_code: send.target.position_code
+      position_code: send.target.position_code,
     })
   );
+
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   return (
     <>
@@ -44,16 +51,16 @@ function PutAway() {
         isOpen={isOpen}
         onClose={onClose}
         onConfirm={() => {
-          finishputaway(state)
+          finishputaway(state);
           onClose();
           toast({
-            title: 'Put Away Finish',
-            description: 'Position Code : ' + state.target.position_code + '',
-            status: 'success',
+            title: "Put Away Finish",
+            description: "Position Code : " + state.target.position_code + "",
+            status: "success",
             duration: 5000,
             isClosable: true,
-          })
-          navigate("/scan-tag")
+          });
+          navigate("/scan-tag");
         }}
         LbuttonPopup="Cancle"
         RbuttonPopup="Confirm"
@@ -85,29 +92,21 @@ function PutAway() {
           />
         </Center>
       ) : (
-        <div className='ContentPutAwayItemPage'>
-          <div className='ZoneTitle'>
-            Zone {state.target.zone}
-          </div>
+        <div className="ContentPutAwayItemPage">
+          <div className="ZoneTitle">Zone {state.target.zone}</div>
           <div>
             <GridPutAwayItem itemlist={state} />
           </div>
-          <div className='ContainerContent'>
-            <div className='ContainerNoteBox'>
-              <div className='NoteBoxInprogress'>
-                No.
-              </div>
+          <div className="ContainerContent">
+            <div className="ContainerNoteBox">
+              <div className="NoteBoxInprogress">No.</div>
               Inprogress
-              <div className='NoteBoxTarget'>
-                No.
-              </div>
+              <div className="NoteBoxTarget">No.</div>
               Target
-              <div className='NoteBoxFull'>
-                Full
-              </div>
+              <div className="NoteBoxFull">Full</div>
               Full
             </div>
-            <div className='ContainerBtnFinish'>
+            <div className="ContainerBtnFinish">
               <CustomButton
                 marginX={4}
                 onOpen={() => {
@@ -127,7 +126,7 @@ function PutAway() {
         </div>
       )}
     </>
-  )
+  );
 }
 
-export default PutAway
+export default PutAway;

@@ -1,12 +1,25 @@
-import React, { useState } from "react";
-import { Box, Center, Grid, HStack, Spinner, VStack } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { Center, Grid, HStack, Spinner } from "@chakra-ui/react";
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import BoxStock from "../../components/BoxStock";
+import { useUserStore } from "../../store/user";
+import { useNavigate } from "react-router-dom";
 
 const Stock = () => {
   const { data, isLoading } = useQuery(["/stock"]);
+  const user = useUserStore((state) => state.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user.role === "Forklift") {
+      navigate("/picking-order-list");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   return (
     <>
