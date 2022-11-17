@@ -1,5 +1,8 @@
 .TitleContainer {
     display: flex;
+    align-items: center;
+    justify-items: center;
+
 }
 
 .OrderTitle {
@@ -9,7 +12,7 @@
     width: 75%;
     font-size: 35px;
     font-weight: 600;
-    margin: 10px 0px 10px 30px;
+    margin: 10px 0px 10px 10px;
     /*top right bottom left*/
     /* background-color: rgb(215, 250, 220); */
 }
