@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../OrderDetail.css";
 import * as dayjs from "dayjs";
 import {
@@ -26,13 +26,25 @@ import { CustomAlertOneButton } from "../../components/AlertOneButton";
 import { isNil } from "lodash";
 import { useIsFetching, useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/user";
 import { useMutation } from "@tanstack/react-query";
 import { api, queryClient } from "../../lib/query";
-
 
 function PickingOrderDetail() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast()
+  
+  const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
 
   const { state } = useLocation();
   const { data: order, isLoading } = useQuery([`/picking/${state}`]);
@@ -44,10 +56,9 @@ function PickingOrderDetail() {
   const { data: item_zone_6 } = useQuery([`/picking/${state}`, { zone: 6 }]);
   const isFetching = useIsFetching([`/picking/${state}`]);
 
-  // Test input Item
+ // Test input Item
   const [inputitem, setInputitem] = useState("");
   const handleChange = (event) => setInputitem(event.target.value)
-  const navigate = useNavigate();
   console.log(inputitem);
 
   const {

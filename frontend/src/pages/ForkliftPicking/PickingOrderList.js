@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Flex,
   Heading,
@@ -12,9 +12,21 @@ import TableFPickingOrder from "../../components/TableFPickingOrder";
 
 import { isNil } from "lodash";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/user";
 
 const PickingOrderList = () => {
   const { data: orders, isLoading } = useQuery(["/order-list"]);
+  const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   return (
     <>
