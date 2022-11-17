@@ -11,11 +11,13 @@ import {
   TabPanel,
   Spinner,
   Center,
+  Button
 } from "@chakra-ui/react";
+import { IoIosArrowBack } from "react-icons/io";
 
 import { isNil } from "lodash";
 import { useIsFetching, useQuery } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function OrderDetail() {
   const { state } = useLocation();
@@ -27,6 +29,7 @@ function OrderDetail() {
   const { data: item_zone_5 } = useQuery([`/order/${state}`, { zone: 5 }]);
   const { data: item_zone_6 } = useQuery([`/order/${state}`, { zone: 6 }]);
   const isFetching = useIsFetching([`/order/${state}`]);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -44,7 +47,10 @@ function OrderDetail() {
       ) : (
         <div>
           <div className="TitleContainer">
-            <div className="OrderTitle">Order {state}</div>
+            <Button leftIcon={<IoIosArrowBack />} ml="30px" onClick={() => navigate("/order-list")}></Button>
+            <div className="OrderTitle">
+              Order {state}
+            </div>
             <div className="OrderBy">
               Ordered by {order.description[0].create_by}{" "}
               {dayjs(order.description[0].create_dt).format("DD/MM/YYYY")}
@@ -63,42 +69,36 @@ function OrderDetail() {
               <TabPanels>
                 {item_zone_1.warehouse_id ? (
                   <TabPanel>
-                    1
                     <GridOrderDetail itemlist={item_zone_1} />
                     <TablePickingListInOrder itemlist={item_zone_1} />
                   </TabPanel>
                 ) : null}
                 {item_zone_2.warehouse_id ? (
                   <TabPanel>
-                    2
                     <GridOrderDetail itemlist={item_zone_2} />
                     <TablePickingListInOrder itemlist={item_zone_2} />
                   </TabPanel>
                 ) : null}
                 {item_zone_3.warehouse_id ? (
                   <TabPanel>
-                    3
                     <GridOrderDetail itemlist={item_zone_3} />
                     <TablePickingListInOrder itemlist={item_zone_3} />
                   </TabPanel>
                 ) : null}
                 {item_zone_4.warehouse_id ? (
                   <TabPanel>
-                    4
                     <GridOrderDetail itemlist={item_zone_4} />
                     <TablePickingListInOrder itemlist={item_zone_4} />
                   </TabPanel>
                 ) : null}
                 {item_zone_5.warehouse_id ? (
                   <TabPanel>
-                    5
                     <GridOrderDetail itemlist={item_zone_5} />
                     <TablePickingListInOrder itemlist={item_zone_5} />
                   </TabPanel>
                 ) : null}
                 {item_zone_6.warehouse_id ? (
                   <TabPanel>
-                    6
                     <GridOrderDetail itemlist={item_zone_6} />
                     <TablePickingListInOrder itemlist={item_zone_6} />
                   </TabPanel>

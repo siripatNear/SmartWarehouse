@@ -70,15 +70,13 @@ function PutAway() {
           <font>Are you sure to Finish put away?</font>
         </HStack>
         textBody=<VStack alignItems="center">
-          <Text fontSize="xl">Item Code : {state.item.item_code} </Text>
-          <Text fontSize="xl">
-            Position Code : {state.target.position_code}{" "}
-          </Text>
-          <Grid templateColumns="repeat(2, 2fr)" gap={2}>
-            <Text fontSize="xl">Zone : {state.target.zone} </Text>
-            <Text fontSize="xl">Section : {state.target.section} </Text>
-            <Text fontSize="xl">Colum : {state.target.col_no} </Text>
-            <Text fontSize="xl">Floor : {state.target.floor_no} </Text>
+          <Text fontSize="xl">Item Code : {object.item.item_code} </Text>
+          <Text fontSize="xl">Position Code : {object.target.position_code} </Text>
+          <Grid templateColumns='repeat(2, 2fr)' gap={2}>
+            <Text fontSize="xl">Zone : {object.target.zone} </Text>
+            <Text fontSize="xl">Section : {object.target.section} </Text>
+            <Text fontSize="xl">Colum : {object.target.col_no} </Text>
+            <Text fontSize="xl">Floor : {object.target.floor_no} </Text>
           </Grid>
         </VStack>
       />
