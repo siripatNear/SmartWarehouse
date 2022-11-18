@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../OrderDetail.css";
 import * as dayjs from "dayjs";
 import {
@@ -15,24 +15,36 @@ import {
   Text,
   Box,
   Input,
-  useToast
+  useToast,
+  Button
 } from "@chakra-ui/react";
 
 import CustomButton from "../../components/CustomButton";
 import GridOrderDetail from "../../components/GridOrderDetail";
 import TablePickingListInOrder from "../../components/TablePickingListInOrder";
 import { CustomAlertOneButton } from "../../components/AlertOneButton";
+import { IoIosArrowBack } from "react-icons/io";
 
 import { isNil } from "lodash";
 import { useIsFetching, useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUserStore } from "../../store/user";
 import { useMutation } from "@tanstack/react-query";
 import { api, queryClient } from "../../lib/query";
-
 
 function PickingOrderDetail() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast()
+  const navigate = useNavigate();
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   const { state } = useLocation();
   const { data: order, isLoading } = useQuery([`/picking/${state}`]);
@@ -47,7 +59,6 @@ function PickingOrderDetail() {
   // Test input Item
   const [inputitem, setInputitem] = useState("");
   const handleChange = (event) => setInputitem(event.target.value)
-  const navigate = useNavigate();
   console.log(inputitem);
 
   const {
@@ -114,7 +125,7 @@ function PickingOrderDetail() {
           if (data?.data?.finish) {
             toast({
               title: 'Order Finish',
-              description: 'Order ID : ' + state  + ' is already finished.',
+              description: 'Order ID : ' + state + ' is already finished.',
               status: 'success',
               duration: 5000,
               isClosable: true,
@@ -139,29 +150,6 @@ function PickingOrderDetail() {
         </VStack>
       />
 
-      {/* < CustomAlertOneButton
-        isOpen={isOpen}
-        onClose={onClose}
-        onConfirm={() => {
-          onClose();
-          navigate("/picking-order-list")
-        }}
-        buttonPopup="OK"
-        ColorbuttonPopup="twitter"
-        HearderFsize="5xl"
-        textHeader=<HStack >
-          <font> Are you sure to </font>
-          <font color="twitter" > FINISH </font>
-          <font> this order? </font>
-        </HStack>
-        textBody=<VStack alignItems="left">
-          <Text fontSize="xl">Order : {state} </Text>
-          <Text fontSize="xl">Date create :  </Text>
-          <Text fontSize="xl">Quantity :  </Text>
-          <Text fontSize="xl">Ordered By :  </Text>
-        </VStack>
-      /> */}
-
       {isLoading || isNil(order) || isFetching > 0 ? (
         <Center mt="100px">
           <Spinner
@@ -176,7 +164,10 @@ function PickingOrderDetail() {
       ) : (
         <div>
           <div className="TitleContainer">
-            <div className="OrderTitle">Order {state}</div>
+            <Button leftIcon={<IoIosArrowBack />} ml="30px" onClick={() => navigate("/picking-order-list")}></Button>
+            <div className="OrderTitle">
+              Order {state}
+            </div>
             <div className="OrderBy">
               Ordered by {order.description.create_by}{" "}
               {dayjs(order.description.create_dt).format("DD/MM/YYYY")}
@@ -195,42 +186,36 @@ function PickingOrderDetail() {
               <TabPanels>
                 {item_zone_1.warehouse_id ? (
                   <TabPanel>
-                    1
                     <GridOrderDetail itemlist={item_zone_1} />
                     <TablePickingListInOrder itemlist={item_zone_1} />
                   </TabPanel>
                 ) : null}
                 {item_zone_2.warehouse_id ? (
                   <TabPanel>
-                    2
                     <GridOrderDetail itemlist={item_zone_2} />
                     <TablePickingListInOrder itemlist={item_zone_2} />
                   </TabPanel>
                 ) : null}
                 {item_zone_3.warehouse_id ? (
                   <TabPanel>
-                    3
                     <GridOrderDetail itemlist={item_zone_3} />
                     <TablePickingListInOrder itemlist={item_zone_3} />
                   </TabPanel>
                 ) : null}
                 {item_zone_4.warehouse_id ? (
                   <TabPanel>
-                    4
                     <GridOrderDetail itemlist={item_zone_4} />
                     <TablePickingListInOrder itemlist={item_zone_4} />
                   </TabPanel>
                 ) : null}
                 {item_zone_5.warehouse_id ? (
                   <TabPanel>
-                    5
                     <GridOrderDetail itemlist={item_zone_5} />
                     <TablePickingListInOrder itemlist={item_zone_5} />
                   </TabPanel>
                 ) : null}
                 {item_zone_6.warehouse_id ? (
                   <TabPanel>
-                    6
                     <GridOrderDetail itemlist={item_zone_6} />
                     <TablePickingListInOrder itemlist={item_zone_6} />
                   </TabPanel>

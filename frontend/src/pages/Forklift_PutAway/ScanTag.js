@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect,useState  } from "react";
 import "./ScanTag.css";
 import scanlogo from "../../assets/scanlogo.png";
 import Nametag from "../../components/Nametag";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../../lib/query";
+import { useUserStore } from "../../store/user";
 
 import CustomButton from "../../components/CustomButton";
 import {
   Box,
   Input,
   FormControl,
-
 } from "@chakra-ui/react";
 
 export const warehouseSelect = [
@@ -22,7 +22,6 @@ export const warehouseSelect = [
 ];
 
 function ScanTag() {
-
   // Test input Item
   const [warehouse, setWarehouse] = useState("");
   const [inputitem, setInputitem] = useState("");
@@ -33,7 +32,6 @@ function ScanTag() {
 
   const {
     mutate: sendItemCode,
-    data
   } = useMutation(
     (send) =>
       api.post(`/put-away/${warehouse}`, { item_code: send }),
@@ -55,7 +53,17 @@ function ScanTag() {
     }
   );
 
-  return (
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
+ return (
     <div>
       <div className="Content">
         <Nametag />

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./UpdateMat.css";
-import { Input } from '@chakra-ui/react'
+import { Input } from "@chakra-ui/react";
 import CustomButton from "../../components/CustomButton";
 import { CustomAlertDialog } from "../../components/AlertDialog";
 import {
@@ -8,72 +8,122 @@ import {
   HStack,
   useDisclosure,
   Text,
-  useToast
+  useToast,
+  Grid
 } from "@chakra-ui/react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../../lib/query";
+import { useUserStore } from "../../store/user";
 
-const MockItem = [
-  {
-    "name": "Kraft Paper",
-    "size": "100gsm. 420mm",
-    "type": "smooth, brown",
-    "item_code": "AA-125464",
-    "og_length": 200,
-  },
-]
+const mapCateName = (category) => {
+  switch (category) {
+    case "1":
+      return "Kraft";
+    case "2":
+      return "Bleached";
+    case "3":
+      return "Glassine";
+    case "4":
+      return "Wax";
+    case "5":
+      return "PVC";
+    case "6":
+      return "Inkjet";
+    case "7":
+      return "Corrugated";
+    default:
+      return "";
+  }
+};
 
 export default function UpdateMat() {
-
-  const [UseLength, setUseLength] = useState("");
+  const [useLength, setUseLength] = useState("");
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { state, isLoading } = useLocation();
+  const { state } = useLocation();
   const navigate = useNavigate();
   const toast = useToast()
+  let leftValue = state.item.length - useLength;
+  console.log(leftValue);
+
+  const {
+    mutate: finishupdate,
+  } = useMutation(
+    (send) =>
+      api.put(`/update-item`, {
+        item_code: send.item.item_code,
+        length: leftValue
+      })
+  );
+
+  const user = useUserStore((state) => state.user);
+  useEffect(() => {
+    if (user.role === "Admin") {
+      navigate("/");
+    }
+    if (user.role === "Operator") {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   return (
     <>
       <CustomAlertDialog
         isOpen={isOpen}
         onClose={onClose}
+        onConfirm={() => {
+          finishupdate(state)
+          onClose();
+          toast({
+            title: 'Update Item Finish',
+            description: 'Item Code : ' + object.item_code + '',
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          })
+          navigate("/scan-tag")
+        }}
         LbuttonPopup="Cancle"
         RbuttonPopup="Confirm"
         ColorRbuttonPopup="twitter"
         HearderFsize="2xl"
-        textHeader=<HStack >
+        textHeader=<HStack>
           <font> Update raw material </font>
         </HStack>
         textBody=<VStack alignItems="left">
           <Text fontSize="xl">Item code : {object.item_code} </Text>
-          <Text fontSize="xl">Original {object.og_length}m. used 80m. left 120m. </Text>
+          <Grid templateColumns='repeat(2, 2fr)' gap={2}>
+            <Text fontSize="xl">Original {object.length} {object.unit}  </Text>
+            <Text fontSize="xl">Used {useLength} {object.unit} </Text>
+            <Text fontSize="xl">Left {leftValue} {object.unit} </Text>
+          </Grid>
         </VStack>
       />
 
-      <div className='ContentUpdateMatPage'>
-        <div className='AlertTitle'>
+      <div className="ContentUpdateMatPage">
+        <div className="AlertTitle">
           Please update this raw material before put it away
         </div>
         <div className='ItemName'>
-          {MockItem[0].name}
+          {mapCateName(state.item.item_cate_code)}
         </div>
-        <div className='ItemProperties'>
-          {MockItem[0].size} {MockItem[0].type}
-        </div>
+        {/* <div className='ItemProperties'>
+        </div> */}
         <div className='Original'>
           <p>Item code : {state.item.item_code}</p>
-          <p>Original length : {state.item.lengh} meters</p>
+          <p>Sub category code : {state.item.sub_cate_code}</p>
+          <p>Original length : {state.item.length} {state.item.unit}</p>
         </div>
         <div className='Update'>
           <p>How many length do you use? : <Input placeholder='0' isInvalid errorBorderColor='crimson' width='100px'
             onChange={(event) =>
               setUseLength(event.currentTarget.value)
             } /> meters </p>
-          <p>This item's length would be : {state.item.lengh - UseLength} meters</p>
+          <p>This item's length would be : {leftValue} {state.item.unit}</p>
         </div>
-        <div className='ContainerBtn'>
+        <div className="ContainerBtn">
           <CustomButton
             marginX={4}
             onOpen={() => {
@@ -91,5 +141,5 @@ export default function UpdateMat() {
         </div>
       </div>
     </>
-  )
+  );
 }
