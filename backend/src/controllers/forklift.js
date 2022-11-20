@@ -308,7 +308,7 @@ exports.findPosition = async (req, res) => {
                 success: true,
                 item
             })
-        } else if(existing.dataValues.item_status != 'new coming') {
+        } else if(existing.dataValues.item_status === 'in progress'| existing.dataValues.item_status === 'stock in') {
             //In case picking the wrong item in warehouse
             return res.status(201).json({
                 success: false,
