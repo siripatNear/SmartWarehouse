@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as dayjs from "dayjs";
 import {
   Table,
@@ -12,6 +12,8 @@ import {
   HStack,
   useDisclosure,
   Text,
+  FormControl,
+  Input,
 } from "@chakra-ui/react";
 import { useUserStore } from "../store/user";
 import CustomButton from "./CustomButton";
@@ -19,6 +21,8 @@ import { CustomAlertDialog } from "./AlertDialog";
 import { api, queryClient } from "../lib/query";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { Select } from "chakra-react-select";
+import _, { isEmpty } from "lodash";
 
 export const header = [
   { value: "order_id", label: "Order ID" },
@@ -29,6 +33,11 @@ export const header = [
   { value: "order_by", label: "Order by" },
   { value: "progress_by", label: "Progress by" },
   { value: "operation", label: "Operation" },
+];
+
+export const statusData = [
+  { value: "NotStart", label: "Not start" },
+  { value: "InProgress", label: "In progress" },
 ];
 
 const mapStatus = (status) => {
@@ -61,11 +70,14 @@ const mapStatus = (status) => {
 };
 
 const TableOrderlist = (props) => {
+  const [searchStatus, setSearchStatus] = useState("");
+  const [searchText, setSearchText] = useState("");
   const { orders } = props;
   const user = useUserStore((state) => state.user);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [object, setObject] = useState({});
   const navigate = useNavigate();
+  const [filteredData, setFilteredData] = useState(null);
 
   //* delete data from api
   const { mutate: DeleteOrder, isLoading: isDeleting } = useMutation(
@@ -77,6 +89,45 @@ const TableOrderlist = (props) => {
       },
     }
   );
+
+  useEffect(() => {
+    if (!isEmpty(searchStatus) && !isEmpty(searchText)) {
+      setFilteredData(
+        _(orders?.order_list)
+          .filter(
+            (v) =>
+              _(v.order_status).includes(searchStatus.label) &&
+              (_(v.order_id).toLower().includes(_(searchText).toLower()) ||
+                _(v.ordered_by).toLower().includes(_(searchText).toLower()) ||
+                _(v.progress_by).toLower().includes(_(searchText).toLower()))
+          )
+          .value()
+      );
+    } else if (!isEmpty(searchStatus)) {
+      setFilteredData(
+        _(orders?.order_list)
+          .filter((v) => _(v.order_status).includes(searchStatus.label))
+          .value()
+      );
+    } else if (!isEmpty(searchText)) {
+      setFilteredData(
+        _(orders?.order_list)
+          .filter(
+            (v) =>
+              _(v.order_id).toLower().includes(_(searchText).toLower()) ||
+              _(v.ordered_by).toLower().includes(_(searchText).toLower()) ||
+              _(v.progress_by).toLower().includes(_(searchText).toLower())
+          )
+          .value()
+      );
+    } else {
+      setFilteredData(orders?.order_list);
+    }
+  }, [orders, searchStatus, searchText]);
+
+  useEffect(() => {
+    console.log(searchStatus);
+  }, [searchStatus]);
 
   return (
     <>
@@ -101,6 +152,27 @@ const TableOrderlist = (props) => {
         </Text>
       />
 
+      <HStack flex={1} paddingRight={4} width={"90%"}>
+        <FormControl width={"20%"} p={2} id="statussearch">
+          <Select
+            isClearable
+            value={searchStatus}
+            onChange={setSearchStatus}
+            placeholder="Status"
+            closeMenuOnSelect={true}
+            options={statusData}
+          />
+        </FormControl>
+        <FormControl width={"80%"} p={1}>
+          <Input
+            type="text"
+            placeholder="Search Order ID, Order By, Progress By ..."
+            value={searchText}
+            onChange={(v) => setSearchText(v.target.value)}
+          />
+        </FormControl>
+      </HStack>
+
       <TableContainer width="90%">
         <Table size="md">
           <Thead>
@@ -114,7 +186,7 @@ const TableOrderlist = (props) => {
           </Thead>
 
           <Tbody>
-            {orders.order_list.map((order) => (
+            {filteredData?.map((order) => (
               <Tr
                 _hover={{
                   backgroundColor: "#ECF7FE",
