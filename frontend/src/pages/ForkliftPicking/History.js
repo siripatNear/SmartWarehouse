@@ -32,6 +32,7 @@ export const header = [
   { value: "qt", label: "Quantity" },
   { value: "status", label: "Status" },
   { value: "order_by", label: "Order by" },
+  { value: "progress_by", label: "Progress by" },
   { value: "operation", label: " " },
 ];
 
@@ -110,7 +111,7 @@ const History = () => {
             <FormControl p={1}>
               <Input
                 type="text"
-                placeholder="Search Order ID, Order By ..."
+                placeholder="Search Order ID, Order By, Progress By ..."
                 value={searchText}
                 onChange={(v) => setSearchText(v.target.value)}
               />
@@ -130,7 +131,7 @@ const History = () => {
               </Thead>
 
               <Tbody>
-                {filteredData.map((d) => (
+                {filteredData?.map((d) => (
                   <Tr
                     _hover={{
                       backgroundColor: "#ECF7FE",
@@ -143,6 +144,7 @@ const History = () => {
                     <Td>{d.quantity}</Td>
                     <Td>{mapStatus(d.order_status)}</Td>
                     <Td>{d.ordered_by}</Td>
+                    <Td>{d.progress_by}</Td>
                     <Td textAlign={"center"}>
                       <CustomButton
                         marginX={4}

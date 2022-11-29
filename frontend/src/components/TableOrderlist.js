@@ -32,7 +32,7 @@ export const header = [
   { value: "status", label: "Status" },
   { value: "order_by", label: "Order by" },
   { value: "progress_by", label: "Progress by" },
-  { value: "operation", label: "Operation" },
+  { value: "operation", label: " " },
 ];
 
 export const statusData = [
