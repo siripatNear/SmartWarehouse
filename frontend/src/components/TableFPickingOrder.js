@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Thead,
@@ -12,12 +12,16 @@ import {
   VStack,
   HStack,
   Text,
+  FormControl,
+  Input,
 } from "@chakra-ui/react";
 
 import * as dayjs from "dayjs";
 import CustomButton from "./CustomButton";
 import { CustomAlertDialog } from "./AlertDialog";
 import { useNavigate } from "react-router-dom";
+import _, { isEmpty } from "lodash";
+import { Select } from "chakra-react-select";
 
 export const header = [
   { value: "order_id", label: "Order ID" },
@@ -58,11 +62,57 @@ const mapStatus = (order_status) => {
   }
 };
 
+export const statusData = [
+  { value: "NotStart", label: "Not start" },
+  { value: "InProgress", label: "In progress" },
+];
+
 const TableFPickingList = (props) => {
   const { orders } = props;
   const [object, setObject] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+
+  const [searchStatus, setSearchStatus] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState(null);
+
+  useEffect(() => {
+    if (!isEmpty(searchStatus) && !isEmpty(searchText)) {
+      setFilteredData(
+        _(orders?.order_list)
+          .filter(
+            (v) =>
+              _(v.order_status).includes(searchStatus.label) &&
+              (_(v.order_id).toLower().includes(_(searchText).toLower()) ||
+                _(v.ordered_by).toLower().includes(_(searchText).toLower()))
+          )
+          .value()
+      );
+    } else if (!isEmpty(searchStatus)) {
+      setFilteredData(
+        _(orders?.order_list)
+          .filter((v) => _(v.order_status).includes(searchStatus.label))
+          .value()
+      );
+    } else if (!isEmpty(searchText)) {
+      setFilteredData(
+        _(orders?.order_list)
+          .filter(
+            (v) =>
+              _(v.order_id).toLower().includes(_(searchText).toLower()) ||
+              _(v.ordered_by).toLower().includes(_(searchText).toLower())
+          )
+          .value()
+      );
+    } else {
+      setFilteredData(orders?.order_list);
+    }
+  }, [orders, searchStatus, searchText]);
+
+  useEffect(() => {
+    console.log(searchStatus);
+  }, [searchStatus]);
 
   return (
     <>
@@ -83,7 +133,7 @@ const TableFPickingList = (props) => {
           <font
             color={object.order_status === "Not start" ? "#1DA1F2" : "#FFBF00"}
           >
-            {object.order_status === "Not start" ? "Start" : "Resume"}{" "}
+            {object.order_status === "Not start" ? "Start" : "Resume"}
           </font>
           <font> this order ? </font>
         </HStack>
@@ -96,6 +146,27 @@ const TableFPickingList = (props) => {
           <Text fontSize="xl">Order by : {object.ordered_by}</Text>
         </VStack>
       />
+
+      <HStack flex={1} paddingRight={4} width={"90%"}>
+        <FormControl width={"20%"} p={2} id="statussearch">
+          <Select
+            isClearable
+            value={searchStatus}
+            onChange={setSearchStatus}
+            placeholder="Status"
+            closeMenuOnSelect={true}
+            options={statusData}
+          />
+        </FormControl>
+        <FormControl width={"80%"} p={1}>
+          <Input
+            type="text"
+            placeholder="Search Order ID, Order By ..."
+            value={searchText}
+            onChange={(v) => setSearchText(v.target.value)}
+          />
+        </FormControl>
+      </HStack>
 
       <TableContainer width="90%">
         <Table size="md">
@@ -110,7 +181,7 @@ const TableFPickingList = (props) => {
           </Thead>
 
           <Tbody>
-            {orders.order_list.map((order) => (
+            {filteredData?.map((order) => (
               <Tr
                 _hover={{
                   backgroundColor: "#ECF7FE",
