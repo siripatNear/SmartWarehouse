@@ -6,7 +6,9 @@ import TablePickingListInOrder from "../components/TablePickingListInOrder";
 import {
     Spinner,
     Center,
-    Button
+    Button,
+    Stack,
+    Text,
 } from "@chakra-ui/react";
 
 import { IoIosArrowBack } from "react-icons/io";
@@ -16,10 +18,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function HistoryDetail() {
     const { state } = useLocation();
-    const { data: order, isLoading } = useQuery([`/order/${state}`]);
-    const { data: items } = useQuery([`/order/${state}`, { zone: 1 }]);
-    const isFetching = useIsFetching([`/order/${state}`]);
+    const { data: order, isLoading } = useQuery([`/history-order/${state}`]);
+    const isFetching = useIsFetching([`/history-order/${state}`]);
     const navigate = useNavigate();
+    // console.log(order.order[0].progress_by);
+    // console.log(isLoading);
 
     return (
         <>
@@ -37,20 +40,19 @@ function HistoryDetail() {
             ) : (
                 <div>
                     <div className="TitleContainer">
-                        <Button leftIcon={<IoIosArrowBack />} ml="30px" onClick={() => navigate("/history")}></Button>
+                        <Button leftIcon={<IoIosArrowBack />} ml="30px" mt="13px" onClick={() => navigate("/history")}></Button>
                         <div className="OrderTitle">
-                            {/* Order {state} */}
-                            Order
+                            Order {state}
                         </div>
                         <div className="OrderBy">
-                            {/* Progress by {order.description[0].create_by}{" "} */}
-                            Progress by 
-
-                            {/* {dayjs(order.description[0].create_dt).format("DD/MM/YYYY")} */}
+                            <Stack>
+                                <Text>Order by {order.order[0].order_by} {dayjs(order.order[0].create_dt).format("DD/MM/YYYY")} </Text>
+                                <Text>Progress by {order.order[0].progress_by}</Text>
+                            </Stack>
                         </div>
                     </div>
                     <div className="BodyOrderDetailPage">
-                        {/* <TablePickingListInOrder itemlist={items} /> */}
+                        <TablePickingListInOrder itemlist={order.details} />
                     </div>
                 </div>
             )}
