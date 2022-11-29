@@ -23,6 +23,7 @@ const {
   getCompletedOrder,
   deleteOrder,
   getOrderDetail,
+  getCompletedDetail,
 } = require("../controllers/orderManagement");
 const {
   validationMiddleware,
@@ -60,7 +61,6 @@ router.delete("/manage-users/:user_id", deleteUser); //complete
 //========Operator routes=============
 router.post("/warehouse/:wh_id/picking-list", userAuth, createOrder);
 router.get("/order-list", getCurrentOrder);
-router.get("/history-order", getCompletedOrder);
 router.delete("/order/:order_id", userAuth, deleteOrder);
 router.get("/order/:order_id", getOrderDetail);
 router.get("/stock", userAuth, authPage(["Admin"]), getStock);
@@ -93,6 +93,11 @@ router.put(
 );
 
 router.put("/put-away-finish", userAuth,finishPutAway);
+
+//===========All roles========================
+
+router.get("/history-order", getCompletedOrder);
+router.get("/history-order/:order_id", getCompletedDetail);
 
 //========= NO UI (just test)================
 router.post(
