@@ -356,7 +356,7 @@ exports.findPosition = async (req, res) => {
             }
             console.log(`Zone is ${rows[0].zone} and Section is ${rows[i].section}.`);
 
-            //* 5. Find column that contain this {category} from most to min
+            //* 5. Find column that contain this {category} Desc
             const column = await db.query(`
                 SELECT r.item_cate_code, wt.zone,
                 wt.section, wt.col_no , COUNT(*)
@@ -374,16 +374,15 @@ exports.findPosition = async (req, res) => {
                 FROM raw_materials r
                 RIGHT JOIN warehouse_trans wt ON wt.position_code = r.position_code
                 WHERE wt.warehouse_id = $1 AND wt.zone = $2 
-                AND wt.section = $3 AND wt.col_no = 
-                $4
+                AND wt.section = $3 AND wt.col_no = $4
                 AND r.position_code IS NULL
                 ORDER BY wt.position_code DESC
             `, [warehouse_id, rows[0].zone, rows[0].section, column.rows[0].col_no])
 
             let j = 0;
             while (empty_positions.rowCount === 0) {
-                // the section is full
-                // find next section
+                // the Column is full
+                // find next Column
                 j = j + 1;
                 empty_positions = await db.query(`
                     SELECT wt.position_code ,wt.zone, wt.section

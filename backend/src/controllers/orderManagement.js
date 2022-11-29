@@ -131,7 +131,7 @@ exports.getCompletedOrder = async (req, res) => {
     try {
         const { rows } = await db.query(`
             SELECT order_id, create_dt, quantity, order_status, 
-            create_by as ordered_by
+            create_by as ordered_by, progress_by
             FROM orders WHERE order_status = 'Completed'
             `);
         return res.status(200).json({
