@@ -20,7 +20,7 @@ exports.createOrder = async (req, res) => {
 
         let prev_order_id = null;
 
-        if(prev_order.length > 0){
+        if (prev_order.length > 0) {
             prev_order_id = prev_order[0].dataValues['order_id'];
         }
 
@@ -94,7 +94,7 @@ exports.deleteOrder = async (req, res) => {
             FROM order_transaction ot
             WHERE rm.item_code = ot.item_code
             AND order_id = $3
-        `,[modify_by,modify_dt,order_id])
+        `, [modify_by, modify_dt, order_id])
 
         //* 2. Delete order_transaction where order_id = req.params.order_id
 
@@ -127,6 +127,7 @@ exports.deleteOrder = async (req, res) => {
     }
 }
 
+// ===============History========================
 exports.getCompletedOrder = async (req, res) => {
     try {
         const { rows } = await db.query(`
@@ -147,6 +148,37 @@ exports.getCompletedOrder = async (req, res) => {
         })
     }
 }
+
+exports.getCompletedDetail = async (req, res) => {
+    const order_id = String(req.params.order_id);
+    try {
+        const order = await db.query(`
+            SELECT order_id, create_by as order_by, create_dt, progress_by
+            FROM orders
+            WHERE order_id = $1
+        `,[order_id])
+        const { rows } = await db.query(`
+            SELECT r.item_code, r.item_cate_code, r.sub_cate_code, r.length, r.create_dt
+            FROM raw_materials r
+            JOIN order_transaction ot ON r.item_code = ot.item_code
+            JOIN orders o ON o.order_id = ot.order_id
+            WHERE o.order_id = $1
+            `, [order_id]);
+        return res.status(200).json({
+            message: 'you have permission to access',
+            order: order.rows,
+            details: rows
+        })
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            error: true,
+            message: "Internal Server error"
+        })
+    }
+}
+// =======================================
 
 exports.getCurrentOrder = async (req, res) => {
     try {
@@ -193,7 +225,7 @@ exports.getOrderDetail = async (req, res) => {
 
         console.log(JSON.stringify(zones.rows))
 
-        if (zones.rowCount != 0){
+        if (zones.rowCount != 0) {
 
             let zone = parseInt(req.query.zone || zones.rows[0].zone);
             const items = await db.query(`
@@ -207,16 +239,16 @@ exports.getOrderDetail = async (req, res) => {
                 WHERE ot.order_id = $1 
                 AND wt.zone = $2
             ` , [order_id, zone])
-            
+
             // Order by and Create_dt
-            const desc = await models.Orders.findAll({ 
-                attributes: [ 'create_by', 'create_dt' ],
+            const desc = await models.Orders.findAll({
+                attributes: ['create_by', 'create_dt'],
                 where: { order_id }
             })
 
             const grid = await positionsGrid(order_id, zone)
 
-            if(grid){
+            if (grid) {
                 return res.status(200).json({
                     success: true,
                     warehouse_id: grid.warehouse_id,
@@ -225,22 +257,22 @@ exports.getOrderDetail = async (req, res) => {
                     zone: grid.zone,
                     positions_grid: grid.positions,
                     items: items.rows,
-                })    
+                })
             }
-            else{
+            else {
                 return res.status(200).json({
                     success: false,
                     message: `Don't find zone = ${zone} in this order list`,
-                })    
+                })
             }
-            
-        } else{
+
+        } else {
             return res.status(200).json({
                 success: true,
                 message: `Don't find the order id ${order_id} in order list`,
             })
         }
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
