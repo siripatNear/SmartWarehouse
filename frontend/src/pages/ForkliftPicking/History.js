@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Badge,
   Center,
   Flex,
+  FormControl,
   Heading,
   HStack,
+  Input,
   Spinner,
   Table,
   TableContainer,
@@ -17,7 +19,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { isNil } from "lodash";
+import _, { isEmpty, isNil } from "lodash";
 import Nametag from "../../components/Nametag";
 import dayjs from "dayjs";
 import CustomButton from "../../components/CustomButton";
@@ -30,6 +32,7 @@ export const header = [
   { value: "qt", label: "Quantity" },
   { value: "status", label: "Status" },
   { value: "order_by", label: "Order by" },
+  { value: "progress_by", label: "Progress by" },
   { value: "operation", label: " " },
 ];
 
@@ -55,6 +58,26 @@ const History = () => {
         return "";
     }
   };
+
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState(null);
+
+  useEffect(() => {
+    if (!isEmpty(searchText)) {
+      setFilteredData(
+        _(data?.order_list)
+          .filter(
+            (v) =>
+              _(v.order_id).toLower().includes(_(searchText).toLower()) ||
+              _(v.ordered_by).toLower().includes(_(searchText).toLower()) ||
+              _(v.progress_by).toLower().includes(_(searchText).toLower())
+          )
+          .value()
+      );
+    } else {
+      setFilteredData(data?.order_list);
+    }
+  }, [data, searchText]);
 
   return (
     <>
@@ -84,6 +107,17 @@ const History = () => {
             <Heading as="h1">History</Heading>
           </HStack>
 
+          <HStack flex={1} paddingRight={4} width={"90%"}>
+            <FormControl p={1}>
+              <Input
+                type="text"
+                placeholder="Search Order ID, Order By, Progress By ..."
+                value={searchText}
+                onChange={(v) => setSearchText(v.target.value)}
+              />
+            </FormControl>
+          </HStack>
+
           <TableContainer width="90%">
             <Table size="md">
               <Thead>
@@ -97,7 +131,7 @@ const History = () => {
               </Thead>
 
               <Tbody>
-                {data.order_list.map((d) => (
+                {filteredData?.map((d) => (
                   <Tr
                     _hover={{
                       backgroundColor: "#ECF7FE",
@@ -110,6 +144,7 @@ const History = () => {
                     <Td>{d.quantity}</Td>
                     <Td>{mapStatus(d.order_status)}</Td>
                     <Td>{d.ordered_by}</Td>
+                    <Td>{d.progress_by}</Td>
                     <Td textAlign={"center"}>
                       <CustomButton
                         marginX={4}
