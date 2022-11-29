@@ -3,6 +3,15 @@ import "../pages/OrderDetail.css";
 import { isNil } from "lodash";
 import { Spinner, Center, Box } from "@chakra-ui/react";
 
+const mapCountText = (count) => {
+  switch (count) {
+    case "4":
+      return "Full";
+    default:
+      return "";
+  }
+};
+
 function GridPutAwayItem(props) {
 
     const { itemlist, isLoading } = props
@@ -30,7 +39,8 @@ function GridPutAwayItem(props) {
                         {sec1.map((data) => {
                             return (
                                 <Box
-                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    bgColor={data.target_in ? "green" : '#A3D9FB'}
+                                    // bgColor={data.count === 4 ? "gray" : '#A3D9FB'}
                                     width='70px'
                                     height='70px'
                                     display='flex'
@@ -40,7 +50,7 @@ function GridPutAwayItem(props) {
                                     key={data.col_no}
                                 >
                                     <div className="TextBoxPutAwayPosition">
-                                        {data.count}
+                                        {data.count === "4" ? mapCountText(data.count): (data.count) }
                                     </div>
                                 </Box>
                             );
@@ -50,7 +60,7 @@ function GridPutAwayItem(props) {
                         {sec2.map((data) => {
                             return (
                                 <Box
-                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    bgColor={data.target_in ? "green" : '#A3D9FB'}
                                     width='70px'
                                     height='70px'
                                     display='flex'
@@ -70,7 +80,7 @@ function GridPutAwayItem(props) {
                         {sec3.map((data) => {
                             return (
                                 <Box
-                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    bgColor={data.target_in ? "green" : '#A3D9FB'}
                                     width='70px'
                                     height='70px'
                                     display='flex'
@@ -90,7 +100,7 @@ function GridPutAwayItem(props) {
                         {sec4.map((data) => {
                             return (
                                 <Box
-                                    bgColor={data.target_in ? "yellow" : '#A3D9FB'}
+                                    bgColor={data.target_in ? "green" : '#A3D9FB'}
                                     width='70px'
                                     height='70px'
                                     display='flex'

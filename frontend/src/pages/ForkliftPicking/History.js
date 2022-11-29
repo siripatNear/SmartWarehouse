@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Badge,
   Center,
@@ -30,13 +30,14 @@ export const header = [
   { value: "qt", label: "Quantity" },
   { value: "status", label: "Status" },
   { value: "order_by", label: "Order by" },
+  { value: "progress_by", label: "Progress by" },
   { value: "operation", label: " " },
 ];
 
 const History = () => {
   const { data, isLoading } = useQuery(["/history-order"]);
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onClose } = useDisclosure();
 
   const mapStatus = (order_status) => {
     switch (order_status) {
@@ -110,11 +111,12 @@ const History = () => {
                     <Td>{d.quantity}</Td>
                     <Td>{mapStatus(d.order_status)}</Td>
                     <Td>{d.ordered_by}</Td>
+                    <Td>{d.progress_by}</Td>
                     <Td textAlign={"center"}>
                       <CustomButton
                         marginX={4}
                         onOpen={() => {
-                          // navigate("/order-detail", { state: d.order_id })
+                          navigate("/history-detail", { state: d.order_id })
                         }}
                         onClose={onClose}
                         buttonName="Detail"

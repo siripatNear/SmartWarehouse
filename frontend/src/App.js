@@ -38,6 +38,7 @@ import ConfirmPicking from "./pages/Operator/ConfirmPicking";
 import OrderList from "./pages/OrderList";
 import OrderDetail from "./pages/OrderDetail";
 import Stock from "./pages/adminRole/Stock";
+import HistoryDetail from "./pages/HistoryDetail";
 
 const PrivateRoutes = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -91,6 +92,7 @@ const App = () => {
           <Route path="/order-detail" element={<OrderDetail />} />
           <Route path="/confirm-picking" element={<ConfirmPicking />} />
           <Route path="/history" element={<History />} />
+          <Route path="/history-detail" element={<HistoryDetail />} />
 
           {/* //* Forklift Put away */}
           <Route path="/scan-tag" element={<ScanTag />} />
