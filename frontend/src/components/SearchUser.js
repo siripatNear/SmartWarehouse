@@ -2,8 +2,6 @@ import React from "react";
 import { FormControl, HStack, Button } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { Input } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -31,13 +29,6 @@ const SearchUser = () => {
           <FormControl width={"70%"} p={1}>
             <Input type="text" placeholder="Search User ID or Name..." />
           </FormControl>
-          {/* <IconButton
-            colorScheme="blue"
-            aria-label="Search database"
-            icon={<SearchIcon />}
-            type="submit"
-            form="search"
-          /> */}
         </HStack>
       </form>
       <HStack>
