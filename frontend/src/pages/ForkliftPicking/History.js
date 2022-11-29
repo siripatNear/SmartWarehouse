@@ -39,7 +39,7 @@ export const header = [
 const History = () => {
   const { data, isLoading } = useQuery(["/history-order"]);
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onClose } = useDisclosure();
 
   const mapStatus = (order_status) => {
     switch (order_status) {
@@ -149,7 +149,7 @@ const History = () => {
                       <CustomButton
                         marginX={4}
                         onOpen={() => {
-                          // navigate("/order-detail", { state: d.order_id })
+                          navigate("/history-detail", { state: d.order_id })
                         }}
                         onClose={onClose}
                         buttonName="Detail"
