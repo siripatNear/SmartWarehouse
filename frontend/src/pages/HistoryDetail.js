@@ -52,7 +52,7 @@ function HistoryDetail() {
                         </div>
                     </div>
                     <div className="BodyOrderDetailPage">
-                        <TablePickingListInOrder itemlist={order.details} />
+                        <TablePickingListInOrder itemlist={order} />
                     </div>
                 </div>
             )}

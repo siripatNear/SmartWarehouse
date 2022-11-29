@@ -99,8 +99,6 @@ function PutAway() {
           </div>
           <div className="ContainerContent">
             <div className="ContainerNoteBox">
-              <div className="NoteBoxInprogress">No.</div>
-              Inprogress
               <div className="NoteBoxTarget">No.</div>
               Target
               <div className="NoteBoxFull">Full</div>

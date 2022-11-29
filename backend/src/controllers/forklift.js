@@ -41,7 +41,7 @@ exports.startOrder = async (req, res) => {
 
             const items = await db.query(
                 `
-                SELECT rm.item_code, c.cate_name as category, rm.length, 
+                SELECT rm.item_code, c.cate_name as category, rm.sub_cate_code, rm.length, 
                 rm.create_dt, wt.zone
                 FROM raw_materials rm
                 JOIN order_transaction ot ON rm.item_code = ot.item_code

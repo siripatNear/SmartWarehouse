@@ -158,16 +158,17 @@ exports.getCompletedDetail = async (req, res) => {
             WHERE order_id = $1
         `,[order_id])
         const { rows } = await db.query(`
-            SELECT r.item_code, r.item_cate_code, r.sub_cate_code, r.length, r.create_dt
+            SELECT r.item_code, c.cate_name as category, r.sub_cate_code, r.length, r.create_dt
             FROM raw_materials r
             JOIN order_transaction ot ON r.item_code = ot.item_code
             JOIN orders o ON o.order_id = ot.order_id
+            JOIN category c ON r.item_cate_code = c.item_cate_code
             WHERE o.order_id = $1
             `, [order_id]);
         return res.status(200).json({
             message: 'you have permission to access',
             order: order.rows,
-            details: rows
+            items: rows
         })
 
     } catch (error) {
@@ -229,7 +230,7 @@ exports.getOrderDetail = async (req, res) => {
 
             let zone = parseInt(req.query.zone || zones.rows[0].zone);
             const items = await db.query(`
-                SELECT rm.item_code, c.cate_name as category, rm.length, 
+                SELECT rm.item_code, c.cate_name as category, rm.sub_cate_code, rm.length, 
                 rm.create_dt, wt.zone
                 FROM raw_materials rm
                 JOIN order_transaction ot ON rm.item_code = ot.item_code
