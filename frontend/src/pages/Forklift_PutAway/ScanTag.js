@@ -14,6 +14,7 @@ import {
   Input,
   Button,
   VStack,
+  useToast
 } from "@chakra-ui/react";
 
 export const warehouseSelect = [
@@ -29,6 +30,8 @@ function ScanTag() {
   const [inputitem, setInputitem] = useState("");
   const handleChange = (event) => setInputitem(event.target.value)
   const navigate = useNavigate();
+  const toast = useToast();
+
   console.log(inputitem);
   console.log(warehouse);
 
@@ -40,15 +43,25 @@ function ScanTag() {
     {
       onSuccess(result) {
         console.log(result);
-        if (result.data.target) {
-          console.log('new coming');
-          navigate("/put-away", {
-            state: result.data
-          });
+        if (result.data.success) {
+          if (result.data.target) {
+            console.log('new coming');
+            navigate("/put-away", {
+              state: result.data
+            });
+          } else {
+            console.log('update');
+            navigate("/update-mat", {
+              state: result.data
+            });
+          }
         } else {
-          console.log('update');
-          navigate("/update-mat", {
-            state: result.data
+          toast({
+            title: "Wrong Item!",
+            description: result.data.message,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
           });
         }
       }
