@@ -223,13 +223,11 @@ function PickingOrderDetail() {
               </TabPanels>
             </Tabs>
           </div>
-          <Box display='flex' alignItems='center' justifyContent='center' mb='10px'>
+          <Box display='flex' flexDirection='column' gap='10px' alignItems='center' justifyContent='center' mb='10px'>
             <Input placeholder='Item_code' width='200px' border='2px'
               inputitem={inputitem}
               onChange={handleChange}
             />
-          </Box>
-          <div className='ContainerBtn'>
             <CustomButton
               onOpen={() =>
                 sendItemCode(inputitem)
@@ -243,7 +241,7 @@ function PickingOrderDetail() {
               fontSize="22px"
               fontWeight="medium"
             />
-          </div>
+          </Box>
         </div>
       )}
     </>
