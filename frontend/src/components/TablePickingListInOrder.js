@@ -22,29 +22,30 @@ export const header = [
   { value: "create_dt", label: "Date Create" },
 ];
 
-const mapCateName = (category) => {
-  switch (category) {
-    case "1":
-      return "Kraft";
-    case "2":
-      return "Bleached";
-    case "3":
-      return "Glassine";
-    case "4":
-      return "Wax";
-    case "5":
-      return "PVC";
-    case "6":
-      return "Inkjet";
-    case "7":
-      return "Corrugated";
-    default:
-      return "";
-  }
-};
+// const mapCateName = (category) => {
+//   switch (category) {
+//     case "1":
+//       return "Kraft";
+//     case "2":
+//       return "Bleached";
+//     case "3":
+//       return "Glassine";
+//     case "4":
+//       return "Wax";
+//     case "5":
+//       return "PVC";
+//     case "6":
+//       return "Inkjet";
+//     case "7":
+//       return "Corrugated";
+//     default:
+//       return "";
+//   }
+// };
 
 const TablePickingList = (props) => {
   const { itemlist, isLoading } = props
+  console.log(itemlist);
 
   return (
     <>
@@ -73,9 +74,8 @@ const TablePickingList = (props) => {
                 </Tr>
               </Thead>
 
-
               <Tbody >
-                {itemlist.map((item) => (
+                {itemlist.items.map((item) => (
                   <Tr
                     _hover={{
                       backgroundColor: "#ECF7FE",
@@ -83,7 +83,7 @@ const TablePickingList = (props) => {
                     key={item.item_code}
                   >
                     <Td>{item.item_code}</Td>
-                    <Td>{mapCateName(item.item_cate_code)}</Td>
+                    <Td>{item.category}</Td>
                     <Td>{item.sub_cate_code}</Td>
                     <Td>{item.length}</Td>
                     <Td>{dayjs(item.create_dt).format('DD / MM / YYYY')}</Td>
