@@ -21,8 +21,6 @@ function HistoryDetail() {
     const { data: order, isLoading } = useQuery([`/history-order/${state}`]);
     const isFetching = useIsFetching([`/history-order/${state}`]);
     const navigate = useNavigate();
-    // console.log(order.order[0].progress_by);
-    // console.log(isLoading);
 
     return (
         <>
@@ -39,12 +37,12 @@ function HistoryDetail() {
                 </Center>
             ) : (
                 <div>
-                    <div className="TitleContainer">
+                    <div className="HistoryTitleContainer">
                         <Button leftIcon={<IoIosArrowBack />} ml="30px" mt="13px" onClick={() => navigate("/history")}></Button>
-                        <div className="OrderTitle">
+                        <div className="HistoryOrderTitle">
                             Order {state}
                         </div>
-                        <div className="OrderBy">
+                        <div className="HistoryOrderBy">
                             <Stack>
                                 <Text>Order by {order.order[0].order_by} {dayjs(order.order[0].create_dt).format("DD/MM/YYYY")} </Text>
                                 <Text>Progress by {order.order[0].progress_by}</Text>

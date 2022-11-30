@@ -285,6 +285,7 @@ exports.getStock = async (req, res) => {
             FROM category c
             JOIN raw_materials r ON c.item_cate_code = r.item_cate_code
             JOIN category_stock cs ON c.item_cate_code = cs.item_cate_code
+            WHERE r.item_status != 'using'
             GROUP BY c.item_cate_code, cs.max_quantity,cs.min_quantity
             ORDER BY c.item_cate_code
         `)
